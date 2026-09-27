@@ -1,0 +1,522 @@
+import SwiftUI
+import UniformTypeIdentifiers
+
+struct SettingsView: View {
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var libraryController: CollectionLibraryController
+    @AppStorage(AppSettings.selectedLanguageKey) private var selectedLanguage = AppLanguage.system.rawValue
+    @AppStorage(AppSettings.hideOnboardingKey) private var hideOnboarding = false
+    @AppStorage(AppSettings.comicVineAPIKeyKey) private var comicVineAPIKey = ""
+    @AppStorage(AppSettings.theGamesDBAPIKeyKey) private var theGamesDBAPIKey = ""
+    @AppStorage(AppSettings.googleBooksAPIKeyKey) private var googleBooksAPIKey = ""
+    @AppStorage(AppSettings.discogsConsumerKeyKey) private var discogsConsumerKey = ""
+    @AppStorage(AppSettings.discogsConsumerSecretKey) private var discogsConsumerSecret = ""
+    @State private var isUsageGuideExpanded = false
+    @State private var isAPISectionExpanded = false
+    @State private var isBackupSectionExpanded = false
+    @State private var isPrivacySectionExpanded = false
+    @State private var isEditingAPIKeys = false
+    @State private var exportURL: URL?
+    @State private var isImportingLibrary = false
+    @State private var pendingImportURL: URL?
+    @State private var importFailed = false
+
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                HalftoneBackground()
+
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 18) {
+                        SettingsHeaderView()
+                        languageSection
+                        onboardingSection
+                        usageGuideSection
+                        backupSection
+                        privacySection
+                        apiSection
+                    }
+                    .padding(20)
+                }
+            }
+            .navigationTitle(L10n.Settings.title)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(L10n.Common.save) {
+                        dismiss()
+                    }
+                    .font(.headline.weight(.black))
+                }
+            }
+            .fileImporter(
+                isPresented: $isImportingLibrary,
+                allowedContentTypes: [UTType(filenameExtension: "json") ?? .item],
+                allowsMultipleSelection: false
+            ) { result in
+                guard case .success(let urls) = result, let url = urls.first else { return }
+                pendingImportURL = url
+            }
+            .alert(L10n.Settings.importLibraryTitle, isPresented: importConfirmationBinding) {
+                Button(L10n.Common.cancel, role: .cancel) {
+                    pendingImportURL = nil
+                }
+
+                Button(L10n.Settings.importLibraryConfirm, role: .destructive) {
+                    guard let pendingImportURL else { return }
+                    let didImport = libraryController.importLibrary(from: pendingImportURL)
+                    self.pendingImportURL = nil
+                    importFailed = !didImport
+                }
+            } message: {
+                Text(L10n.Settings.importLibraryMessage)
+            }
+            .alert(L10n.Settings.importLibraryFailedTitle, isPresented: $importFailed) {
+                Button(L10n.Common.cancel, role: .cancel) {}
+            } message: {
+                Text(L10n.Settings.importLibraryFailedMessage)
+            }
+        }
+    }
+
+    private var importConfirmationBinding: Binding<Bool> {
+        Binding(
+            get: { pendingImportURL != nil },
+            set: { isPresented in
+                if !isPresented {
+                    pendingImportURL = nil
+                }
+            }
+        )
+    }
+
+    private var languageSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            SettingsSectionTitle(
+                systemName: "globe",
+                title: L10n.Settings.languageTitle
+            )
+
+            ComicSegmentedControl(
+                options: AppLanguage.allCases,
+                selection: selectedLanguageBinding,
+                title: { $0.title }
+            )
+        }
+        .padding(16)
+        .comicPanel()
+    }
+
+    private var selectedLanguageBinding: Binding<AppLanguage> {
+        Binding(
+            get: { AppLanguage(rawValue: selectedLanguage) ?? .system },
+            set: { selectedLanguage = $0.rawValue }
+        )
+    }
+
+    private var onboardingSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            SettingsSectionTitle(
+                systemName: "sparkles.rectangle.stack.fill",
+                title: L10n.Settings.onboardingTitle
+            )
+
+            Toggle(isOn: $hideOnboarding) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(L10n.Settings.hideOnboarding)
+                        .font(.headline.weight(.black))
+                        .foregroundStyle(ComicTheme.ink)
+
+                    Text(L10n.Settings.hideOnboardingHint)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(ComicTheme.ink.opacity(0.72))
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            .tint(ComicTheme.yellow)
+            .colorScheme(.light)
+            .padding(12)
+            .background(Color.white)
+            .overlay(
+                RoundedRectangle(cornerRadius: 7)
+                    .stroke(ComicTheme.ink, lineWidth: 2)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 7))
+        }
+        .padding(16)
+        .comicPanel()
+    }
+
+    private var usageGuideSection: some View {
+        DisclosureGroup(isExpanded: $isUsageGuideExpanded) {
+            VStack(alignment: .leading, spacing: 12) {
+                SettingsGuideRow(systemName: "square.grid.2x2.fill", title: L10n.Settings.guideCollectionsTitle, description: L10n.Settings.guideCollectionsBody)
+                SettingsGuideRow(systemName: "tray.full.fill", title: L10n.Settings.guideShelvesTitle, description: L10n.Settings.guideShelvesBody)
+                SettingsGuideRow(systemName: "photo.fill", title: L10n.Settings.guideCoversTitle, description: L10n.Settings.guideCoversBody)
+                SettingsGuideRow(systemName: "checkmark.seal.fill", title: L10n.Settings.guideTrackingTitle, description: L10n.Settings.guideTrackingBody)
+            }
+            .padding(.top, 12)
+        } label: {
+            SettingsSectionTitle(systemName: "questionmark.circle.fill", title: L10n.Settings.usageGuideTitle)
+        }
+        .tint(ComicTheme.ink)
+        .padding(16)
+        .comicPanel()
+    }
+
+    private var apiSection: some View {
+        DisclosureGroup(isExpanded: $isAPISectionExpanded) {
+            VStack(alignment: .leading, spacing: 14) {
+                Text(L10n.Settings.apiPrivacyBody)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(ComicTheme.ink.opacity(0.82))
+                    .fixedSize(horizontal: false, vertical: true)
+
+                Button {
+                    isEditingAPIKeys.toggle()
+                } label: {
+                    Label(
+                        isEditingAPIKeys ? L10n.Settings.hideAPIKeys : L10n.Settings.editAPIKeys,
+                        systemImage: isEditingAPIKeys ? "eye.slash.fill" : "pencil"
+                    )
+                    .font(.caption.weight(.black))
+                    .foregroundStyle(ComicTheme.ink)
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 12)
+                    .background(ComicTheme.yellow)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 7)
+                            .stroke(ComicTheme.ink, lineWidth: 2)
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 7))
+                }
+                .buttonStyle(.plain)
+
+                apiKeySection(
+                    systemName: "book.closed.fill",
+                    title: L10n.Settings.googleBooksTitle,
+                    placeholder: L10n.Settings.googleBooksAPIKeyPlaceholder,
+                    text: $googleBooksAPIKey,
+                    isConfigured: !googleBooksAPIKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+                    guideBody: L10n.Settings.googleBooksGuideBody,
+                    linkTitle: L10n.Settings.googleBooksOpenAPIPage,
+                    linkURL: URL(string: "https://developers.google.com/books/docs/v1/using")!
+                )
+
+                apiKeySection(
+                    systemName: "book.closed.fill",
+                    title: L10n.Settings.comicVineTitle,
+                    placeholder: L10n.Settings.comicVineAPIKeyPlaceholder,
+                    text: $comicVineAPIKey,
+                    isConfigured: !comicVineAPIKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+                    guideBody: L10n.Settings.comicVineGuideBody,
+                    linkTitle: L10n.Settings.comicVineOpenAPIPage,
+                    linkURL: URL(string: "https://comicvine.gamespot.com/api/")!
+                )
+
+                apiKeySection(
+                    systemName: "gamecontroller.fill",
+                    title: L10n.Settings.theGamesDBTitle,
+                    placeholder: L10n.Settings.theGamesDBAPIKeyPlaceholder,
+                    text: $theGamesDBAPIKey,
+                    isConfigured: !theGamesDBAPIKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+                    guideBody: L10n.Settings.theGamesDBGuideBody,
+                    linkTitle: L10n.Settings.theGamesDBOpenAPIPage,
+                    linkURL: URL(string: "https://api.thegamesdb.net/")!
+                )
+
+                discogsAPISection
+            }
+            .padding(.top, 12)
+        } label: {
+            SettingsSectionTitle(systemName: "key.fill", title: L10n.Settings.apiSectionTitle)
+        }
+        .tint(ComicTheme.ink)
+        .padding(16)
+        .comicPanel()
+    }
+
+    private var backupSection: some View {
+        DisclosureGroup(isExpanded: $isBackupSectionExpanded) {
+            VStack(alignment: .leading, spacing: 14) {
+                Text(L10n.Settings.backupBody)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(ComicTheme.ink.opacity(0.82))
+                    .fixedSize(horizontal: false, vertical: true)
+
+                Button {
+                    exportURL = libraryController.exportLibrary()
+                } label: {
+                    SettingsActionLabel(title: L10n.Settings.exportLibrary, systemName: "square.and.arrow.up.fill")
+                }
+                .buttonStyle(.plain)
+
+                if let exportURL {
+                    ShareLink(item: exportURL) {
+                        SettingsActionLabel(title: L10n.Settings.shareExportedLibrary, systemName: "paperplane.fill")
+                    }
+                    .buttonStyle(.plain)
+                }
+
+                Button {
+                    isImportingLibrary = true
+                } label: {
+                    SettingsActionLabel(title: L10n.Settings.importLibrary, systemName: "square.and.arrow.down.fill")
+                }
+                .buttonStyle(.plain)
+            }
+            .padding(.top, 12)
+        } label: {
+            SettingsSectionTitle(systemName: "externaldrive.fill", title: L10n.Settings.backupTitle)
+        }
+        .tint(ComicTheme.ink)
+        .padding(16)
+        .comicPanel()
+    }
+
+    private var privacySection: some View {
+        DisclosureGroup(isExpanded: $isPrivacySectionExpanded) {
+            VStack(alignment: .leading, spacing: 12) {
+                SettingsGuideRow(systemName: "lock.fill", title: L10n.Settings.privacyLocalTitle, description: L10n.Settings.privacyLocalBody)
+                SettingsGuideRow(systemName: "key.fill", title: L10n.Settings.privacyAPIKeysTitle, description: L10n.Settings.privacyAPIKeysBody)
+                SettingsGuideRow(systemName: "camera.fill", title: L10n.Settings.privacyMediaTitle, description: L10n.Settings.privacyMediaBody)
+                SettingsGuideRow(systemName: "network", title: L10n.Settings.privacyNetworkTitle, description: L10n.Settings.privacyNetworkBody)
+            }
+            .padding(.top, 12)
+        } label: {
+            SettingsSectionTitle(systemName: "hand.raised.fill", title: L10n.Settings.privacyTitle)
+        }
+        .tint(ComicTheme.ink)
+        .padding(16)
+        .comicPanel()
+    }
+
+    private var discogsAPISection: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            SettingsSectionTitle(
+                systemName: "record.circle.fill",
+                title: L10n.Settings.discogsTitle
+            )
+
+            SettingsAPIStatusView(isConfigured: discogsCredentialsConfigured)
+
+            if isEditingAPIKeys {
+                SettingsSecureField(placeholder: L10n.Settings.discogsConsumerKeyPlaceholder, text: $discogsConsumerKey)
+
+                SettingsSecureField(placeholder: L10n.Settings.discogsConsumerSecretPlaceholder, text: $discogsConsumerSecret)
+            }
+
+            Text(L10n.Settings.discogsGuideBody)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(ComicTheme.ink.opacity(0.82))
+                .fixedSize(horizontal: false, vertical: true)
+
+            SettingsLinkButton(title: L10n.Settings.discogsOpenAPIPage, url: URL(string: "https://www.discogs.com/developers")!)
+        }
+        .padding(14)
+        .background(Color.white)
+        .overlay(
+            RoundedRectangle(cornerRadius: 7)
+                .stroke(ComicTheme.ink, lineWidth: 2)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 7))
+    }
+
+    private var discogsCredentialsConfigured: Bool {
+        !discogsConsumerKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            && !discogsConsumerSecret.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
+    private func apiKeySection(
+        systemName: String,
+        title: String,
+        placeholder: String,
+        text: Binding<String>,
+        isConfigured: Bool,
+        guideBody: String,
+        linkTitle: String,
+        linkURL: URL
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 14) {
+            SettingsSectionTitle(
+                systemName: systemName,
+                title: title
+            )
+
+            SettingsAPIStatusView(isConfigured: isConfigured)
+
+            if isEditingAPIKeys {
+                SettingsSecureField(placeholder: placeholder, text: text)
+            }
+
+            Text(guideBody)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(ComicTheme.ink.opacity(0.82))
+                .fixedSize(horizontal: false, vertical: true)
+
+            SettingsLinkButton(title: linkTitle, url: linkURL)
+        }
+        .padding(14)
+        .background(Color.white)
+        .overlay(
+            RoundedRectangle(cornerRadius: 7)
+                .stroke(ComicTheme.ink, lineWidth: 2)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 7))
+    }
+}
+
+private struct SettingsHeaderView: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(L10n.Settings.eyebrow.uppercased())
+                .font(.caption.weight(.black))
+                .foregroundStyle(ComicTheme.blue)
+
+            Text(L10n.Settings.title.uppercased())
+                .font(ComicTheme.displayFont)
+                .foregroundStyle(ComicTheme.ink)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+        }
+        .padding(.vertical, 8)
+    }
+}
+
+private struct SettingsSectionTitle: View {
+    let systemName: String
+    let title: String
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(systemName: systemName)
+                .font(.headline.weight(.black))
+                .foregroundStyle(ComicTheme.red)
+
+            Text(title.uppercased())
+                .font(.headline.weight(.black))
+                .foregroundStyle(ComicTheme.ink)
+        }
+    }
+}
+
+private struct SettingsSecureField: View {
+    let placeholder: String
+    @Binding var text: String
+
+    var body: some View {
+        SecureField("", text: $text, prompt: Text(placeholder).foregroundStyle(ComicTheme.ink.opacity(0.72)))
+            .textInputAutocapitalization(.never)
+            .autocorrectionDisabled()
+            .font(ComicTheme.bodyFont)
+            .foregroundStyle(ComicTheme.ink)
+            .tint(ComicTheme.blue)
+            .padding(14)
+            .background(Color.white)
+            .overlay(
+                RoundedRectangle(cornerRadius: 7)
+                    .stroke(ComicTheme.ink, lineWidth: 2)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 7))
+            .shadow(color: ComicTheme.ink, radius: 0, x: 3, y: 3)
+    }
+}
+
+private struct SettingsAPIStatusView: View {
+    let isConfigured: Bool
+
+    var body: some View {
+        Label(
+            isConfigured ? L10n.Settings.apiConfigured : L10n.Settings.apiNotConfigured,
+            systemImage: isConfigured ? "checkmark.seal.fill" : "exclamationmark.triangle.fill"
+        )
+        .font(.caption.weight(.black))
+        .foregroundStyle(ComicTheme.ink)
+        .padding(.vertical, 8)
+        .padding(.horizontal, 10)
+        .background(isConfigured ? ComicTheme.green.opacity(0.35) : ComicTheme.yellow.opacity(0.6))
+        .overlay(
+            RoundedRectangle(cornerRadius: 7)
+                .stroke(ComicTheme.ink, lineWidth: 2)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 7))
+    }
+}
+
+private struct SettingsLinkButton: View {
+    let title: String
+    let url: URL
+
+    var body: some View {
+        Link(destination: url) {
+            HStack(spacing: 8) {
+                Image(systemName: "safari.fill")
+                Text(title.uppercased())
+            }
+            .font(.caption.weight(.black))
+            .foregroundStyle(ComicTheme.ink)
+            .padding(.vertical, 10)
+            .padding(.horizontal, 12)
+            .background(ComicTheme.yellow)
+            .overlay(
+                RoundedRectangle(cornerRadius: 7)
+                    .stroke(ComicTheme.ink, lineWidth: 2)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 7))
+        }
+    }
+}
+
+private struct SettingsActionLabel: View {
+    let title: String
+    let systemName: String
+
+    var body: some View {
+        Label(title.uppercased(), systemImage: systemName)
+            .font(.caption.weight(.black))
+            .foregroundStyle(ComicTheme.ink)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.vertical, 12)
+            .padding(.horizontal, 12)
+            .background(ComicTheme.yellow)
+            .overlay(
+                RoundedRectangle(cornerRadius: 7)
+                    .stroke(ComicTheme.ink, lineWidth: 2)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 7))
+            .shadow(color: ComicTheme.ink, radius: 0, x: 3, y: 3)
+    }
+}
+
+private struct SettingsGuideRow: View {
+    let systemName: String
+    let title: String
+    let description: String
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: systemName)
+                .font(.headline.weight(.black))
+                .foregroundStyle(ComicTheme.red)
+                .frame(width: 28)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.headline.weight(.black))
+                    .foregroundStyle(ComicTheme.ink)
+
+                Text(description)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(ComicTheme.ink.opacity(0.78))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .padding(12)
+        .background(Color.white)
+        .overlay(
+            RoundedRectangle(cornerRadius: 7)
+                .stroke(ComicTheme.ink, lineWidth: 2)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 7))
+    }
+}
