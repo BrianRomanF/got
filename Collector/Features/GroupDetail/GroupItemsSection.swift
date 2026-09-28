@@ -12,7 +12,7 @@ struct GroupItemsSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(itemTitle.uppercased())
+            Text(itemTitle.uppercased().vintageSafe)
                 .font(ComicTheme.titleFont)
                 .foregroundStyle(ComicTheme.ink)
 

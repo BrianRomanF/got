@@ -10,7 +10,7 @@ struct CategoryItemSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(category.template.itemTitle.uppercased())
+            Text(category.template.itemTitle.uppercased().vintageSafe)
                 .font(ComicTheme.titleFont)
                 .foregroundStyle(ComicTheme.ink)
 

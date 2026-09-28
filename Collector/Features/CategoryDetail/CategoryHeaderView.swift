@@ -8,7 +8,7 @@ struct CategoryHeaderView: View {
             CategoryIconView(category: category, size: 76, symbolSize: 42)
 
             VStack(alignment: .leading, spacing: 5) {
-                Text(category.title.uppercased())
+                Text(category.title.uppercased().vintageSafe)
                     .font(ComicTheme.displayFont)
                     .foregroundStyle(ComicTheme.ink)
                     .lineLimit(2)

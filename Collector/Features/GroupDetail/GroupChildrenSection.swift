@@ -10,7 +10,7 @@ struct GroupChildrenSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(L10n.Detail.groups.uppercased())
+            Text(L10n.Detail.groups.uppercased().vintageSafe)
                 .font(ComicTheme.titleFont)
                 .foregroundStyle(ComicTheme.ink)
 

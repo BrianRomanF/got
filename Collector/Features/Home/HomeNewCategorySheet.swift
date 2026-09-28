@@ -6,6 +6,7 @@ struct HomeNewCategorySheet: View {
     @Binding var subtitle: String
     @Binding var svgIconURL: String
     @Binding var selectedTemplate: CollectionTemplate
+    @Binding var customContentMode: CustomCategoryContentMode
     let navigationTitle: String
     let hint: String
     let selectedSVGIconPath: String?
@@ -36,6 +37,10 @@ struct HomeNewCategorySheet: View {
                         .comicPanel(fill: ComicTheme.panel)
 
                         HomeCategoryTemplatePicker(selectedTemplate: $selectedTemplate)
+
+                        if selectedTemplate == .custom {
+                            HomeCustomContentModePicker(selection: $customContentMode)
+                        }
 
                         HomeSVGIconSelector(
                             svgIconURL: $svgIconURL,

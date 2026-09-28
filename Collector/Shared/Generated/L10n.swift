@@ -120,6 +120,17 @@ enum L10n {
         static var newGroupHint: String { tr("detail.newGroupHint") }
     }
 
+    enum CustomMode {
+        static var title: String { tr("customMode.title") }
+        static var hint: String { tr("customMode.hint") }
+        static var shelvesAndPieces: String { tr("customMode.shelvesAndPieces") }
+        static var shelvesAndPiecesHint: String { tr("customMode.shelvesAndPiecesHint") }
+        static var shelvesOnly: String { tr("customMode.shelvesOnly") }
+        static var shelvesOnlyHint: String { tr("customMode.shelvesOnlyHint") }
+        static var piecesOnly: String { tr("customMode.piecesOnly") }
+        static var piecesOnlyHint: String { tr("customMode.piecesOnlyHint") }
+    }
+
     enum Onboarding {
         static var headline: String { tr("onboarding.headline") }
         static var tagline: String { tr("onboarding.tagline") }
@@ -205,6 +216,14 @@ enum L10n {
         static var missingAPIKey: String { tr("discogs.missingAPIKey") }
         static var invalidURL: String { tr("discogs.invalidURL") }
         static var requestFailed: String { tr("discogs.requestFailed") }
+    }
+
+    enum TCGdex {
+        static var searchTitle: String { tr("tcgdex.searchTitle") }
+        static var search: String { tr("tcgdex.search") }
+        static var searchPlaceholder: String { tr("tcgdex.searchPlaceholder") }
+        static var invalidURL: String { tr("tcgdex.invalidURL") }
+        static var requestFailed: String { tr("tcgdex.requestFailed") }
     }
 
     enum Ownership {

@@ -55,6 +55,7 @@ struct HomeView: View {
                     subtitle: $controller.categorySubtitle,
                     svgIconURL: $controller.categorySVGIconURL,
                     selectedTemplate: $controller.selectedTemplate,
+                    customContentMode: $controller.customContentMode,
                     navigationTitle: L10n.Home.addCategory,
                     hint: L10n.Home.newCategoryHint,
                     selectedSVGIconPath: controller.selectedSVGIconPath,
@@ -66,12 +67,13 @@ struct HomeView: View {
                         Task {
                             let svgIconPath = await controller.savedSVGIconPath()
                             libraryController.addCategory(
-                            title: controller.categoryTitle,
-                            subtitle: controller.categorySubtitle,
-                            template: controller.selectedTemplate,
-                            svgIconPath: svgIconPath,
-                            svgIconRemoteURL: controller.svgIconRemoteURL
-                        )
+                                title: controller.categoryTitle,
+                                subtitle: controller.categorySubtitle,
+                                template: controller.selectedTemplate,
+                                customContentMode: controller.customContentMode,
+                                svgIconPath: svgIconPath,
+                                svgIconRemoteURL: controller.svgIconRemoteURL
+                            )
                             controller.resetForm()
                             controller.isAddingCategory = false
                         }
@@ -86,6 +88,7 @@ struct HomeView: View {
                     subtitle: $controller.categorySubtitle,
                     svgIconURL: $controller.categorySVGIconURL,
                     selectedTemplate: $controller.selectedTemplate,
+                    customContentMode: $controller.customContentMode,
                     navigationTitle: L10n.Home.editCategory,
                     hint: L10n.Home.editCategoryHint,
                     selectedSVGIconPath: controller.selectedSVGIconPath,
@@ -101,6 +104,7 @@ struct HomeView: View {
                                 title: controller.categoryTitle,
                                 subtitle: controller.categorySubtitle,
                                 template: controller.selectedTemplate,
+                                customContentMode: controller.customContentMode,
                                 svgIconPath: svgIconPath,
                                 svgIconRemoteURL: controller.svgIconRemoteURL
                             )

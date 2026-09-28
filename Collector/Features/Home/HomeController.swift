@@ -6,6 +6,7 @@ final class HomeController: ObservableObject {
     @Published var categorySubtitle = ""
     @Published var categorySVGIconURL = ""
     @Published var selectedTemplate: CollectionTemplate = .custom
+    @Published var customContentMode: CustomCategoryContentMode = .shelvesAndPieces
     @Published var selectedSVGIconPath: String?
     private let iconStorage: SVGIconStorageController
 
@@ -18,6 +19,7 @@ final class HomeController: ObservableObject {
         categorySubtitle = ""
         categorySVGIconURL = ""
         selectedTemplate = .custom
+        customContentMode = .shelvesAndPieces
         selectedSVGIconPath = nil
     }
 
@@ -26,6 +28,7 @@ final class HomeController: ObservableObject {
         categorySubtitle = category.subtitle
         categorySVGIconURL = category.svgIconRemoteURL?.absoluteString ?? ""
         selectedTemplate = category.template
+        customContentMode = category.customContentMode
         selectedSVGIconPath = category.svgIconPath
     }
 

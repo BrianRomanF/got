@@ -7,7 +7,7 @@ struct HomeHeaderView: View {
                 .font(.caption.weight(.black))
                 .foregroundStyle(ComicTheme.red)
 
-            Text(L10n.Home.title.uppercased())
+            Text(L10n.Home.title.uppercased().vintageSafe)
                 .font(ComicTheme.displayFont)
                 .foregroundStyle(ComicTheme.ink)
                 .lineLimit(1)

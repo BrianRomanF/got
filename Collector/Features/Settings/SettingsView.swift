@@ -373,7 +373,7 @@ private struct SettingsHeaderView: View {
                 .font(.caption.weight(.black))
                 .foregroundStyle(ComicTheme.blue)
 
-            Text(L10n.Settings.title.uppercased())
+            Text(L10n.Settings.title.uppercased().vintageSafe)
                 .font(ComicTheme.displayFont)
                 .foregroundStyle(ComicTheme.ink)
                 .lineLimit(1)

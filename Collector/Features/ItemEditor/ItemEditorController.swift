@@ -156,4 +156,23 @@ final class ItemEditorController: ObservableObject {
             )
         }
     }
+
+    func applyTCGdexResult(_ result: TCGdexCardSearchResult) {
+        title = result.name
+        subtitle = result.displaySubtitle
+        coverURLString = result.imageURL?.absoluteString ?? ""
+        coverImageData = nil
+        coverLocalImagePath = nil
+        comicVineID = nil
+        comicVineSiteURL = nil
+        theGamesDBID = nil
+
+        Task {
+            coverLocalImagePath = await coverStorage.saveCover(
+                from: result.imageURL,
+                preferredName: "\(result.name)-\(result.id)",
+                template: .tradingCards
+            )
+        }
+    }
 }

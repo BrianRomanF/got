@@ -107,6 +107,15 @@
 "detail.groupSubtitle" = "Optional detail";
 "detail.newGroupHint" = "Organize this collection with a new shelf.";
 
+"customMode.title" = "Custom content";
+"customMode.hint" = "Choose whether this collection uses shelves, direct pieces, or both.";
+"customMode.shelvesAndPieces" = "Shelves and pieces";
+"customMode.shelvesAndPiecesHint" = "Create shelves and also add loose pieces.";
+"customMode.shelvesOnly" = "Shelves only";
+"customMode.shelvesOnlyHint" = "Best when everything lives inside shelves.";
+"customMode.piecesOnly" = "Pieces only";
+"customMode.piecesOnlyHint" = "Best for a flat gallery without shelves.";
+
 "onboarding.headline" = "Your collections. Always with you.";
 "onboarding.tagline" = "Comics, books, games, cards, figures, and more. Track, organize, and discover your collection.";
 "onboarding.collections" = "Comics, games, books, vinyl, cassettes, and more.";
@@ -175,6 +184,12 @@
 "discogs.missingAPIKey" = "To search Discogs, register on its website and generate a consumer key and consumer secret. Check the guide in Settings > APIs and imports.";
 "discogs.invalidURL" = "Discogs URL could not be built.";
 "discogs.requestFailed" = "Discogs request failed.";
+
+"tcgdex.searchTitle" = "Search TCGdex";
+"tcgdex.search" = "Search";
+"tcgdex.searchPlaceholder" = "Pikachu, Charizard, Mew...";
+"tcgdex.invalidURL" = "TCGdex URL could not be built.";
+"tcgdex.requestFailed" = "TCGdex request failed.";
 
 "ownership.owned" = "In collection";
 "ownership.missing" = "Missing";

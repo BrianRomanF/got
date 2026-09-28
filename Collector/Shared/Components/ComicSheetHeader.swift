@@ -6,7 +6,7 @@ struct ComicSheetHeader: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(title.uppercased())
+            Text(title.uppercased().vintageSafe)
                 .font(ComicTheme.titleFont)
                 .foregroundStyle(ComicTheme.ink)
                 .lineLimit(2)

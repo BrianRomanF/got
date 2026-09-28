@@ -9,7 +9,7 @@ struct CategoryGroupSection: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(category.template.topLevelGroupTitle.uppercased())
+            Text(category.template.topLevelGroupTitle.uppercased().vintageSafe)
                 .font(ComicTheme.titleFont)
                 .foregroundStyle(ComicTheme.ink)
 

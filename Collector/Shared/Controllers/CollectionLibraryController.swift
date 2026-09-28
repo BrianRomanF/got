@@ -42,6 +42,7 @@ final class CollectionLibraryController: ObservableObject {
         title: String,
         subtitle: String,
         template: CollectionTemplate = .custom,
+        customContentMode: CustomCategoryContentMode = .shelvesAndPieces,
         symbolName: String? = nil,
         svgIconPath: String? = nil,
         svgIconRemoteURL: URL? = nil
@@ -52,7 +53,8 @@ final class CollectionLibraryController: ObservableObject {
             symbolName: symbolName ?? template.defaultSymbolName,
             svgIconPath: svgIconPath,
             svgIconRemoteURL: svgIconRemoteURL,
-            template: template
+            template: template,
+            customContentMode: customContentMode
         )
         categories.append(category)
     }
@@ -79,6 +81,7 @@ final class CollectionLibraryController: ObservableObject {
         title: String,
         subtitle: String,
         template: CollectionTemplate,
+        customContentMode: CustomCategoryContentMode,
         svgIconPath: String?,
         svgIconRemoteURL: URL?
     ) {
@@ -86,6 +89,7 @@ final class CollectionLibraryController: ObservableObject {
         categories[categoryIndex].title = title
         categories[categoryIndex].subtitle = subtitle
         categories[categoryIndex].template = template
+        categories[categoryIndex].customContentMode = customContentMode
         categories[categoryIndex].symbolName = template.defaultSymbolName
         categories[categoryIndex].svgIconPath = svgIconPath
         categories[categoryIndex].svgIconRemoteURL = svgIconRemoteURL

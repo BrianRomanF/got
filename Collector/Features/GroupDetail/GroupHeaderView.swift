@@ -5,7 +5,7 @@ struct GroupHeaderView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text(group.title.uppercased())
+            Text(group.title.uppercased().vintageSafe)
                 .font(ComicTheme.displayFont)
                 .foregroundStyle(ComicTheme.ink)
                 .lineLimit(3)

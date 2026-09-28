@@ -13,7 +13,7 @@ struct ItemDetailMetadataView: View {
                 }
             }
 
-            Text(item.title.uppercased())
+            Text(item.title.uppercased().vintageSafe)
                 .font(ComicTheme.displayFont)
                 .foregroundStyle(ComicTheme.ink)
                 .lineLimit(3)

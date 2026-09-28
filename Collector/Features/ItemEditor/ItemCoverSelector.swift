@@ -10,7 +10,7 @@ struct ItemCoverSelector: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(L10n.ItemEditor.cover.uppercased())
+            Text(L10n.ItemEditor.cover.uppercased().vintageSafe)
                 .font(ComicTheme.titleFont)
                 .foregroundStyle(ComicTheme.ink)
 

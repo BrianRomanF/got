@@ -14,9 +14,11 @@ struct CategoryDetailView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
                         CategoryHeaderView(category: category)
-                        CategoryGroupSection(category: category)
+                        if category.allowsTopLevelGroups {
+                            CategoryGroupSection(category: category)
+                        }
 
-                        if category.template.shouldShowTopLevelItemsWhenEmpty || !category.items.isEmpty {
+                        if category.allowsTopLevelItems {
                             OwnershipFilterControl(selection: $controller.ownershipFilter)
                             CategoryItemSection(category: category, items: controller.filteredItems(from: category.items))
                         }
@@ -31,11 +33,13 @@ struct CategoryDetailView: View {
                             }
                         }
 
-                        CategoryToolbarButton(systemName: "folder.badge.plus", label: category.template.addTopLevelGroupTitle) {
-                            controller.isAddingGroup = true
+                        if category.allowsTopLevelGroups {
+                            CategoryToolbarButton(systemName: "folder.badge.plus", label: category.template.addTopLevelGroupTitle) {
+                                controller.isAddingGroup = true
+                            }
                         }
 
-                        if category.template.shouldShowTopLevelItemsWhenEmpty || !category.items.isEmpty {
+                        if category.allowsTopLevelItems {
                             CategoryToolbarButton(systemName: "plus.square.fill", label: L10n.Detail.addItem) {
                                 controller.isAddingItem = true
                             }

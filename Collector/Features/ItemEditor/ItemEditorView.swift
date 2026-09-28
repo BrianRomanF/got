@@ -7,6 +7,7 @@ struct ItemEditorView: View {
     @State private var isSearchingTheGamesDB = false
     @State private var isSearchingBooks = false
     @State private var isSearchingDiscogs = false
+    @State private var isSearchingTCGdex = false
     let template: CollectionTemplate
     let mode: Mode
     let onSave: (CollectibleItem) -> Void
@@ -69,6 +70,11 @@ struct ItemEditorView: View {
                                 isSearchingDiscogs = true
                             }
                         }
+                        if template == .tradingCards {
+                            TCGdexSearchButton {
+                                isSearchingTCGdex = true
+                            }
+                        }
                         ItemNameInput(text: $controller.title)
                         ItemSubtitleInput(text: $controller.subtitle)
                         ItemOwnershipInput(selection: $controller.ownershipStatus)
@@ -109,6 +115,11 @@ struct ItemEditorView: View {
             .sheet(isPresented: $isSearchingDiscogs) {
                 DiscogsSearchSheet(initialQuery: controller.title) { result in
                     controller.applyDiscogsResult(result)
+                }
+            }
+            .sheet(isPresented: $isSearchingTCGdex) {
+                TCGdexSearchSheet(initialQuery: controller.title) { result in
+                    controller.applyTCGdexResult(result)
                 }
             }
             .toolbar {
