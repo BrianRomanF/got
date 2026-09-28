@@ -13,14 +13,7 @@ struct DiscogsSearchSheet: View {
 
                 ScrollView {
                     VStack(spacing: 16) {
-                        Picker(L10n.Discogs.format, selection: $controller.selectedFormat) {
-                            ForEach(DiscogsMediaFormat.allCases) { format in
-                                Text(format.title).tag(format)
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                        .padding(12)
-                        .comicPanel(fill: ComicTheme.panel)
+                        DiscogsFormatPicker(selection: $controller.selectedFormat)
 
                         DiscogsSearchField(text: $controller.query) {
                             controller.search()
