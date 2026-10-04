@@ -95,6 +95,7 @@ struct ItemEditorView: View {
                             fields: template.detailFields,
                             values: $controller.templateDetails
                         )
+                        ItemLocationInput(text: $controller.physicalLocation)
                         ItemNotesInput(text: $controller.notes)
                         ItemSaveButton(isEnabled: controller.canSaveItem()) {
                             Task {

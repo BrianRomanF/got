@@ -120,6 +120,21 @@
 "wishlist.noShelf" = "No shelf";
 "wishlist.categorySubtitle" = "Choose a shelf to see its missing pieces.";
 
+"globalSearch.title" = "Search";
+"globalSearch.subtitle" = "Find collections, shelves, and pieces from one place.";
+"globalSearch.placeholder" = "Comic, shelf, piece...";
+"globalSearch.clear" = "Clear search";
+"globalSearch.startTitle" = "Search everything";
+"globalSearch.startMessage" = "Type a name, number, note, or location to jump straight to it.";
+
+"recentActivity.title" = "Recent activity";
+"recentActivity.subtitle" = "Latest pieces added or edited.";
+"recentActivity.count" = "%d recent moves";
+"recentActivity.categorySubtitle" = "Choose a shelf to see recent moves.";
+"recentActivity.noShelf" = "No shelf";
+"recentActivity.emptyTitle" = "No activity";
+"recentActivity.emptyMessage" = "Pieces you add or edit will appear here.";
+
 "filters.quick" = "Quick filter";
 "filters.all" = "All";
 "filters.withNotes" = "With notes";
@@ -194,6 +209,10 @@
 "itemDetail.delete" = "Delete";
 "itemDetail.deleteTitle" = "Delete piece?";
 "itemDetail.deleteMessage" = "This removes the piece from this collection.";
+
+"itemLocation.title" = "Physical location";
+"itemLocation.placeholder" = "Shelf, box, display case...";
+"itemLocation.hint" = "Where this piece lives inside your collection.";
 
 "quickActions.markOwned" = "Mark as have";
 "quickActions.markMissing" = "Mark as missing";

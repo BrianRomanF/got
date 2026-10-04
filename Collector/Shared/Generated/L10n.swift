@@ -135,6 +135,25 @@ enum L10n {
         static var categorySubtitle: String { tr("wishlist.categorySubtitle") }
     }
 
+    enum GlobalSearch {
+        static var title: String { tr("globalSearch.title") }
+        static var subtitle: String { tr("globalSearch.subtitle") }
+        static var placeholder: String { tr("globalSearch.placeholder") }
+        static var clear: String { tr("globalSearch.clear") }
+        static var startTitle: String { tr("globalSearch.startTitle") }
+        static var startMessage: String { tr("globalSearch.startMessage") }
+    }
+
+    enum RecentActivity {
+        static var title: String { tr("recentActivity.title") }
+        static var subtitle: String { tr("recentActivity.subtitle") }
+        static var count: String { tr("recentActivity.count") }
+        static var categorySubtitle: String { tr("recentActivity.categorySubtitle") }
+        static var noShelf: String { tr("recentActivity.noShelf") }
+        static var emptyTitle: String { tr("recentActivity.emptyTitle") }
+        static var emptyMessage: String { tr("recentActivity.emptyMessage") }
+    }
+
     enum Filters {
         static var quick: String { tr("filters.quick") }
         static var all: String { tr("filters.all") }
@@ -230,6 +249,12 @@ enum L10n {
         static var delete: String { tr("itemDetail.delete") }
         static var deleteTitle: String { tr("itemDetail.deleteTitle") }
         static var deleteMessage: String { tr("itemDetail.deleteMessage") }
+    }
+
+    enum ItemLocation {
+        static var title: String { tr("itemLocation.title") }
+        static var placeholder: String { tr("itemLocation.placeholder") }
+        static var hint: String { tr("itemLocation.hint") }
     }
 
     enum QuickActions {

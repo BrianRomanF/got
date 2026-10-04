@@ -19,7 +19,6 @@ struct HomeView: View {
                             stats: libraryController.libraryStats(),
                             categoryCount: libraryController.categories.count
                         )
-                        HomeWishlistButton(missingCount: libraryController.libraryStats().missingItems)
                         HomeCategoryGrid(
                             categories: libraryController.categories,
                             stats: { libraryController.stats(for: $0) },
@@ -31,12 +30,20 @@ struct HomeView: View {
                                 categoryToDelete = category
                             }
                         )
+                        HomeRecentActivityButton(count: libraryController.recentActivity(limit: 60).count)
+                        HomeWishlistButton(missingCount: libraryController.libraryStats().missingItems)
                     }
                     .padding(20)
                 }
             }
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
+                ToolbarItemGroup(placement: .topBarLeading) {
+                    NavigationLink(value: CollectorRoute.globalSearch) {
+                        Image(systemName: "magnifyingglass")
+                            .font(.headline.weight(.black))
+                    }
+                    .accessibilityLabel(L10n.GlobalSearch.title)
+
                     Button {
                         isShowingSettings = true
                     } label: {
@@ -137,6 +144,14 @@ struct HomeView: View {
             }
             .navigationDestination(for: CollectorRoute.self) { route in
                 switch route {
+                case .globalSearch:
+                    GlobalSearchView()
+                case .recentActivity:
+                    RecentActivityView()
+                case .recentActivityCategory(let id):
+                    RecentActivityCategoryView(categoryID: id)
+                case .recentActivitySection(let sectionID):
+                    RecentActivitySectionItemsView(sectionID: sectionID)
                 case .category(let id):
                     CategoryDetailView(categoryID: id)
                 case .group(let categoryID, let groupID):

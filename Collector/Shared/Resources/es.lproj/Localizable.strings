@@ -120,6 +120,21 @@
 "wishlist.noShelf" = "Sin shelf";
 "wishlist.categorySubtitle" = "Elige un estante para ver sus piezas faltantes.";
 
+"globalSearch.title" = "Buscar";
+"globalSearch.subtitle" = "Encuentra colecciones, estantes y piezas desde un solo lugar.";
+"globalSearch.placeholder" = "Comic, estante, pieza...";
+"globalSearch.clear" = "Limpiar busqueda";
+"globalSearch.startTitle" = "Busca en todo";
+"globalSearch.startMessage" = "Escribe un nombre, numero, nota o ubicacion para saltar directo a lo que buscas.";
+
+"recentActivity.title" = "Actividad reciente";
+"recentActivity.subtitle" = "Ultimas piezas agregadas o editadas.";
+"recentActivity.count" = "%d movimientos recientes";
+"recentActivity.categorySubtitle" = "Elige un estante para ver sus movimientos recientes.";
+"recentActivity.noShelf" = "Sin shelf";
+"recentActivity.emptyTitle" = "Sin actividad";
+"recentActivity.emptyMessage" = "Cuando agregues o edites piezas apareceran aqui.";
+
 "filters.quick" = "Filtro rapido";
 "filters.all" = "Todos";
 "filters.withNotes" = "Con notas";
@@ -194,6 +209,10 @@
 "itemDetail.delete" = "Eliminar";
 "itemDetail.deleteTitle" = "Eliminar pieza?";
 "itemDetail.deleteMessage" = "Esto elimina la pieza de esta coleccion.";
+
+"itemLocation.title" = "Ubicacion fisica";
+"itemLocation.placeholder" = "Repisa, caja, vitrina...";
+"itemLocation.hint" = "Donde vive esta pieza dentro de tu coleccion.";
 
 "quickActions.markOwned" = "Marcar como tengo";
 "quickActions.markMissing" = "Marcar como me falta";

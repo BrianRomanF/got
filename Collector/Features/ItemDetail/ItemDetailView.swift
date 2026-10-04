@@ -38,6 +38,7 @@ struct ItemDetailView: View {
                                 values: item.templateDetails ?? [:]
                             )
                         }
+                        ItemDetailLocationView(location: item.physicalLocation)
                         ItemDetailNotesView(notes: item.notes) {
                             notesDraft = item.notes
                             isEditingNotes = true

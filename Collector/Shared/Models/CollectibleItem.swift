@@ -18,9 +18,11 @@ struct CollectibleItem: Identifiable, Hashable, Codable {
     var bookEdition: String?
     var bookFormat: BookOwnershipFormat?
     var templateDetails: [String: String]?
+    var physicalLocation: String?
     var ownershipStatus: ItemOwnershipStatus
     var readingStatus: ReadingStatus?
     var createdAt: Date
+    var updatedAt: Date?
 
     init(
         id: UUID = UUID(),
@@ -40,9 +42,11 @@ struct CollectibleItem: Identifiable, Hashable, Codable {
         bookEdition: String? = nil,
         bookFormat: BookOwnershipFormat? = nil,
         templateDetails: [String: String]? = nil,
+        physicalLocation: String? = nil,
         ownershipStatus: ItemOwnershipStatus = .owned,
         readingStatus: ReadingStatus? = nil,
-        createdAt: Date = .now
+        createdAt: Date = .now,
+        updatedAt: Date? = nil
     ) {
         self.id = id
         self.title = title
@@ -61,8 +65,10 @@ struct CollectibleItem: Identifiable, Hashable, Codable {
         self.bookEdition = bookEdition
         self.bookFormat = bookFormat
         self.templateDetails = templateDetails
+        self.physicalLocation = physicalLocation
         self.ownershipStatus = ownershipStatus
         self.readingStatus = readingStatus
         self.createdAt = createdAt
+        self.updatedAt = updatedAt
     }
 }

@@ -1,0 +1,53 @@
+import SwiftUI
+
+struct RecentActivityCell: View {
+    let entry: RecentActivityEntry
+
+    var body: some View {
+        HStack(spacing: 12) {
+            CoverImageView(
+                title: entry.item.title,
+                ownershipStatus: entry.item.ownershipStatus,
+                localImageData: entry.item.coverImageData,
+                localImagePath: entry.item.coverLocalImagePath,
+                remoteImageURL: entry.item.coverRemoteURL,
+                ownedFill: ComicTheme.red,
+                placeholderSymbolName: "clock.fill",
+                showsTitle: false
+            )
+            .frame(width: 72, height: 96)
+
+            VStack(alignment: .leading, spacing: 7) {
+                HStack(spacing: 8) {
+                    OwnershipBadge(status: entry.item.ownershipStatus)
+
+                    if let readingStatus = entry.item.readingStatus {
+                        ReadingBadge(status: readingStatus)
+                    }
+                }
+
+                Text(entry.item.title)
+                    .font(.headline.weight(.black))
+                    .foregroundStyle(ComicTheme.ink)
+                    .lineLimit(2)
+
+                Text([entry.categoryTitle, entry.groupTitle].compactMap { $0 }.joined(separator: " > "))
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(ComicTheme.ink.opacity(0.68))
+                    .lineLimit(2)
+
+                Text(entry.activityDate.formatted(date: .abbreviated, time: .shortened))
+                    .font(.caption2.weight(.black))
+                    .foregroundStyle(ComicTheme.ink.opacity(0.58))
+            }
+
+            Spacer(minLength: 0)
+
+            Image(systemName: "chevron.right")
+                .font(.caption.weight(.black))
+                .foregroundStyle(ComicTheme.ink.opacity(0.55))
+        }
+        .padding(12)
+        .comicPanel(fill: ComicTheme.panel)
+    }
+}

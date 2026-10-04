@@ -187,6 +187,80 @@ final class CollectionLibraryController: ObservableObject {
             .first { $0.id == sectionID }
     }
 
+    func globalSearchResults(query: String) -> [GlobalSearchResult] {
+        let normalizedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !normalizedQuery.isEmpty else { return [] }
+
+        var results: [GlobalSearchResult] = []
+
+        for category in categories {
+            if matches(normalizedQuery, in: [category.title, category.subtitle]) {
+                results.append(
+                    GlobalSearchResult(
+                        id: "category-\(category.id.uuidString)",
+                        kind: .category,
+                        title: category.title,
+                        subtitle: category.subtitle,
+                        route: .category(category.id)
+                    )
+                )
+            }
+
+            results.append(contentsOf: globalSearchResults(
+                query: normalizedQuery,
+                items: category.items,
+                categoryID: category.id,
+                categoryTitle: category.title,
+                groupID: nil,
+                path: category.title
+            ))
+
+            results.append(contentsOf: globalSearchResults(
+                query: normalizedQuery,
+                groups: category.groups,
+                categoryID: category.id,
+                categoryTitle: category.title,
+                path: category.title
+            ))
+        }
+
+        return Array(results.prefix(60))
+    }
+
+    func recentActivity(limit: Int = 20) -> [RecentActivityEntry] {
+        categories
+            .flatMap { category in
+                recentActivityEntries(in: category)
+            }
+            .sorted { $0.activityDate > $1.activityDate }
+            .prefix(limit)
+            .map { $0 }
+    }
+
+    func recentActivityCategorySummaries() -> [RecentActivityCategorySummary] {
+        categories.compactMap { category in
+            let sections = recentActivitySections(in: category)
+            guard !sections.isEmpty else { return nil }
+            return RecentActivityCategorySummary(
+                id: category.id,
+                title: category.title,
+                sections: sections
+            )
+        }
+        .sorted { ($0.latestDate ?? .distantPast) > ($1.latestDate ?? .distantPast) }
+    }
+
+    func recentActivitySections(inCategory categoryID: UUID) -> [RecentActivitySection] {
+        guard let category = category(with: categoryID) else { return [] }
+        return recentActivitySections(in: category)
+    }
+
+    func recentActivitySection(with sectionID: String) -> RecentActivitySection? {
+        recentActivityCategorySummaries()
+            .flatMap(\.sections)
+            .first { $0.id == sectionID }
+    }
+
     func addItem(_ item: CollectibleItem, toCategory categoryID: UUID) {
         guard let categoryIndex = categories.firstIndex(where: { $0.id == categoryID }) else { return }
         categories[categoryIndex].items.append(item)
@@ -199,14 +273,16 @@ final class CollectionLibraryController: ObservableObject {
 
     func updateItem(_ item: CollectibleItem, inCategory categoryID: UUID, groupID: UUID?) {
         guard let categoryIndex = categories.firstIndex(where: { $0.id == categoryID }) else { return }
+        var updatedItem = item
+        updatedItem.updatedAt = .now
 
         if let groupID {
-            updateItem(item, groupID: groupID, groups: &categories[categoryIndex].groups)
+            updateItem(updatedItem, groupID: groupID, groups: &categories[categoryIndex].groups)
             return
         }
 
         guard let itemIndex = categories[categoryIndex].items.firstIndex(where: { $0.id == item.id }) else { return }
-        categories[categoryIndex].items[itemIndex] = item
+        categories[categoryIndex].items[itemIndex] = updatedItem
     }
 
     func updateItemOwnership(itemID: UUID, status: ItemOwnershipStatus, inCategory categoryID: UUID, groupID: UUID?) {
@@ -364,6 +440,182 @@ final class CollectionLibraryController: ObservableObject {
                     categoryID: categoryID,
                     categoryTitle: categoryTitle
                 )
+        }
+    }
+
+    private func globalSearchResults(
+        query: String,
+        groups: [CollectionGroup],
+        categoryID: UUID,
+        categoryTitle: String,
+        path: String
+    ) -> [GlobalSearchResult] {
+        groups.flatMap { group in
+            let groupPath = [path, group.title].joined(separator: " > ")
+            var results: [GlobalSearchResult] = []
+
+            if matches(query, in: [group.title, group.subtitle]) {
+                results.append(
+                    GlobalSearchResult(
+                        id: "group-\(categoryID.uuidString)-\(group.id.uuidString)",
+                        kind: .shelf,
+                        title: group.title,
+                        subtitle: groupPath,
+                        route: .group(categoryID: categoryID, groupID: group.id)
+                    )
+                )
+            }
+
+            results.append(contentsOf: globalSearchResults(
+                query: query,
+                items: group.items,
+                categoryID: categoryID,
+                categoryTitle: categoryTitle,
+                groupID: group.id,
+                path: groupPath
+            ))
+
+            results.append(contentsOf: globalSearchResults(
+                query: query,
+                groups: group.groups,
+                categoryID: categoryID,
+                categoryTitle: categoryTitle,
+                path: groupPath
+            ))
+
+            return results
+        }
+    }
+
+    private func globalSearchResults(
+        query: String,
+        items: [CollectibleItem],
+        categoryID: UUID,
+        categoryTitle: String,
+        groupID: UUID?,
+        path: String
+    ) -> [GlobalSearchResult] {
+        items.compactMap { item in
+            let searchableValues = [
+                item.title,
+                item.subtitle,
+                item.notes,
+                item.physicalLocation ?? ""
+            ] + (item.templateDetails?.map(\.value) ?? [])
+
+            guard matches(query, in: searchableValues) else { return nil }
+
+            return GlobalSearchResult(
+                id: "item-\(categoryID.uuidString)-\(groupID?.uuidString ?? "root")-\(item.id.uuidString)",
+                kind: .piece,
+                title: item.title,
+                subtitle: path,
+                route: .item(categoryID: categoryID, groupID: groupID, itemID: item.id)
+            )
+        }
+    }
+
+    private func recentActivityEntries(in category: CollectionCategory) -> [RecentActivityEntry] {
+        category.items.map {
+            RecentActivityEntry(
+                categoryID: category.id,
+                groupID: nil,
+                item: $0,
+                categoryTitle: category.title,
+                groupTitle: nil
+            )
+        }
+        + recentActivityEntries(in: category.groups, categoryID: category.id, categoryTitle: category.title)
+    }
+
+    private func recentActivityEntries(in groups: [CollectionGroup], categoryID: UUID, categoryTitle: String) -> [RecentActivityEntry] {
+        groups.flatMap { group in
+            group.items.map {
+                RecentActivityEntry(
+                    categoryID: categoryID,
+                    groupID: group.id,
+                    item: $0,
+                    categoryTitle: categoryTitle,
+                    groupTitle: group.title
+                )
+            }
+            + recentActivityEntries(in: group.groups, categoryID: categoryID, categoryTitle: categoryTitle)
+        }
+    }
+
+    private func recentActivitySections(in category: CollectionCategory) -> [RecentActivitySection] {
+        var sections: [RecentActivitySection] = []
+
+        let rootEntries = category.items
+            .map {
+                RecentActivityEntry(
+                    categoryID: category.id,
+                    groupID: nil,
+                    item: $0,
+                    categoryTitle: category.title,
+                    groupTitle: nil
+                )
+            }
+            .sorted { $0.activityDate > $1.activityDate }
+
+        if !rootEntries.isEmpty {
+            sections.append(
+                RecentActivitySection(
+                    id: "\(category.id.uuidString)-root-recent",
+                    categoryID: category.id,
+                    categoryTitle: category.title,
+                    groupID: nil,
+                    title: L10n.RecentActivity.noShelf,
+                    entries: rootEntries
+                )
+            )
+        }
+
+        sections.append(contentsOf: recentActivitySections(
+            in: category.groups,
+            categoryID: category.id,
+            categoryTitle: category.title
+        ))
+
+        return sections.sorted { ($0.latestDate ?? .distantPast) > ($1.latestDate ?? .distantPast) }
+    }
+
+    private func recentActivitySections(in groups: [CollectionGroup], categoryID: UUID, categoryTitle: String) -> [RecentActivitySection] {
+        groups.flatMap { group in
+            var sections: [RecentActivitySection] = []
+            let entries = group.items
+                .map {
+                    RecentActivityEntry(
+                        categoryID: categoryID,
+                        groupID: group.id,
+                        item: $0,
+                        categoryTitle: categoryTitle,
+                        groupTitle: group.title
+                    )
+                }
+                .sorted { $0.activityDate > $1.activityDate }
+
+            if !entries.isEmpty {
+                sections.append(
+                    RecentActivitySection(
+                        id: "\(categoryID.uuidString)-\(group.id.uuidString)-recent",
+                        categoryID: categoryID,
+                        categoryTitle: categoryTitle,
+                        groupID: group.id,
+                        title: group.title,
+                        entries: entries
+                    )
+                )
+            }
+
+            sections.append(contentsOf: recentActivitySections(in: group.groups, categoryID: categoryID, categoryTitle: categoryTitle))
+            return sections.sorted { ($0.latestDate ?? .distantPast) > ($1.latestDate ?? .distantPast) }
+        }
+    }
+
+    private func matches(_ query: String, in values: [String]) -> Bool {
+        values.contains { value in
+            value.range(of: query, options: [.caseInsensitive, .diacriticInsensitive]) != nil
         }
     }
 

@@ -16,6 +16,7 @@ final class ItemEditorController: ObservableObject {
     @Published var bookEdition = ""
     @Published var bookFormat: BookOwnershipFormat = .physical
     @Published var templateDetails: [String: String] = [:]
+    @Published var physicalLocation = ""
     @Published var coverImageData: Data?
     @Published var coverURLString = ""
     private var coverLocalImagePath: String?
@@ -40,6 +41,7 @@ final class ItemEditorController: ObservableObject {
         bookEdition = item.bookEdition ?? ""
         bookFormat = item.bookFormat ?? .physical
         templateDetails = item.templateDetails ?? [:]
+        physicalLocation = item.physicalLocation ?? ""
         coverImageData = item.coverImageData ?? item.coverLocalImagePath.flatMap { try? Data(contentsOf: URL(fileURLWithPath: $0)) }
         coverLocalImagePath = item.coverLocalImagePath
         coverURLString = item.coverRemoteURL?.absoluteString ?? ""
@@ -70,9 +72,11 @@ final class ItemEditorController: ObservableObject {
             bookEdition: template == .books ? normalizedBookText(bookEdition) : nil,
             bookFormat: template == .books ? bookFormat : nil,
             templateDetails: normalizedTemplateDetails(for: template),
+            physicalLocation: normalizedText(physicalLocation),
             ownershipStatus: ownershipStatus,
             readingStatus: template.supportsReadingStatus ? readingStatus : nil,
-            createdAt: existingItem?.createdAt ?? .now
+            createdAt: existingItem?.createdAt ?? .now,
+            updatedAt: existingItem?.updatedAt
         )
     }
 
@@ -103,6 +107,10 @@ final class ItemEditorController: ObservableObject {
     }
 
     private func normalizedBookText(_ value: String) -> String? {
+        normalizedText(value)
+    }
+
+    private func normalizedText(_ value: String) -> String? {
         let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
         return trimmed.isEmpty ? nil : trimmed
     }
