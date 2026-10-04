@@ -336,6 +336,12 @@ private extension CollectionLibraryController {
             subtitle: L10n.Seed.gamesSubtitle,
             symbolName: "gamecontroller.fill",
             template: .games
+        ),
+        CollectionCategory(
+            title: L10n.Seed.booksTitle,
+            subtitle: L10n.Seed.booksSubtitle,
+            symbolName: "books.vertical.fill",
+            template: .books
         )
     ]
 }

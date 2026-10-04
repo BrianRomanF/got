@@ -263,3 +263,5 @@
 "seed.genreSubtitle" = "Genre shelf";
 "seed.gamesTitle" = "Games";
 "seed.gamesSubtitle" = "Platforms, sagas, editions";
+"seed.booksTitle" = "Books";
+"seed.booksSubtitle" = "Authors, sagas, reading";

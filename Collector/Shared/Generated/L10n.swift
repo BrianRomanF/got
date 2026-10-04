@@ -307,6 +307,8 @@ enum L10n {
         static var genreSubtitle: String { tr("seed.genreSubtitle") }
         static var gamesTitle: String { tr("seed.gamesTitle") }
         static var gamesSubtitle: String { tr("seed.gamesSubtitle") }
+        static var booksTitle: String { tr("seed.booksTitle") }
+        static var booksSubtitle: String { tr("seed.booksSubtitle") }
     }
 }
 

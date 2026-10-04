@@ -263,3 +263,5 @@
 "seed.genreSubtitle" = "Estante de genero";
 "seed.gamesTitle" = "Juegos";
 "seed.gamesSubtitle" = "Plataformas, sagas, ediciones";
+"seed.booksTitle" = "Libros";
+"seed.booksSubtitle" = "Autores, sagas, lecturas";
