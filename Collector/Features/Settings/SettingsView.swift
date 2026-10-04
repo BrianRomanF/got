@@ -15,6 +15,7 @@ struct SettingsView: View {
     @AppStorage(AppSettings.defaultQuickFilterKey) private var defaultQuickFilter = ItemQuickFilter.all.rawValue
     @AppStorage(AppSettings.defaultSortOptionKey) private var defaultSortOption = ItemSortOption.newest.rawValue
     @AppStorage(AppSettings.defaultDisplayModeKey) private var defaultDisplayMode = ItemDisplayMode.grid.rawValue
+    @State private var isGeneralSectionExpanded = false
     @State private var isUsageGuideExpanded = false
     @State private var isAPISectionExpanded = false
     @State private var isBackupSectionExpanded = false
@@ -123,49 +124,53 @@ struct SettingsView: View {
     }
 
     private var generalSection: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        DisclosureGroup(isExpanded: $isGeneralSectionExpanded) {
+            VStack(alignment: .leading, spacing: 14) {
+                Text(L10n.Settings.generalHint)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(ComicTheme.ink.opacity(0.76))
+                    .fixedSize(horizontal: false, vertical: true)
+
+                SettingsPickerRow(
+                    title: L10n.Settings.defaultOwnershipFilter,
+                    systemName: "checkmark.seal.fill",
+                    options: ItemOwnershipFilter.allCases,
+                    selection: defaultOwnershipBinding,
+                    optionTitle: { $0.title }
+                )
+
+                SettingsPickerRow(
+                    title: L10n.Settings.defaultQuickFilter,
+                    systemName: "line.3.horizontal.decrease.circle.fill",
+                    options: ItemQuickFilter.allCases,
+                    selection: defaultQuickFilterBinding,
+                    optionTitle: { $0.title }
+                )
+
+                SettingsPickerRow(
+                    title: L10n.Settings.defaultSort,
+                    systemName: "arrow.up.arrow.down.square.fill",
+                    options: ItemSortOption.allCases,
+                    selection: defaultSortBinding,
+                    optionTitle: { $0.title }
+                )
+
+                SettingsPickerRow(
+                    title: L10n.Settings.defaultDisplay,
+                    systemName: "square.grid.2x2.fill",
+                    options: ItemDisplayMode.allCases,
+                    selection: defaultDisplayBinding,
+                    optionTitle: { $0.title }
+                )
+            }
+            .padding(.top, 12)
+        } label: {
             SettingsSectionTitle(
                 systemName: "slider.horizontal.3",
                 title: L10n.Settings.generalTitle
             )
-
-            Text(L10n.Settings.generalHint)
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(ComicTheme.ink.opacity(0.76))
-                .fixedSize(horizontal: false, vertical: true)
-
-            SettingsPickerRow(
-                title: L10n.Settings.defaultOwnershipFilter,
-                systemName: "checkmark.seal.fill",
-                options: ItemOwnershipFilter.allCases,
-                selection: defaultOwnershipBinding,
-                optionTitle: { $0.title }
-            )
-
-            SettingsPickerRow(
-                title: L10n.Settings.defaultQuickFilter,
-                systemName: "line.3.horizontal.decrease.circle.fill",
-                options: ItemQuickFilter.allCases,
-                selection: defaultQuickFilterBinding,
-                optionTitle: { $0.title }
-            )
-
-            SettingsPickerRow(
-                title: L10n.Settings.defaultSort,
-                systemName: "arrow.up.arrow.down.square.fill",
-                options: ItemSortOption.allCases,
-                selection: defaultSortBinding,
-                optionTitle: { $0.title }
-            )
-
-            SettingsPickerRow(
-                title: L10n.Settings.defaultDisplay,
-                systemName: "square.grid.2x2.fill",
-                options: ItemDisplayMode.allCases,
-                selection: defaultDisplayBinding,
-                optionTitle: { $0.title }
-            )
         }
+        .tint(ComicTheme.ink)
         .padding(16)
         .comicPanel()
     }

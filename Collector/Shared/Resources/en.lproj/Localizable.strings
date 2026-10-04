@@ -125,8 +125,11 @@
 "filters.withNotes" = "With notes";
 "filters.noCover" = "No cover";
 
+"options.title" = "Options";
+
 "sort.title" = "Sort";
 "sort.newest" = "Newest";
+"sort.number" = "Number";
 "sort.ownedFirst" = "Have first";
 "sort.missingFirst" = "Missing first";
 "sort.rating" = "Rating";

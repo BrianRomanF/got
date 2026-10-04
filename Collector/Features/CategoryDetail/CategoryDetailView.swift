@@ -27,6 +27,14 @@ struct CategoryDetailView: View {
                         }
 
                         if category.allowsTopLevelItems {
+                            ItemOptionsPanel(
+                                isExpanded: $controller.isOptionsExpanded,
+                                ownershipFilter: $controller.ownershipFilter,
+                                quickFilter: $controller.quickFilter,
+                                sortOption: $controller.sortOption,
+                                displayMode: $controller.displayMode,
+                                includesBookFilters: category.template == .books
+                            )
                             CategoryItemSection(
                                 category: category,
                                 items: controller.filteredItems(from: category.items),

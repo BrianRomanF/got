@@ -8,10 +8,19 @@ final class GroupDetailController: ObservableObject {
     @Published var itemToDelete: CollectibleItem?
     @Published var groupTitle = ""
     @Published var groupSubtitle = ""
-    @Published var ownershipFilter: ItemOwnershipFilter
-    @Published var quickFilter: ItemQuickFilter
-    @Published var sortOption: ItemSortOption
-    @Published var displayMode: ItemDisplayMode
+    @Published var ownershipFilter: ItemOwnershipFilter {
+        didSet { AppSettings.defaultOwnershipFilter = ownershipFilter }
+    }
+    @Published var quickFilter: ItemQuickFilter {
+        didSet { AppSettings.defaultQuickFilter = quickFilter }
+    }
+    @Published var sortOption: ItemSortOption {
+        didSet { AppSettings.defaultSortOption = sortOption }
+    }
+    @Published var displayMode: ItemDisplayMode {
+        didSet { AppSettings.defaultDisplayMode = displayMode }
+    }
+    @Published var isOptionsExpanded = false
     @Published var searchText = ""
     @Published var movingGroupID: UUID?
 

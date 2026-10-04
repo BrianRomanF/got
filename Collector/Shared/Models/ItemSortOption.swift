@@ -2,6 +2,7 @@ import Foundation
 
 enum ItemSortOption: String, CaseIterable, Identifiable, Hashable {
     case newest
+    case number
     case title
     case ownedFirst
     case missingFirst
@@ -15,6 +16,8 @@ enum ItemSortOption: String, CaseIterable, Identifiable, Hashable {
         switch self {
         case .newest:
             return L10n.Sort.newest
+        case .number:
+            return L10n.Sort.number
         case .title:
             return L10n.Sort.title
         case .ownedFirst:

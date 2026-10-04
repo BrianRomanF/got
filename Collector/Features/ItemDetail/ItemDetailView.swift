@@ -122,7 +122,7 @@ struct ItemDetailView: View {
     }
 
     private func moveToSibling(offset: Int) {
-        let items = libraryController.items(inCategory: categoryID, groupID: groupID)
+        let items = siblingItems()
         guard let index = items.firstIndex(where: { $0.id == currentItemID }) else { return }
 
         let nextIndex = index + offset
@@ -131,5 +131,21 @@ struct ItemDetailView: View {
         withAnimation(.spring(response: 0.28, dampingFraction: 0.85)) {
             currentItemID = items[nextIndex].id
         }
+    }
+
+    private func siblingItems() -> [CollectibleItem] {
+        let rawItems = libraryController.items(inCategory: categoryID, groupID: groupID)
+        let filteredItems = rawItems
+            .filter {
+                AppSettings.defaultOwnershipFilter.includes($0)
+                    && AppSettings.defaultQuickFilter.includes($0)
+            }
+            .sorted(using: AppSettings.defaultSortOption)
+
+        if filteredItems.contains(where: { $0.id == currentItemID }) {
+            return filteredItems
+        }
+
+        return rawItems.sorted(using: AppSettings.defaultSortOption)
     }
 }

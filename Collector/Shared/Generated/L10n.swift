@@ -142,9 +142,14 @@ enum L10n {
         static var noCover: String { tr("filters.noCover") }
     }
 
+    enum Options {
+        static var title: String { tr("options.title") }
+    }
+
     enum Sort {
         static var title: String { tr("sort.title") }
         static var newest: String { tr("sort.newest") }
+        static var number: String { tr("sort.number") }
         static var ownedFirst: String { tr("sort.ownedFirst") }
         static var missingFirst: String { tr("sort.missingFirst") }
         static var rating: String { tr("sort.rating") }

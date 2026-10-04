@@ -40,6 +40,14 @@ struct GroupDetailView: View {
                                 totalCount: group.items.count
                             )
                             GroupFolderSearchBar(text: $controller.searchText)
+                            ItemOptionsPanel(
+                                isExpanded: $controller.isOptionsExpanded,
+                                ownershipFilter: $controller.ownershipFilter,
+                                quickFilter: $controller.quickFilter,
+                                sortOption: $controller.sortOption,
+                                displayMode: $controller.displayMode,
+                                includesBookFilters: category.template == .books
+                            )
                             GroupItemsSection(
                                 categoryID: categoryID,
                                 groupID: groupID,

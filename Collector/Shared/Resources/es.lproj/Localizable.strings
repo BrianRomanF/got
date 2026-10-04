@@ -125,8 +125,11 @@
 "filters.withNotes" = "Con notas";
 "filters.noCover" = "Sin portada";
 
+"options.title" = "Opciones";
+
 "sort.title" = "Orden";
 "sort.newest" = "Recientes";
+"sort.number" = "Numero";
 "sort.ownedFirst" = "Tengo primero";
 "sort.missingFirst" = "Faltan primero";
 "sort.rating" = "Rating";
