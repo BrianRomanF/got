@@ -5,6 +5,7 @@ struct ItemBookDetailsInput: View {
     @Binding var protagonist: String
     @Binding var series: String
     @Binding var edition: String
+    @Binding var format: BookOwnershipFormat
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -46,6 +47,18 @@ struct ItemBookDetailsInput: View {
 
             TextField("", text: $edition, prompt: Text(L10n.BookDetails.editionPlaceholder).foregroundStyle(ComicTheme.ink.opacity(0.55)))
                 .comicTextField()
+
+            VStack(alignment: .leading, spacing: 8) {
+                Text(L10n.BookDetails.format.uppercased().vintageSafe)
+                    .font(.caption.weight(.black))
+                    .foregroundStyle(ComicTheme.red)
+
+                ComicSegmentedControl(
+                    options: BookOwnershipFormat.allCases,
+                    selection: $format,
+                    title: { $0.title }
+                )
+            }
         }
         .padding(16)
         .comicPanel(fill: .white)

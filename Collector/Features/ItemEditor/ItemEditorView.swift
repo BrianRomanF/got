@@ -86,7 +86,8 @@ struct ItemEditorView: View {
                                 rating: $controller.bookRating,
                                 protagonist: $controller.bookProtagonist,
                                 series: $controller.bookSeries,
-                                edition: $controller.bookEdition
+                                edition: $controller.bookEdition,
+                                format: $controller.bookFormat
                             )
                         }
                         ItemNotesInput(text: $controller.notes)

@@ -23,6 +23,7 @@ struct ItemDetailBookDetailsView: View {
                 detailRow(title: L10n.BookDetails.protagonist, value: item.bookProtagonist)
                 detailRow(title: L10n.BookDetails.series, value: item.bookSeries)
                 detailRow(title: L10n.BookDetails.edition, value: item.bookEdition)
+                detailRow(title: L10n.BookDetails.format, value: item.bookFormat?.title)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(16)
@@ -35,6 +36,7 @@ struct ItemDetailBookDetailsView: View {
             || hasValue(item.bookProtagonist)
             || hasValue(item.bookSeries)
             || hasValue(item.bookEdition)
+            || item.bookFormat != nil
     }
 
     @ViewBuilder

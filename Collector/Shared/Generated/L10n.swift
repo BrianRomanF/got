@@ -218,6 +218,9 @@ enum L10n {
         static var protagonist: String { tr("bookDetails.protagonist") }
         static var series: String { tr("bookDetails.series") }
         static var edition: String { tr("bookDetails.edition") }
+        static var format: String { tr("bookDetails.format") }
+        static var physical: String { tr("bookDetails.physical") }
+        static var digital: String { tr("bookDetails.digital") }
         static var protagonistPlaceholder: String { tr("bookDetails.protagonistPlaceholder") }
         static var seriesPlaceholder: String { tr("bookDetails.seriesPlaceholder") }
         static var editionPlaceholder: String { tr("bookDetails.editionPlaceholder") }

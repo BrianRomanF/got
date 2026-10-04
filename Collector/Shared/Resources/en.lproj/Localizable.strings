@@ -186,6 +186,9 @@
 "bookDetails.protagonist" = "Protagonist";
 "bookDetails.series" = "Series";
 "bookDetails.edition" = "Edition";
+"bookDetails.format" = "Format";
+"bookDetails.physical" = "Physical";
+"bookDetails.digital" = "Digital";
 "bookDetails.protagonistPlaceholder" = "Protagonist or central character";
 "bookDetails.seriesPlaceholder" = "Saga, series, or universe";
 "bookDetails.editionPlaceholder" = "Edition, format, or publisher";

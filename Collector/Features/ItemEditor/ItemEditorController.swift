@@ -14,6 +14,7 @@ final class ItemEditorController: ObservableObject {
     @Published var bookProtagonist = ""
     @Published var bookSeries = ""
     @Published var bookEdition = ""
+    @Published var bookFormat: BookOwnershipFormat = .physical
     @Published var coverImageData: Data?
     @Published var coverURLString = ""
     private var coverLocalImagePath: String?
@@ -36,6 +37,7 @@ final class ItemEditorController: ObservableObject {
         bookProtagonist = item.bookProtagonist ?? ""
         bookSeries = item.bookSeries ?? ""
         bookEdition = item.bookEdition ?? ""
+        bookFormat = item.bookFormat ?? .physical
         coverImageData = item.coverImageData ?? item.coverLocalImagePath.flatMap { try? Data(contentsOf: URL(fileURLWithPath: $0)) }
         coverLocalImagePath = item.coverLocalImagePath
         coverURLString = item.coverRemoteURL?.absoluteString ?? ""
@@ -64,6 +66,7 @@ final class ItemEditorController: ObservableObject {
             bookProtagonist: template == .books ? normalizedBookText(bookProtagonist) : nil,
             bookSeries: template == .books ? normalizedBookText(bookSeries) : nil,
             bookEdition: template == .books ? normalizedBookText(bookEdition) : nil,
+            bookFormat: template == .books ? bookFormat : nil,
             ownershipStatus: ownershipStatus,
             readingStatus: template.supportsReadingStatus ? readingStatus : nil,
             createdAt: existingItem?.createdAt ?? .now
