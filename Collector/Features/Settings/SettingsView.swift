@@ -41,6 +41,9 @@ struct SettingsView: View {
             }
             .navigationTitle(L10n.Settings.title)
             .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(ComicTheme.paper, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarColorScheme(.light, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(L10n.Common.save) {
@@ -371,7 +374,7 @@ private struct SettingsHeaderView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(L10n.Settings.eyebrow.uppercased())
                 .font(.caption.weight(.black))
-                .foregroundStyle(ComicTheme.blue)
+                .foregroundStyle(ComicTheme.red)
 
             Text(L10n.Settings.title.uppercased().vintageSafe)
                 .font(ComicTheme.displayFont)
@@ -379,7 +382,9 @@ private struct SettingsHeaderView: View {
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
         }
-        .padding(.vertical, 8)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
+        .comicPanel(fill: ComicTheme.yellow)
     }
 }
 

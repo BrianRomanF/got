@@ -3,6 +3,7 @@ import SwiftUI
 struct BookSearchSheet: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var controller = BookSearchController()
+    @State private var isScanningBarcode = false
     let initialQuery: String
     let onSelect: (BookSearchResult) -> Void
 
@@ -13,8 +14,14 @@ struct BookSearchSheet: View {
 
                 ScrollView {
                     VStack(spacing: 16) {
-                        BookSearchField(text: $controller.query) {
-                            controller.search()
+                        HStack(spacing: 10) {
+                            BookSearchField(text: $controller.query) {
+                                controller.search()
+                            }
+
+                            BookBarcodeScanButton {
+                                isScanningBarcode = true
+                            }
                         }
 
                         if controller.isLoading {
@@ -64,6 +71,14 @@ struct BookSearchSheet: View {
                         dismiss()
                     }
                 }
+            }
+            .sheet(isPresented: $isScanningBarcode) {
+                BookBarcodeScannerView { code in
+                    controller.query = code
+                    isScanningBarcode = false
+                    controller.search()
+                }
+                .ignoresSafeArea()
             }
             .onAppear {
                 if controller.query.isEmpty {

@@ -152,6 +152,8 @@ enum L10n {
         static var deleteTitle: String { tr("groupDetail.deleteTitle") }
         static var deleteMessage: String { tr("groupDetail.deleteMessage") }
         static var deleteConfirm: String { tr("groupDetail.deleteConfirm") }
+        static var searchPlaceholder: String { tr("groupDetail.searchPlaceholder") }
+        static var issueCounter: String { tr("groupDetail.issueCounter") }
     }
 
     enum ItemEditor {
@@ -202,6 +204,7 @@ enum L10n {
         static var searchTitle: String { tr("bookSearch.searchTitle") }
         static var search: String { tr("bookSearch.search") }
         static var searchPlaceholder: String { tr("bookSearch.searchPlaceholder") }
+        static var scanBarcode: String { tr("bookSearch.scanBarcode") }
         static var invalidURL: String { tr("bookSearch.invalidURL") }
         static var requestFailed: String { tr("bookSearch.requestFailed") }
     }

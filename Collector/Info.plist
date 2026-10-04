@@ -23,7 +23,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Collector usa la camara para fotografiar portadas de tus piezas.</string>
+	<string>Got it usa la camara para fotografiar portadas y escanear codigos de libros.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Collector usa tu biblioteca para elegir portadas de tus piezas.</string>
 	<key>UIAppFonts</key>

@@ -8,6 +8,7 @@ final class CategoryDetailController: ObservableObject {
     @Published var groupTitle = ""
     @Published var groupSubtitle = ""
     @Published var ownershipFilter: ItemOwnershipFilter = .all
+    @Published var movingGroupID: UUID?
 
     func resetGroupForm() {
         groupTitle = ""

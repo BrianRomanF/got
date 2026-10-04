@@ -1,8 +1,11 @@
 import SwiftUI
+import UIKit
 
 struct GroupChildrenSection: View {
     let categoryID: UUID
     let groups: [CollectionGroup]
+    @Binding var movingGroupID: UUID?
+    let onMoveGroup: (UUID, GroupMoveDirection) -> Void
 
     private let columns = [
         GridItem(.adaptive(minimum: 150), spacing: 16)
@@ -22,11 +25,31 @@ struct GroupChildrenSection: View {
                 )
             } else {
                 LazyVGrid(columns: columns, spacing: 16) {
-                    ForEach(groups) { group in
-                        NavigationLink(value: CollectorRoute.group(categoryID: categoryID, groupID: group.id)) {
-                            GroupChildCell(group: group)
+                    ForEach(Array(groups.enumerated()), id: \.element.id) { index, group in
+                        ZStack(alignment: .topTrailing) {
+                            NavigationLink(value: CollectorRoute.group(categoryID: categoryID, groupID: group.id)) {
+                                GroupChildCell(group: group)
+                            }
+                            .buttonStyle(.plain)
+                            .simultaneousGesture(
+                                LongPressGesture(minimumDuration: 0.45)
+                                    .onEnded { _ in
+                                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                                        movingGroupID = group.id
+                                    }
+                            )
+
+                            if movingGroupID == group.id {
+                                ShelfMoveControls(
+                                    canMoveUp: index > 0,
+                                    canMoveDown: index < groups.count - 1,
+                                    onMove: { direction in onMoveGroup(group.id, direction) },
+                                    onClose: { movingGroupID = nil }
+                                )
+                                .padding(8)
+                                .zIndex(2)
+                            }
                         }
-                        .buttonStyle(.plain)
                     }
                 }
             }

@@ -115,6 +115,27 @@ final class CollectionLibraryController: ObservableObject {
         deleteGroup(with: groupID, groups: &categories[categoryIndex].groups)
     }
 
+    func moveGroup(with groupID: UUID, direction: GroupMoveDirection, inCategory categoryID: UUID, parentGroupID: UUID? = nil) {
+        guard let categoryIndex = categories.firstIndex(where: { $0.id == categoryID }) else { return }
+
+        if let parentGroupID {
+            moveGroup(with: groupID, direction: direction, parentGroupID: parentGroupID, groups: &categories[categoryIndex].groups)
+            return
+        }
+
+        moveGroup(with: groupID, direction: direction, groups: &categories[categoryIndex].groups)
+    }
+
+    func items(inCategory categoryID: UUID, groupID: UUID?) -> [CollectibleItem] {
+        guard let category = category(with: categoryID) else { return [] }
+
+        if let groupID {
+            return findGroup(groupID, in: category.groups)?.items ?? []
+        }
+
+        return category.items
+    }
+
     func addItem(_ item: CollectibleItem, toCategory categoryID: UUID) {
         guard let categoryIndex = categories.firstIndex(where: { $0.id == categoryID }) else { return }
         categories[categoryIndex].items.append(item)
@@ -189,6 +210,32 @@ final class CollectionLibraryController: ObservableObject {
 
         for index in groups.indices {
             if deleteGroup(with: groupID, groups: &groups[index].groups) {
+                return true
+            }
+        }
+
+        return false
+    }
+
+    @discardableResult
+    private func moveGroup(with groupID: UUID, direction: GroupMoveDirection, groups: inout [CollectionGroup]) -> Bool {
+        guard let sourceIndex = groups.firstIndex(where: { $0.id == groupID }) else { return false }
+        let destinationIndex = sourceIndex + direction.offset
+        guard groups.indices.contains(destinationIndex) else { return false }
+
+        let group = groups.remove(at: sourceIndex)
+        groups.insert(group, at: destinationIndex)
+        return true
+    }
+
+    @discardableResult
+    private func moveGroup(with groupID: UUID, direction: GroupMoveDirection, parentGroupID: UUID, groups: inout [CollectionGroup]) -> Bool {
+        for index in groups.indices {
+            if groups[index].id == parentGroupID {
+                return moveGroup(with: groupID, direction: direction, groups: &groups[index].groups)
+            }
+
+            if moveGroup(with: groupID, direction: direction, parentGroupID: parentGroupID, groups: &groups[index].groups) {
                 return true
             }
         }

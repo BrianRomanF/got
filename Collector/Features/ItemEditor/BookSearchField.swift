@@ -8,6 +8,7 @@ struct BookSearchField: View {
         HStack(spacing: 10) {
             TextField("", text: $text, prompt: Text(L10n.BookSearch.searchPlaceholder).foregroundStyle(ComicTheme.ink.opacity(0.45)))
                 .textInputAutocapitalization(.words)
+                .keyboardType(.asciiCapable)
                 .submitLabel(.search)
                 .onSubmit(onSearch)
                 .comicTextField()

@@ -15,7 +15,12 @@ struct CategoryDetailView: View {
                     VStack(alignment: .leading, spacing: 24) {
                         CategoryHeaderView(category: category)
                         if category.allowsTopLevelGroups {
-                            CategoryGroupSection(category: category)
+                            CategoryGroupSection(
+                                category: category,
+                                movingGroupID: $controller.movingGroupID
+                            ) { groupID, direction in
+                                libraryController.moveGroup(with: groupID, direction: direction, inCategory: categoryID)
+                            }
                         }
 
                         if category.allowsTopLevelItems {

@@ -132,6 +132,8 @@
 "groupDetail.deleteTitle" = "Delete shelf?";
 "groupDetail.deleteMessage" = "This removes this shelf, nested shelves, and every piece inside it.";
 "groupDetail.deleteConfirm" = "Delete shelf";
+"groupDetail.searchPlaceholder" = "Search this folder";
+"groupDetail.issueCounter" = "Have %d/%d";
 
 "itemEditor.newItem" = "New piece";
 "itemEditor.editItem" = "Edit piece";
@@ -171,7 +173,8 @@
 
 "bookSearch.searchTitle" = "Search books";
 "bookSearch.search" = "Search";
-"bookSearch.searchPlaceholder" = "Dune, Neuromancer, Sandman...";
+"bookSearch.searchPlaceholder" = "Title, author, or ISBN";
+"bookSearch.scanBarcode" = "Scan barcode";
 "bookSearch.invalidURL" = "Book search URL could not be built.";
 "bookSearch.requestFailed" = "Book search failed.";
 

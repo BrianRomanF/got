@@ -26,11 +26,13 @@ final class BookSearchAPIClient {
     }
 
     func searchBooks(query: String) async throws -> [BookSearchResult] {
-        if let googleResults = try? await searchGoogleBooks(query: query), !googleResults.isEmpty {
+        let normalizedQuery = normalizedBookQuery(from: query)
+
+        if let googleResults = try? await searchGoogleBooks(query: normalizedQuery.googleQuery), !googleResults.isEmpty {
             return googleResults
         }
 
-        return try await searchOpenLibrary(query: query)
+        return try await searchOpenLibrary(query: normalizedQuery.openLibraryQuery)
     }
 
     private func searchGoogleBooks(query: String) async throws -> [BookSearchResult] {
@@ -113,6 +115,19 @@ final class BookSearchAPIClient {
         }
 
         return try JSONDecoder().decode(Response.self, from: data)
+    }
+
+    private func normalizedBookQuery(from query: String) -> (googleQuery: String, openLibraryQuery: String) {
+        let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        let isbn = trimmed
+            .uppercased()
+            .filter { $0.isNumber || $0 == "X" }
+
+        if isbn.count == 10 || isbn.count == 13 {
+            return ("isbn:\(isbn)", isbn)
+        }
+
+        return (trimmed, trimmed)
     }
 }
 

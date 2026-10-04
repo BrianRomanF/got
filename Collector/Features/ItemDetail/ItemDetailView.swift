@@ -5,9 +5,17 @@ struct ItemDetailView: View {
     @EnvironmentObject private var libraryController: CollectionLibraryController
     @State private var isEditing = false
     @State private var isConfirmingDelete = false
+    @State private var currentItemID: UUID
     let categoryID: UUID
     let groupID: UUID?
     let itemID: UUID
+
+    init(categoryID: UUID, groupID: UUID?, itemID: UUID) {
+        self.categoryID = categoryID
+        self.groupID = groupID
+        self.itemID = itemID
+        _currentItemID = State(initialValue: itemID)
+    }
 
     var body: some View {
         ZStack {
@@ -22,6 +30,7 @@ struct ItemDetailView: View {
                     }
                     .padding(20)
                 }
+                .gesture(detailSwipeGesture)
             }
         }
         .navigationTitle(item?.title ?? "")
@@ -49,6 +58,7 @@ struct ItemDetailView: View {
             if let item, let category = libraryController.category(with: categoryID) {
                 ItemEditorView(template: category.template, mode: .edit(item)) { updatedItem in
                     libraryController.updateItem(updatedItem, inCategory: categoryID, groupID: groupID)
+                    currentItemID = updatedItem.id
                     isEditing = false
                 }
             }
@@ -56,7 +66,7 @@ struct ItemDetailView: View {
         .alert(L10n.ItemDetail.deleteTitle, isPresented: $isConfirmingDelete) {
             Button(L10n.Common.cancel, role: .cancel) {}
             Button(L10n.ItemDetail.delete, role: .destructive) {
-                libraryController.deleteItem(with: itemID, inCategory: categoryID, groupID: groupID)
+                libraryController.deleteItem(with: currentItemID, inCategory: categoryID, groupID: groupID)
                 dismiss()
             }
         } message: {
@@ -65,6 +75,39 @@ struct ItemDetailView: View {
     }
 
     private var item: CollectibleItem? {
-        libraryController.item(with: itemID, inCategory: categoryID, groupID: groupID)
+        libraryController.item(with: currentItemID, inCategory: categoryID, groupID: groupID)
+    }
+
+    private var detailSwipeGesture: some Gesture {
+        DragGesture(minimumDistance: 45)
+            .onEnded { value in
+                let width = value.translation.width
+                let height = value.translation.height
+
+                if abs(width) > abs(height) {
+                    if width < -45 {
+                        moveToSibling(offset: 1)
+                    } else if width > 45 {
+                        moveToSibling(offset: -1)
+                    }
+                    return
+                }
+
+                if height > 70 {
+                    dismiss()
+                }
+            }
+    }
+
+    private func moveToSibling(offset: Int) {
+        let items = libraryController.items(inCategory: categoryID, groupID: groupID)
+        guard let index = items.firstIndex(where: { $0.id == currentItemID }) else { return }
+
+        let nextIndex = index + offset
+        guard items.indices.contains(nextIndex) else { return }
+
+        withAnimation(.spring(response: 0.28, dampingFraction: 0.85)) {
+            currentItemID = items[nextIndex].id
+        }
     }
 }

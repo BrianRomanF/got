@@ -17,8 +17,25 @@ struct GroupDetailView: View {
                     VStack(alignment: .leading, spacing: 24) {
                         GroupHeaderView(group: group)
                         if !group.groups.isEmpty {
-                            GroupChildrenSection(categoryID: categoryID, groups: group.groups)
+                            GroupChildrenSection(
+                                categoryID: categoryID,
+                                groups: group.groups,
+                                movingGroupID: $controller.movingGroupID
+                            ) { movedGroupID, direction in
+                                libraryController.moveGroup(
+                                    with: movedGroupID,
+                                    direction: direction,
+                                    inCategory: categoryID,
+                                    parentGroupID: groupID
+                                )
+                            }
                         }
+                        GroupIssueCounterView(
+                            itemTitle: category.template.itemTitle,
+                            ownedCount: controller.ownedCount(from: group.items),
+                            totalCount: group.items.count
+                        )
+                        GroupFolderSearchBar(text: $controller.searchText)
                         OwnershipFilterControl(selection: $controller.ownershipFilter)
                         GroupItemsSection(
                             categoryID: categoryID,
