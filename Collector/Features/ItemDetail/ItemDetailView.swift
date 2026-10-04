@@ -28,6 +28,9 @@ struct ItemDetailView: View {
                     VStack(alignment: .leading, spacing: 18) {
                         ItemDetailCoverView(item: item)
                         ItemDetailMetadataView(item: item)
+                        if libraryController.category(with: categoryID)?.template == .books {
+                            ItemDetailBookDetailsView(item: item)
+                        }
                         ItemDetailNotesView(notes: item.notes) {
                             notesDraft = item.notes
                             isEditingNotes = true

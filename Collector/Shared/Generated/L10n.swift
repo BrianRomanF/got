@@ -212,6 +212,17 @@ enum L10n {
         static var requestFailed: String { tr("bookSearch.requestFailed") }
     }
 
+    enum BookDetails {
+        static var title: String { tr("bookDetails.title") }
+        static var rating: String { tr("bookDetails.rating") }
+        static var protagonist: String { tr("bookDetails.protagonist") }
+        static var series: String { tr("bookDetails.series") }
+        static var edition: String { tr("bookDetails.edition") }
+        static var protagonistPlaceholder: String { tr("bookDetails.protagonistPlaceholder") }
+        static var seriesPlaceholder: String { tr("bookDetails.seriesPlaceholder") }
+        static var editionPlaceholder: String { tr("bookDetails.editionPlaceholder") }
+    }
+
     enum Discogs {
         static var searchTitle: String { tr("discogs.searchTitle") }
         static var search: String { tr("discogs.search") }

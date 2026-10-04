@@ -10,6 +10,10 @@ final class ItemEditorController: ObservableObject {
     @Published var notes = ""
     @Published var ownershipStatus: ItemOwnershipStatus = .owned
     @Published var readingStatus: ReadingStatus = .unread
+    @Published var bookRating = 0
+    @Published var bookProtagonist = ""
+    @Published var bookSeries = ""
+    @Published var bookEdition = ""
     @Published var coverImageData: Data?
     @Published var coverURLString = ""
     private var coverLocalImagePath: String?
@@ -28,6 +32,10 @@ final class ItemEditorController: ObservableObject {
         notes = item.notes
         ownershipStatus = item.ownershipStatus
         readingStatus = item.readingStatus ?? .unread
+        bookRating = item.bookRating ?? 0
+        bookProtagonist = item.bookProtagonist ?? ""
+        bookSeries = item.bookSeries ?? ""
+        bookEdition = item.bookEdition ?? ""
         coverImageData = item.coverImageData ?? item.coverLocalImagePath.flatMap { try? Data(contentsOf: URL(fileURLWithPath: $0)) }
         coverLocalImagePath = item.coverLocalImagePath
         coverURLString = item.coverRemoteURL?.absoluteString ?? ""
@@ -52,6 +60,10 @@ final class ItemEditorController: ObservableObject {
             comicVineID: comicVineID,
             comicVineSiteURL: comicVineSiteURL,
             theGamesDBID: theGamesDBID,
+            bookRating: template == .books ? normalizedBookRating : nil,
+            bookProtagonist: template == .books ? normalizedBookText(bookProtagonist) : nil,
+            bookSeries: template == .books ? normalizedBookText(bookSeries) : nil,
+            bookEdition: template == .books ? normalizedBookText(bookEdition) : nil,
             ownershipStatus: ownershipStatus,
             readingStatus: template.supportsReadingStatus ? readingStatus : nil,
             createdAt: existingItem?.createdAt ?? .now
@@ -78,6 +90,15 @@ final class ItemEditorController: ObservableObject {
         guard coverImageData == nil else { return nil }
         guard !coverURLString.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return nil }
         return coverLocalImagePath
+    }
+
+    private var normalizedBookRating: Int? {
+        (1...5).contains(bookRating) ? bookRating : nil
+    }
+
+    private func normalizedBookText(_ value: String) -> String? {
+        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? nil : trimmed
     }
 
     func applyComicVineResult(_ result: ComicVineIssueSearchResult) {

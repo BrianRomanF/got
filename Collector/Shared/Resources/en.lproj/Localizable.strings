@@ -181,6 +181,15 @@
 "bookSearch.invalidURL" = "Book search URL could not be built.";
 "bookSearch.requestFailed" = "Book search failed.";
 
+"bookDetails.title" = "Book details";
+"bookDetails.rating" = "Rating";
+"bookDetails.protagonist" = "Protagonist";
+"bookDetails.series" = "Series";
+"bookDetails.edition" = "Edition";
+"bookDetails.protagonistPlaceholder" = "Protagonist or central character";
+"bookDetails.seriesPlaceholder" = "Saga, series, or universe";
+"bookDetails.editionPlaceholder" = "Edition, format, or publisher";
+
 "discogs.searchTitle" = "Search Discogs";
 "discogs.search" = "Search";
 "discogs.searchPlaceholder" = "Daft Punk Discovery";

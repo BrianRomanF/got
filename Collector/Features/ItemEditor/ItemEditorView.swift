@@ -81,6 +81,14 @@ struct ItemEditorView: View {
                         if template.supportsReadingStatus {
                             ItemReadingInput(selection: $controller.readingStatus)
                         }
+                        if template == .books {
+                            ItemBookDetailsInput(
+                                rating: $controller.bookRating,
+                                protagonist: $controller.bookProtagonist,
+                                series: $controller.bookSeries,
+                                edition: $controller.bookEdition
+                            )
+                        }
                         ItemNotesInput(text: $controller.notes)
                         ItemSaveButton(isEnabled: controller.canSaveItem()) {
                             Task {

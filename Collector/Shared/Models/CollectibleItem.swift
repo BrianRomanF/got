@@ -12,6 +12,10 @@ struct CollectibleItem: Identifiable, Hashable, Codable {
     var comicVineID: Int?
     var comicVineSiteURL: URL?
     var theGamesDBID: Int?
+    var bookRating: Int?
+    var bookProtagonist: String?
+    var bookSeries: String?
+    var bookEdition: String?
     var ownershipStatus: ItemOwnershipStatus
     var readingStatus: ReadingStatus?
     var createdAt: Date
@@ -28,6 +32,10 @@ struct CollectibleItem: Identifiable, Hashable, Codable {
         comicVineID: Int? = nil,
         comicVineSiteURL: URL? = nil,
         theGamesDBID: Int? = nil,
+        bookRating: Int? = nil,
+        bookProtagonist: String? = nil,
+        bookSeries: String? = nil,
+        bookEdition: String? = nil,
         ownershipStatus: ItemOwnershipStatus = .owned,
         readingStatus: ReadingStatus? = nil,
         createdAt: Date = .now
@@ -43,6 +51,10 @@ struct CollectibleItem: Identifiable, Hashable, Codable {
         self.comicVineID = comicVineID
         self.comicVineSiteURL = comicVineSiteURL
         self.theGamesDBID = theGamesDBID
+        self.bookRating = bookRating
+        self.bookProtagonist = bookProtagonist
+        self.bookSeries = bookSeries
+        self.bookEdition = bookEdition
         self.ownershipStatus = ownershipStatus
         self.readingStatus = readingStatus
         self.createdAt = createdAt
