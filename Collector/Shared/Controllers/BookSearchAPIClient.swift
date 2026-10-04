@@ -19,6 +19,7 @@ final class BookSearchAPIClient {
 
     private let googleBooksURL = URL(string: "https://www.googleapis.com/books/v1/volumes")!
     private let openLibraryURL = URL(string: "https://openlibrary.org/search.json")!
+    private let openLibraryISBNBaseURL = URL(string: "https://openlibrary.org/isbn")!
     private let session: URLSession
 
     init(session: URLSession = .shared) {
@@ -32,22 +33,32 @@ final class BookSearchAPIClient {
             return googleResults
         }
 
+        if let isbn = normalizedQuery.isbn,
+           let openLibraryISBNResult = try? await searchOpenLibraryISBN(isbn: isbn),
+           !openLibraryISBNResult.isEmpty {
+            return openLibraryISBNResult
+        }
+
         return try await searchOpenLibrary(query: normalizedQuery.openLibraryQuery)
     }
 
     private func searchGoogleBooks(query: String) async throws -> [BookSearchResult] {
         let key = apiKey()
-        guard !key.isEmpty else { return [] }
         guard var components = URLComponents(url: googleBooksURL, resolvingAgainstBaseURL: false) else {
             throw BookSearchAPIError.invalidURL
         }
 
-        components.queryItems = [
+        var queryItems = [
             URLQueryItem(name: "q", value: query),
             URLQueryItem(name: "maxResults", value: "20"),
-            URLQueryItem(name: "printType", value: "books"),
-            URLQueryItem(name: "key", value: key)
+            URLQueryItem(name: "printType", value: "books")
         ]
+
+        if !key.isEmpty {
+            queryItems.append(URLQueryItem(name: "key", value: key))
+        }
+
+        components.queryItems = queryItems
 
         let response = try await decodedResponse(GoogleBooksResponse.self, components: components)
 
@@ -65,6 +76,28 @@ final class BookSearchAPIClient {
                 coverURL: item.volumeInfo.imageLinks?.bestURL
             )
         } ?? []
+    }
+
+    private func searchOpenLibraryISBN(isbn: String) async throws -> [BookSearchResult] {
+        let url = openLibraryISBNBaseURL
+            .appendingPathComponent(isbn)
+            .appendingPathExtension("json")
+
+        let book = try await decodedResponse(OpenLibraryISBNBookDTO.self, url: url)
+        guard let title = book.title, !title.isEmpty else { return [] }
+
+        return [
+            BookSearchResult(
+                id: "openlibrary-isbn-\(isbn)",
+                provider: .openLibrary,
+                title: title,
+                authors: book.authorNames,
+                publishedYear: book.publishedYear,
+                publisher: book.publishers?.first,
+                description: book.descriptionText,
+                coverURL: book.coverURL(isbn: isbn)
+            )
+        ]
     }
 
     private func searchOpenLibrary(query: String) async throws -> [BookSearchResult] {
@@ -109,6 +142,10 @@ final class BookSearchAPIClient {
             throw BookSearchAPIError.invalidURL
         }
 
+        return try await decodedResponse(type, url: url)
+    }
+
+    private func decodedResponse<Response: Decodable>(_ type: Response.Type, url: URL) async throws -> Response {
         let (data, response) = try await session.data(from: url)
         guard (response as? HTTPURLResponse)?.statusCode == 200 else {
             throw BookSearchAPIError.requestFailed
@@ -117,17 +154,17 @@ final class BookSearchAPIClient {
         return try JSONDecoder().decode(Response.self, from: data)
     }
 
-    private func normalizedBookQuery(from query: String) -> (googleQuery: String, openLibraryQuery: String) {
+    private func normalizedBookQuery(from query: String) -> (googleQuery: String, openLibraryQuery: String, isbn: String?) {
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
         let isbn = trimmed
             .uppercased()
             .filter { $0.isNumber || $0 == "X" }
 
         if isbn.count == 10 || isbn.count == 13 {
-            return ("isbn:\(isbn)", isbn)
+            return ("isbn:\(isbn)", isbn, isbn)
         }
 
-        return (trimmed, trimmed)
+        return (trimmed, trimmed, nil)
     }
 }
 
@@ -161,6 +198,65 @@ private struct GoogleBookImageLinksDTO: Decodable {
 
 private struct OpenLibraryResponse: Decodable {
     let docs: [OpenLibraryBookDTO]
+}
+
+private struct OpenLibraryISBNBookDTO: Decodable {
+    let title: String?
+    let publishDate: String?
+    let publishers: [String]?
+    let covers: [Int]?
+    let byStatement: String?
+    let description: OpenLibraryDescriptionDTO?
+    let notes: OpenLibraryDescriptionDTO?
+
+    enum CodingKeys: String, CodingKey {
+        case title
+        case publishDate = "publish_date"
+        case publishers
+        case covers
+        case byStatement = "by_statement"
+        case description
+        case notes
+    }
+
+    var authorNames: [String] {
+        guard let byStatement, !byStatement.isEmpty else { return [] }
+        return [byStatement]
+    }
+
+    var publishedYear: String? {
+        publishDate?.split(whereSeparator: { !$0.isNumber }).first.map(String.init)
+    }
+
+    var descriptionText: String? {
+        description?.text ?? notes?.text
+    }
+
+    func coverURL(isbn: String) -> URL? {
+        if let coverID = covers?.first {
+            return URL(string: "https://covers.openlibrary.org/b/id/\(coverID)-L.jpg")
+        }
+
+        return URL(string: "https://covers.openlibrary.org/b/isbn/\(isbn)-L.jpg")
+    }
+}
+
+private struct OpenLibraryDescriptionDTO: Decodable {
+    let text: String?
+
+    init(from decoder: Decoder) throws {
+        if let text = try? decoder.singleValueContainer().decode(String.self) {
+            self.text = text
+            return
+        }
+
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        text = try container.decodeIfPresent(String.self, forKey: .value)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case value
+    }
 }
 
 private struct OpenLibraryBookDTO: Decodable {
