@@ -5,6 +5,7 @@ struct CategoryGroupSection: View {
     let category: CollectionCategory
     @Binding var movingGroupID: UUID?
     let onMoveGroup: (UUID, GroupMoveDirection) -> Void
+    let onAddGroup: () -> Void
 
     private let columns = [
         GridItem(.adaptive(minimum: 150), spacing: 16)
@@ -17,10 +18,13 @@ struct CategoryGroupSection: View {
                 .foregroundStyle(ComicTheme.ink)
 
             if category.groups.isEmpty {
-                ComicEmptyStateView(
+                ComicEmptyActionView(
                     systemName: "tray.full.fill",
                     title: L10n.Empty.shelvesTitle,
-                    message: L10n.Empty.shelvesMessage
+                    message: L10n.Empty.shelvesMessage,
+                    actionTitle: category.template.addTopLevelGroupTitle,
+                    actionSystemName: "folder.badge.plus",
+                    action: onAddGroup
                 )
             } else {
                 LazyVGrid(columns: columns, spacing: 16) {

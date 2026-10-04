@@ -155,4 +155,46 @@ enum CollectionTemplate: String, CaseIterable, Hashable, Identifiable, Codable {
             return "square.grid.2x2.fill"
         }
     }
+
+    var detailFields: [TemplateDetailField] {
+        switch self {
+        case .comics:
+            return [
+                TemplateDetailField(key: "writer", title: L10n.TemplateDetails.writer, placeholder: L10n.TemplateDetails.writerPlaceholder),
+                TemplateDetailField(key: "artist", title: L10n.TemplateDetails.artist, placeholder: L10n.TemplateDetails.artistPlaceholder),
+                TemplateDetailField(key: "publisher", title: L10n.TemplateDetails.publisher, placeholder: L10n.TemplateDetails.publisherPlaceholder),
+                TemplateDetailField(key: "variant", title: L10n.TemplateDetails.variant, placeholder: L10n.TemplateDetails.variantPlaceholder)
+            ]
+        case .games:
+            return [
+                TemplateDetailField(key: "platform", title: L10n.TemplateDetails.platform, placeholder: L10n.TemplateDetails.platformPlaceholder),
+                TemplateDetailField(key: "region", title: L10n.TemplateDetails.region, placeholder: L10n.TemplateDetails.regionPlaceholder),
+                TemplateDetailField(key: "condition", title: L10n.TemplateDetails.condition, placeholder: L10n.TemplateDetails.conditionPlaceholder),
+                TemplateDetailField(key: "completion", title: L10n.TemplateDetails.completion, placeholder: L10n.TemplateDetails.completionPlaceholder)
+            ]
+        case .vinyl:
+            return [
+                TemplateDetailField(key: "year", title: L10n.TemplateDetails.year, placeholder: L10n.TemplateDetails.yearPlaceholder),
+                TemplateDetailField(key: "label", title: L10n.TemplateDetails.label, placeholder: L10n.TemplateDetails.labelPlaceholder),
+                TemplateDetailField(key: "pressing", title: L10n.TemplateDetails.pressing, placeholder: L10n.TemplateDetails.pressingPlaceholder),
+                TemplateDetailField(key: "condition", title: L10n.TemplateDetails.condition, placeholder: L10n.TemplateDetails.conditionPlaceholder)
+            ]
+        case .tradingCards:
+            return [
+                TemplateDetailField(key: "set", title: L10n.TemplateDetails.set, placeholder: L10n.TemplateDetails.setPlaceholder),
+                TemplateDetailField(key: "number", title: L10n.TemplateDetails.number, placeholder: L10n.TemplateDetails.numberPlaceholder),
+                TemplateDetailField(key: "rarity", title: L10n.TemplateDetails.rarity, placeholder: L10n.TemplateDetails.rarityPlaceholder),
+                TemplateDetailField(key: "condition", title: L10n.TemplateDetails.condition, placeholder: L10n.TemplateDetails.conditionPlaceholder)
+            ]
+        case .collectibles:
+            return [
+                TemplateDetailField(key: "maker", title: L10n.TemplateDetails.maker, placeholder: L10n.TemplateDetails.makerPlaceholder),
+                TemplateDetailField(key: "line", title: L10n.TemplateDetails.line, placeholder: L10n.TemplateDetails.linePlaceholder),
+                TemplateDetailField(key: "condition", title: L10n.TemplateDetails.condition, placeholder: L10n.TemplateDetails.conditionPlaceholder),
+                TemplateDetailField(key: "location", title: L10n.TemplateDetails.location, placeholder: L10n.TemplateDetails.locationPlaceholder)
+            ]
+        case .books, .custom:
+            return []
+        }
+    }
 }

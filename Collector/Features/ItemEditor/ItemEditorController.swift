@@ -15,6 +15,7 @@ final class ItemEditorController: ObservableObject {
     @Published var bookSeries = ""
     @Published var bookEdition = ""
     @Published var bookFormat: BookOwnershipFormat = .physical
+    @Published var templateDetails: [String: String] = [:]
     @Published var coverImageData: Data?
     @Published var coverURLString = ""
     private var coverLocalImagePath: String?
@@ -38,6 +39,7 @@ final class ItemEditorController: ObservableObject {
         bookSeries = item.bookSeries ?? ""
         bookEdition = item.bookEdition ?? ""
         bookFormat = item.bookFormat ?? .physical
+        templateDetails = item.templateDetails ?? [:]
         coverImageData = item.coverImageData ?? item.coverLocalImagePath.flatMap { try? Data(contentsOf: URL(fileURLWithPath: $0)) }
         coverLocalImagePath = item.coverLocalImagePath
         coverURLString = item.coverRemoteURL?.absoluteString ?? ""
@@ -67,6 +69,7 @@ final class ItemEditorController: ObservableObject {
             bookSeries: template == .books ? normalizedBookText(bookSeries) : nil,
             bookEdition: template == .books ? normalizedBookText(bookEdition) : nil,
             bookFormat: template == .books ? bookFormat : nil,
+            templateDetails: normalizedTemplateDetails(for: template),
             ownershipStatus: ownershipStatus,
             readingStatus: template.supportsReadingStatus ? readingStatus : nil,
             createdAt: existingItem?.createdAt ?? .now
@@ -102,6 +105,19 @@ final class ItemEditorController: ObservableObject {
     private func normalizedBookText(_ value: String) -> String? {
         let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
         return trimmed.isEmpty ? nil : trimmed
+    }
+
+    private func normalizedTemplateDetails(for template: CollectionTemplate) -> [String: String]? {
+        let allowedKeys = Set(template.detailFields.map(\.key))
+        let normalized = templateDetails.reduce(into: [String: String]()) { result, pair in
+            guard allowedKeys.contains(pair.key) else { return }
+            let trimmed = pair.value.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !trimmed.isEmpty {
+                result[pair.key] = trimmed
+            }
+        }
+
+        return normalized.isEmpty ? nil : normalized
     }
 
     func applyComicVineResult(_ result: ComicVineIssueSearchResult) {

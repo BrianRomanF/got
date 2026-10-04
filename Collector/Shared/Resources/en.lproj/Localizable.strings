@@ -30,6 +30,12 @@
 "settings.languageSystem" = "System";
 "settings.languageEnglish" = "English";
 "settings.languageSpanish" = "Spanish";
+"settings.generalTitle" = "General";
+"settings.generalHint" = "Choose how pieces appear by default so shelves stay clean.";
+"settings.defaultOwnershipFilter" = "Ownership";
+"settings.defaultQuickFilter" = "Quick filter";
+"settings.defaultSort" = "Sort";
+"settings.defaultDisplay" = "View";
 "settings.onboardingTitle" = "Cover";
 "settings.hideOnboarding" = "Hide cover on launch";
 "settings.hideOnboardingHint" = "While this is off, the intro screen appears every time so it can be reviewed during development.";
@@ -98,6 +104,36 @@
 "empty.searchTitle" = "No results";
 "empty.searchMessage" = "Try another name, check spelling, or confirm the API is configured.";
 
+"dashboard.title" = "Summary";
+"dashboard.subtitle" = "A quick read of your collection.";
+"dashboard.collections" = "Collections";
+"dashboard.pieces" = "Pieces";
+"dashboard.missing" = "Missing";
+"dashboard.categoryProgress" = "%d/%d in collection";
+
+"wishlist.title" = "Wishlist";
+"wishlist.subtitle" = "Everything marked as missing, together in one place.";
+"wishlist.count" = "%d missing pieces";
+"wishlist.emptyTitle" = "Nothing pending";
+"wishlist.emptyMessage" = "Pieces marked as missing will appear here.";
+"wishlist.searchPlaceholder" = "Search wishlist";
+"wishlist.noShelf" = "No shelf";
+"wishlist.categorySubtitle" = "Choose a shelf to see its missing pieces.";
+
+"filters.quick" = "Quick filter";
+"filters.all" = "All";
+"filters.withNotes" = "With notes";
+"filters.noCover" = "No cover";
+
+"sort.title" = "Sort";
+"sort.newest" = "Newest";
+"sort.ownedFirst" = "Have first";
+"sort.missingFirst" = "Missing first";
+"sort.rating" = "Rating";
+
+"displayMode.grid" = "Grid";
+"displayMode.gallery" = "Gallery";
+
 "detail.groups" = "Shelves";
 "detail.items" = "Pieces";
 "detail.addGroup" = "Add shelf";
@@ -132,7 +168,7 @@
 "groupDetail.deleteTitle" = "Delete shelf?";
 "groupDetail.deleteMessage" = "This removes this shelf, nested shelves, and every piece inside it.";
 "groupDetail.deleteConfirm" = "Delete shelf";
-"groupDetail.searchPlaceholder" = "Search this folder";
+"groupDetail.searchPlaceholder" = "Search this shelf";
 "groupDetail.issueCounter" = "Have %d/%d";
 
 "itemEditor.newItem" = "New piece";
@@ -155,6 +191,9 @@
 "itemDetail.delete" = "Delete";
 "itemDetail.deleteTitle" = "Delete piece?";
 "itemDetail.deleteMessage" = "This removes the piece from this collection.";
+
+"quickActions.markOwned" = "Mark as have";
+"quickActions.markMissing" = "Mark as missing";
 
 "comicVine.searchTitle" = "Search Comic Vine";
 "comicVine.importSeriesTitle" = "Import shelf";
@@ -261,6 +300,42 @@
 "template.collectiblesCategoryHint" = "Figures, objects, and special pieces.";
 "template.customCategory" = "Custom";
 "template.customCategoryHint" = "No specific API, flexible for anything.";
+
+"templateDetails.title" = "Collection details";
+"templateDetails.writer" = "Writer";
+"templateDetails.writerPlaceholder" = "Writer";
+"templateDetails.artist" = "Art";
+"templateDetails.artistPlaceholder" = "Artist or penciller";
+"templateDetails.publisher" = "Publisher";
+"templateDetails.publisherPlaceholder" = "Publisher";
+"templateDetails.variant" = "Variant";
+"templateDetails.variantPlaceholder" = "Cover A, variant, foil...";
+"templateDetails.platform" = "Platform";
+"templateDetails.platformPlaceholder" = "Switch, PS5, PC...";
+"templateDetails.region" = "Region";
+"templateDetails.regionPlaceholder" = "USA, JP, PAL...";
+"templateDetails.condition" = "Condition";
+"templateDetails.conditionPlaceholder" = "New, used, sealed...";
+"templateDetails.completion" = "Completion";
+"templateDetails.completionPlaceholder" = "Complete, pending, 100%...";
+"templateDetails.year" = "Year";
+"templateDetails.yearPlaceholder" = "Year";
+"templateDetails.label" = "Label";
+"templateDetails.labelPlaceholder" = "Label";
+"templateDetails.pressing" = "Pressing";
+"templateDetails.pressingPlaceholder" = "First press, repress...";
+"templateDetails.set" = "Set";
+"templateDetails.setPlaceholder" = "Base Set, expansion...";
+"templateDetails.number" = "Number";
+"templateDetails.numberPlaceholder" = "#, local ID, card...";
+"templateDetails.rarity" = "Rarity";
+"templateDetails.rarityPlaceholder" = "Common, rare, holo...";
+"templateDetails.maker" = "Maker";
+"templateDetails.makerPlaceholder" = "Maker or brand";
+"templateDetails.line" = "Line";
+"templateDetails.linePlaceholder" = "Line, series, or scale";
+"templateDetails.location" = "Location";
+"templateDetails.locationPlaceholder" = "Display case, box, shelf...";
 
 "seed.comicsTitle" = "Comics";
 "seed.comicsSubtitle" = "Issues, runs, variants";

@@ -9,6 +9,10 @@ enum AppSettings {
     static let googleBooksAPIKeyKey = "collector.googleBooksAPIKey"
     static let discogsConsumerKeyKey = "collector.discogsConsumerKey"
     static let discogsConsumerSecretKey = "collector.discogsConsumerSecret"
+    static let defaultOwnershipFilterKey = "collector.defaultOwnershipFilter"
+    static let defaultQuickFilterKey = "collector.defaultQuickFilter"
+    static let defaultSortOptionKey = "collector.defaultSortOption"
+    static let defaultDisplayModeKey = "collector.defaultDisplayMode"
 
     static var selectedLanguage: AppLanguage {
         get {
@@ -62,6 +66,46 @@ enum AppSettings {
         }
         set {
             UserDefaults.standard.set(newValue, forKey: discogsConsumerSecretKey)
+        }
+    }
+
+    static var defaultOwnershipFilter: ItemOwnershipFilter {
+        get {
+            let rawValue = UserDefaults.standard.string(forKey: defaultOwnershipFilterKey) ?? ItemOwnershipFilter.all.rawValue
+            return ItemOwnershipFilter(rawValue: rawValue) ?? .all
+        }
+        set {
+            UserDefaults.standard.set(newValue.rawValue, forKey: defaultOwnershipFilterKey)
+        }
+    }
+
+    static var defaultQuickFilter: ItemQuickFilter {
+        get {
+            let rawValue = UserDefaults.standard.string(forKey: defaultQuickFilterKey) ?? ItemQuickFilter.all.rawValue
+            return ItemQuickFilter(rawValue: rawValue) ?? .all
+        }
+        set {
+            UserDefaults.standard.set(newValue.rawValue, forKey: defaultQuickFilterKey)
+        }
+    }
+
+    static var defaultSortOption: ItemSortOption {
+        get {
+            let rawValue = UserDefaults.standard.string(forKey: defaultSortOptionKey) ?? ItemSortOption.newest.rawValue
+            return ItemSortOption(rawValue: rawValue) ?? .newest
+        }
+        set {
+            UserDefaults.standard.set(newValue.rawValue, forKey: defaultSortOptionKey)
+        }
+    }
+
+    static var defaultDisplayMode: ItemDisplayMode {
+        get {
+            let rawValue = UserDefaults.standard.string(forKey: defaultDisplayModeKey) ?? ItemDisplayMode.grid.rawValue
+            return ItemDisplayMode(rawValue: rawValue) ?? .grid
+        }
+        set {
+            UserDefaults.standard.set(newValue.rawValue, forKey: defaultDisplayModeKey)
         }
     }
 }

@@ -17,6 +17,7 @@ struct CollectibleItem: Identifiable, Hashable, Codable {
     var bookSeries: String?
     var bookEdition: String?
     var bookFormat: BookOwnershipFormat?
+    var templateDetails: [String: String]?
     var ownershipStatus: ItemOwnershipStatus
     var readingStatus: ReadingStatus?
     var createdAt: Date
@@ -38,6 +39,7 @@ struct CollectibleItem: Identifiable, Hashable, Codable {
         bookSeries: String? = nil,
         bookEdition: String? = nil,
         bookFormat: BookOwnershipFormat? = nil,
+        templateDetails: [String: String]? = nil,
         ownershipStatus: ItemOwnershipStatus = .owned,
         readingStatus: ReadingStatus? = nil,
         createdAt: Date = .now
@@ -58,6 +60,7 @@ struct CollectibleItem: Identifiable, Hashable, Codable {
         self.bookSeries = bookSeries
         self.bookEdition = bookEdition
         self.bookFormat = bookFormat
+        self.templateDetails = templateDetails
         self.ownershipStatus = ownershipStatus
         self.readingStatus = readingStatus
         self.createdAt = createdAt

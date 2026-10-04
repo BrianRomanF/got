@@ -90,6 +90,11 @@ struct ItemEditorView: View {
                                 format: $controller.bookFormat
                             )
                         }
+                        ItemTemplateDetailsInput(
+                            title: L10n.TemplateDetails.title,
+                            fields: template.detailFields,
+                            values: $controller.templateDetails
+                        )
                         ItemNotesInput(text: $controller.notes)
                         ItemSaveButton(isEnabled: controller.canSaveItem()) {
                             Task {

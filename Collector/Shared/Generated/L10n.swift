@@ -38,6 +38,12 @@ enum L10n {
         static var languageSystem: String { tr("settings.languageSystem") }
         static var languageEnglish: String { tr("settings.languageEnglish") }
         static var languageSpanish: String { tr("settings.languageSpanish") }
+        static var generalTitle: String { tr("settings.generalTitle") }
+        static var generalHint: String { tr("settings.generalHint") }
+        static var defaultOwnershipFilter: String { tr("settings.defaultOwnershipFilter") }
+        static var defaultQuickFilter: String { tr("settings.defaultQuickFilter") }
+        static var defaultSort: String { tr("settings.defaultSort") }
+        static var defaultDisplay: String { tr("settings.defaultDisplay") }
         static var onboardingTitle: String { tr("settings.onboardingTitle") }
         static var hideOnboarding: String { tr("settings.hideOnboarding") }
         static var hideOnboardingHint: String { tr("settings.hideOnboardingHint") }
@@ -107,6 +113,46 @@ enum L10n {
         static var piecesMessage: String { tr("empty.piecesMessage") }
         static var searchTitle: String { tr("empty.searchTitle") }
         static var searchMessage: String { tr("empty.searchMessage") }
+    }
+
+    enum Dashboard {
+        static var title: String { tr("dashboard.title") }
+        static var subtitle: String { tr("dashboard.subtitle") }
+        static var collections: String { tr("dashboard.collections") }
+        static var pieces: String { tr("dashboard.pieces") }
+        static var missing: String { tr("dashboard.missing") }
+        static var categoryProgress: String { tr("dashboard.categoryProgress") }
+    }
+
+    enum Wishlist {
+        static var title: String { tr("wishlist.title") }
+        static var subtitle: String { tr("wishlist.subtitle") }
+        static var count: String { tr("wishlist.count") }
+        static var emptyTitle: String { tr("wishlist.emptyTitle") }
+        static var emptyMessage: String { tr("wishlist.emptyMessage") }
+        static var searchPlaceholder: String { tr("wishlist.searchPlaceholder") }
+        static var noShelf: String { tr("wishlist.noShelf") }
+        static var categorySubtitle: String { tr("wishlist.categorySubtitle") }
+    }
+
+    enum Filters {
+        static var quick: String { tr("filters.quick") }
+        static var all: String { tr("filters.all") }
+        static var withNotes: String { tr("filters.withNotes") }
+        static var noCover: String { tr("filters.noCover") }
+    }
+
+    enum Sort {
+        static var title: String { tr("sort.title") }
+        static var newest: String { tr("sort.newest") }
+        static var ownedFirst: String { tr("sort.ownedFirst") }
+        static var missingFirst: String { tr("sort.missingFirst") }
+        static var rating: String { tr("sort.rating") }
+    }
+
+    enum DisplayMode {
+        static var grid: String { tr("displayMode.grid") }
+        static var gallery: String { tr("displayMode.gallery") }
     }
 
     enum Detail {
@@ -179,6 +225,11 @@ enum L10n {
         static var delete: String { tr("itemDetail.delete") }
         static var deleteTitle: String { tr("itemDetail.deleteTitle") }
         static var deleteMessage: String { tr("itemDetail.deleteMessage") }
+    }
+
+    enum QuickActions {
+        static var markOwned: String { tr("quickActions.markOwned") }
+        static var markMissing: String { tr("quickActions.markMissing") }
     }
 
     enum ComicVine {
@@ -305,6 +356,44 @@ enum L10n {
         static var collectiblesCategoryHint: String { tr("template.collectiblesCategoryHint") }
         static var customCategory: String { tr("template.customCategory") }
         static var customCategoryHint: String { tr("template.customCategoryHint") }
+    }
+
+    enum TemplateDetails {
+        static var title: String { tr("templateDetails.title") }
+        static var writer: String { tr("templateDetails.writer") }
+        static var writerPlaceholder: String { tr("templateDetails.writerPlaceholder") }
+        static var artist: String { tr("templateDetails.artist") }
+        static var artistPlaceholder: String { tr("templateDetails.artistPlaceholder") }
+        static var publisher: String { tr("templateDetails.publisher") }
+        static var publisherPlaceholder: String { tr("templateDetails.publisherPlaceholder") }
+        static var variant: String { tr("templateDetails.variant") }
+        static var variantPlaceholder: String { tr("templateDetails.variantPlaceholder") }
+        static var platform: String { tr("templateDetails.platform") }
+        static var platformPlaceholder: String { tr("templateDetails.platformPlaceholder") }
+        static var region: String { tr("templateDetails.region") }
+        static var regionPlaceholder: String { tr("templateDetails.regionPlaceholder") }
+        static var condition: String { tr("templateDetails.condition") }
+        static var conditionPlaceholder: String { tr("templateDetails.conditionPlaceholder") }
+        static var completion: String { tr("templateDetails.completion") }
+        static var completionPlaceholder: String { tr("templateDetails.completionPlaceholder") }
+        static var year: String { tr("templateDetails.year") }
+        static var yearPlaceholder: String { tr("templateDetails.yearPlaceholder") }
+        static var label: String { tr("templateDetails.label") }
+        static var labelPlaceholder: String { tr("templateDetails.labelPlaceholder") }
+        static var pressing: String { tr("templateDetails.pressing") }
+        static var pressingPlaceholder: String { tr("templateDetails.pressingPlaceholder") }
+        static var set: String { tr("templateDetails.set") }
+        static var setPlaceholder: String { tr("templateDetails.setPlaceholder") }
+        static var number: String { tr("templateDetails.number") }
+        static var numberPlaceholder: String { tr("templateDetails.numberPlaceholder") }
+        static var rarity: String { tr("templateDetails.rarity") }
+        static var rarityPlaceholder: String { tr("templateDetails.rarityPlaceholder") }
+        static var maker: String { tr("templateDetails.maker") }
+        static var makerPlaceholder: String { tr("templateDetails.makerPlaceholder") }
+        static var line: String { tr("templateDetails.line") }
+        static var linePlaceholder: String { tr("templateDetails.linePlaceholder") }
+        static var location: String { tr("templateDetails.location") }
+        static var locationPlaceholder: String { tr("templateDetails.locationPlaceholder") }
     }
 
     enum Seed {

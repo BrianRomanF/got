@@ -2,6 +2,7 @@ import SwiftUI
 
 struct HomeCategoryGrid: View {
     let categories: [CollectionCategory]
+    let stats: (CollectionCategory) -> CollectionStats
     let onEdit: (CollectionCategory) -> Void
     let onDelete: (CollectionCategory) -> Void
 
@@ -20,7 +21,7 @@ struct HomeCategoryGrid: View {
             LazyVGrid(columns: columns, spacing: 18) {
                 ForEach(categories) { category in
                     NavigationLink(value: CollectorRoute.category(category.id)) {
-                        HomeCategoryCell(category: category)
+                        HomeCategoryCell(category: category, stats: stats(category))
                     }
                     .buttonStyle(.plain)
                     .contextMenu {

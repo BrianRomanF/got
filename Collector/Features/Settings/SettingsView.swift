@@ -11,6 +11,10 @@ struct SettingsView: View {
     @AppStorage(AppSettings.googleBooksAPIKeyKey) private var googleBooksAPIKey = ""
     @AppStorage(AppSettings.discogsConsumerKeyKey) private var discogsConsumerKey = ""
     @AppStorage(AppSettings.discogsConsumerSecretKey) private var discogsConsumerSecret = ""
+    @AppStorage(AppSettings.defaultOwnershipFilterKey) private var defaultOwnershipFilter = ItemOwnershipFilter.all.rawValue
+    @AppStorage(AppSettings.defaultQuickFilterKey) private var defaultQuickFilter = ItemQuickFilter.all.rawValue
+    @AppStorage(AppSettings.defaultSortOptionKey) private var defaultSortOption = ItemSortOption.newest.rawValue
+    @AppStorage(AppSettings.defaultDisplayModeKey) private var defaultDisplayMode = ItemDisplayMode.grid.rawValue
     @State private var isUsageGuideExpanded = false
     @State private var isAPISectionExpanded = false
     @State private var isBackupSectionExpanded = false
@@ -30,11 +34,12 @@ struct SettingsView: View {
                     VStack(alignment: .leading, spacing: 18) {
                         SettingsHeaderView()
                         languageSection
+                        generalSection
                         onboardingSection
-                        usageGuideSection
-                        backupSection
-                        privacySection
                         apiSection
+                        backupSection
+                        usageGuideSection
+                        privacySection
                     }
                     .padding(20)
                 }
@@ -114,6 +119,82 @@ struct SettingsView: View {
         Binding(
             get: { AppLanguage(rawValue: selectedLanguage) ?? .system },
             set: { selectedLanguage = $0.rawValue }
+        )
+    }
+
+    private var generalSection: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            SettingsSectionTitle(
+                systemName: "slider.horizontal.3",
+                title: L10n.Settings.generalTitle
+            )
+
+            Text(L10n.Settings.generalHint)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(ComicTheme.ink.opacity(0.76))
+                .fixedSize(horizontal: false, vertical: true)
+
+            SettingsPickerRow(
+                title: L10n.Settings.defaultOwnershipFilter,
+                systemName: "checkmark.seal.fill",
+                options: ItemOwnershipFilter.allCases,
+                selection: defaultOwnershipBinding,
+                optionTitle: { $0.title }
+            )
+
+            SettingsPickerRow(
+                title: L10n.Settings.defaultQuickFilter,
+                systemName: "line.3.horizontal.decrease.circle.fill",
+                options: ItemQuickFilter.allCases,
+                selection: defaultQuickFilterBinding,
+                optionTitle: { $0.title }
+            )
+
+            SettingsPickerRow(
+                title: L10n.Settings.defaultSort,
+                systemName: "arrow.up.arrow.down.square.fill",
+                options: ItemSortOption.allCases,
+                selection: defaultSortBinding,
+                optionTitle: { $0.title }
+            )
+
+            SettingsPickerRow(
+                title: L10n.Settings.defaultDisplay,
+                systemName: "square.grid.2x2.fill",
+                options: ItemDisplayMode.allCases,
+                selection: defaultDisplayBinding,
+                optionTitle: { $0.title }
+            )
+        }
+        .padding(16)
+        .comicPanel()
+    }
+
+    private var defaultOwnershipBinding: Binding<ItemOwnershipFilter> {
+        Binding(
+            get: { ItemOwnershipFilter(rawValue: defaultOwnershipFilter) ?? .all },
+            set: { defaultOwnershipFilter = $0.rawValue }
+        )
+    }
+
+    private var defaultQuickFilterBinding: Binding<ItemQuickFilter> {
+        Binding(
+            get: { ItemQuickFilter(rawValue: defaultQuickFilter) ?? .all },
+            set: { defaultQuickFilter = $0.rawValue }
+        )
+    }
+
+    private var defaultSortBinding: Binding<ItemSortOption> {
+        Binding(
+            get: { ItemSortOption(rawValue: defaultSortOption) ?? .newest },
+            set: { defaultSortOption = $0.rawValue }
+        )
+    }
+
+    private var defaultDisplayBinding: Binding<ItemDisplayMode> {
+        Binding(
+            get: { ItemDisplayMode(rawValue: defaultDisplayMode) ?? .grid },
+            set: { defaultDisplayMode = $0.rawValue }
         )
     }
 
@@ -402,6 +483,61 @@ private struct SettingsSectionTitle: View {
                 .font(.headline.weight(.black))
                 .foregroundStyle(ComicTheme.ink)
         }
+    }
+}
+
+private struct SettingsPickerRow<Option: Identifiable & Hashable>: View {
+    let title: String
+    let systemName: String
+    let options: [Option]
+    @Binding var selection: Option
+    let optionTitle: (Option) -> String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Label(title.uppercased().vintageSafe, systemImage: systemName)
+                .font(.caption.weight(.black))
+                .foregroundStyle(ComicTheme.ink.opacity(0.76))
+
+            Menu {
+                ForEach(options) { option in
+                    Button {
+                        selection = option
+                    } label: {
+                        Label(optionTitle(option), systemImage: option == selection ? "checkmark" : "")
+                    }
+                }
+            } label: {
+                HStack {
+                    Text(optionTitle(selection).uppercased().vintageSafe)
+                        .font(.headline.weight(.black))
+                        .foregroundStyle(ComicTheme.ink)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.75)
+
+                    Spacer(minLength: 0)
+
+                    Image(systemName: "chevron.up.chevron.down")
+                        .font(.caption.weight(.black))
+                        .foregroundStyle(ComicTheme.ink.opacity(0.65))
+                }
+                .padding(12)
+                .background(Color.white)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 7)
+                        .stroke(ComicTheme.ink, lineWidth: 2)
+                )
+                .clipShape(RoundedRectangle(cornerRadius: 7))
+                .shadow(color: ComicTheme.ink, radius: 0, x: 3, y: 3)
+            }
+        }
+        .padding(12)
+        .background(ComicTheme.paper)
+        .overlay(
+            RoundedRectangle(cornerRadius: 7)
+                .stroke(ComicTheme.ink, lineWidth: 2)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 7))
     }
 }
 

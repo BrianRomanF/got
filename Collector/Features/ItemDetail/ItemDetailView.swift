@@ -31,6 +31,13 @@ struct ItemDetailView: View {
                         if libraryController.category(with: categoryID)?.template == .books {
                             ItemDetailBookDetailsView(item: item)
                         }
+                        if let category = libraryController.category(with: categoryID) {
+                            ItemDetailTemplateDetailsView(
+                                title: L10n.TemplateDetails.title,
+                                fields: category.template.detailFields,
+                                values: item.templateDetails ?? [:]
+                            )
+                        }
                         ItemDetailNotesView(notes: item.notes) {
                             notesDraft = item.notes
                             isEditingNotes = true

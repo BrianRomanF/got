@@ -74,4 +74,14 @@ extension CollectionCategory {
         guard template == .custom else { return !items.isEmpty }
         return customContentMode == .shelvesAndPieces || customContentMode == .piecesOnly
     }
+
+    var allowsNestedGroups: Bool {
+        guard template == .custom else { return false }
+        return customContentMode == .shelvesAndPieces || customContentMode == .shelvesOnly
+    }
+
+    var allowsGroupItems: Bool {
+        guard template == .custom else { return true }
+        return customContentMode == .shelvesAndPieces || customContentMode == .piecesOnly
+    }
 }

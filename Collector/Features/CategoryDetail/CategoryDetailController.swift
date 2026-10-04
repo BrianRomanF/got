@@ -5,10 +5,22 @@ final class CategoryDetailController: ObservableObject {
     @Published var isAddingItem = false
     @Published var isImportingSeries = false
     @Published var isConfirmingDelete = false
+    @Published var itemToEdit: CollectibleItem?
+    @Published var itemToDelete: CollectibleItem?
     @Published var groupTitle = ""
     @Published var groupSubtitle = ""
-    @Published var ownershipFilter: ItemOwnershipFilter = .all
+    @Published var ownershipFilter: ItemOwnershipFilter
+    @Published var quickFilter: ItemQuickFilter
+    @Published var sortOption: ItemSortOption
+    @Published var displayMode: ItemDisplayMode
     @Published var movingGroupID: UUID?
+
+    init() {
+        ownershipFilter = AppSettings.defaultOwnershipFilter
+        quickFilter = AppSettings.defaultQuickFilter
+        sortOption = AppSettings.defaultSortOption
+        displayMode = AppSettings.defaultDisplayMode
+    }
 
     func resetGroupForm() {
         groupTitle = ""
@@ -20,6 +32,8 @@ final class CategoryDetailController: ObservableObject {
     }
 
     func filteredItems(from items: [CollectibleItem]) -> [CollectibleItem] {
-        items.filter { ownershipFilter.includes($0) }
+        items
+            .filter { ownershipFilter.includes($0) && quickFilter.includes($0) }
+            .sorted(using: sortOption)
     }
 }

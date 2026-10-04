@@ -15,8 +15,9 @@ struct GroupDetailView: View {
                let category = libraryController.category(with: categoryID) {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
+                        ComicBreadcrumbView(parts: [category.title, group.title])
                         GroupHeaderView(group: group)
-                        if !group.groups.isEmpty {
+                        if category.allowsNestedGroups {
                             GroupChildrenSection(
                                 categoryID: categoryID,
                                 groups: group.groups,
@@ -28,32 +29,57 @@ struct GroupDetailView: View {
                                     inCategory: categoryID,
                                     parentGroupID: groupID
                                 )
+                            } onAddGroup: {
+                                controller.isAddingGroup = true
                             }
                         }
-                        GroupIssueCounterView(
-                            itemTitle: category.template.itemTitle,
-                            ownedCount: controller.ownedCount(from: group.items),
-                            totalCount: group.items.count
-                        )
-                        GroupFolderSearchBar(text: $controller.searchText)
-                        OwnershipFilterControl(selection: $controller.ownershipFilter)
-                        GroupItemsSection(
-                            categoryID: categoryID,
-                            groupID: groupID,
-                            itemTitle: category.template.itemTitle,
-                            items: controller.filteredItems(from: group.items)
-                        )
+                        if category.allowsGroupItems {
+                            GroupIssueCounterView(
+                                itemTitle: category.template.itemTitle,
+                                ownedCount: controller.ownedCount(from: group.items),
+                                totalCount: group.items.count
+                            )
+                            GroupFolderSearchBar(text: $controller.searchText)
+                            GroupItemsSection(
+                                categoryID: categoryID,
+                                groupID: groupID,
+                                itemTitle: category.template.itemTitle,
+                                items: controller.filteredItems(from: group.items),
+                                displayMode: controller.displayMode,
+                                onAddItem: {
+                                    controller.isAddingItem = true
+                                },
+                                onEditItem: { item in
+                                    controller.itemToEdit = item
+                                },
+                                onToggleOwnership: { item in
+                                    libraryController.updateItemOwnership(
+                                        itemID: item.id,
+                                        status: item.ownershipStatus == .owned ? .missing : .owned,
+                                        inCategory: categoryID,
+                                        groupID: groupID
+                                    )
+                                },
+                                onDeleteItem: { item in
+                                    controller.itemToDelete = item
+                                }
+                            )
+                        }
                     }
                     .padding(20)
                 }
                 .toolbar {
                     ToolbarItemGroup(placement: .topBarTrailing) {
-                        GroupToolbarButton(systemName: "folder.badge.plus", label: L10n.Detail.addGroup) {
-                            controller.isAddingGroup = true
+                        if category.allowsNestedGroups {
+                            GroupToolbarButton(systemName: "folder.badge.plus", label: L10n.Detail.addGroup) {
+                                controller.isAddingGroup = true
+                            }
                         }
 
-                        GroupToolbarButton(systemName: "plus.square.fill", label: L10n.Detail.addItem) {
-                            controller.isAddingItem = true
+                        if category.allowsGroupItems {
+                            GroupToolbarButton(systemName: "plus.square.fill", label: L10n.Detail.addItem) {
+                                controller.isAddingItem = true
+                            }
                         }
 
                         GroupToolbarButton(systemName: "trash.fill", label: L10n.GroupDetail.delete) {
@@ -83,6 +109,24 @@ struct GroupDetailView: View {
                         controller.isAddingItem = false
                     }
                 }
+                .sheet(item: $controller.itemToEdit) { item in
+                    ItemEditorView(template: category.template, mode: .edit(item)) { updatedItem in
+                        libraryController.updateItem(updatedItem, inCategory: categoryID, groupID: groupID)
+                        controller.itemToEdit = nil
+                    }
+                }
+                .alert(L10n.ItemDetail.deleteTitle, isPresented: deleteItemAlertBinding) {
+                    Button(L10n.Common.cancel, role: .cancel) {
+                        controller.itemToDelete = nil
+                    }
+                    Button(L10n.ItemDetail.delete, role: .destructive) {
+                        guard let item = controller.itemToDelete else { return }
+                        libraryController.deleteItem(with: item.id, inCategory: categoryID, groupID: groupID)
+                        controller.itemToDelete = nil
+                    }
+                } message: {
+                    Text(L10n.ItemDetail.deleteMessage)
+                }
                 .alert(L10n.GroupDetail.deleteTitle, isPresented: $controller.isConfirmingDelete) {
                     Button(L10n.Common.cancel, role: .cancel) {}
                     Button(L10n.GroupDetail.deleteConfirm, role: .destructive) {
@@ -95,5 +139,16 @@ struct GroupDetailView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private var deleteItemAlertBinding: Binding<Bool> {
+        Binding(
+            get: { controller.itemToDelete != nil },
+            set: { isPresented in
+                if !isPresented {
+                    controller.itemToDelete = nil
+                }
+            }
+        )
     }
 }

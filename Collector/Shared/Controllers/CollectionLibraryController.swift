@@ -136,6 +136,57 @@ final class CollectionLibraryController: ObservableObject {
         return category.items
     }
 
+    func stats(for category: CollectionCategory) -> CollectionStats {
+        stats(items: category.items, groups: category.groups)
+    }
+
+    func libraryStats() -> CollectionStats {
+        categories.reduce(CollectionStats(totalItems: 0, ownedItems: 0, missingItems: 0, groups: 0)) { partial, category in
+            let categoryStats = stats(for: category)
+            return CollectionStats(
+                totalItems: partial.totalItems + categoryStats.totalItems,
+                ownedItems: partial.ownedItems + categoryStats.ownedItems,
+                missingItems: partial.missingItems + categoryStats.missingItems,
+                groups: partial.groups + categoryStats.groups
+            )
+        }
+    }
+
+    func wishlistEntries() -> [WishlistEntry] {
+        categories.flatMap { category in
+            wishlistEntries(in: category)
+        }
+    }
+
+    func wishlistSections() -> [(category: CollectionCategory, sections: [WishlistSection])] {
+        categories.compactMap { category in
+            let sections = wishlistSections(in: category)
+            guard !sections.isEmpty else { return nil }
+            return (category, sections)
+        }
+    }
+
+    func wishlistCategorySummaries() -> [WishlistCategorySummary] {
+        wishlistSections().map { grouped in
+            WishlistCategorySummary(
+                id: grouped.category.id,
+                title: grouped.category.title,
+                sections: grouped.sections
+            )
+        }
+    }
+
+    func wishlistSections(inCategory categoryID: UUID) -> [WishlistSection] {
+        guard let category = category(with: categoryID) else { return [] }
+        return wishlistSections(in: category)
+    }
+
+    func wishlistSection(with sectionID: String) -> WishlistSection? {
+        wishlistSections()
+            .flatMap(\.sections)
+            .first { $0.id == sectionID }
+    }
+
     func addItem(_ item: CollectibleItem, toCategory categoryID: UUID) {
         guard let categoryIndex = categories.firstIndex(where: { $0.id == categoryID }) else { return }
         categories[categoryIndex].items.append(item)
@@ -156,6 +207,12 @@ final class CollectionLibraryController: ObservableObject {
 
         guard let itemIndex = categories[categoryIndex].items.firstIndex(where: { $0.id == item.id }) else { return }
         categories[categoryIndex].items[itemIndex] = item
+    }
+
+    func updateItemOwnership(itemID: UUID, status: ItemOwnershipStatus, inCategory categoryID: UUID, groupID: UUID?) {
+        guard var item = item(with: itemID, inCategory: categoryID, groupID: groupID) else { return }
+        item.ownershipStatus = status
+        updateItem(item, inCategory: categoryID, groupID: groupID)
     }
 
     func deleteItem(with itemID: UUID, inCategory categoryID: UUID, groupID: UUID?) {
@@ -181,6 +238,133 @@ final class CollectionLibraryController: ObservableObject {
         }
 
         return nil
+    }
+
+    private func stats(items: [CollectibleItem], groups: [CollectionGroup]) -> CollectionStats {
+        let directOwned = items.filter { $0.ownershipStatus == .owned }.count
+        let directMissing = items.filter { $0.ownershipStatus == .missing }.count
+
+        return groups.reduce(
+            CollectionStats(
+                totalItems: items.count,
+                ownedItems: directOwned,
+                missingItems: directMissing,
+                groups: groups.count
+            )
+        ) { partial, group in
+            let groupStats = stats(items: group.items, groups: group.groups)
+            return CollectionStats(
+                totalItems: partial.totalItems + groupStats.totalItems,
+                ownedItems: partial.ownedItems + groupStats.ownedItems,
+                missingItems: partial.missingItems + groupStats.missingItems,
+                groups: partial.groups + groupStats.groups
+            )
+        }
+    }
+
+    private func wishlistEntries(in category: CollectionCategory) -> [WishlistEntry] {
+        category.items
+            .filter { $0.ownershipStatus == .missing }
+            .map {
+                WishlistEntry(
+                    categoryID: category.id,
+                    groupID: nil,
+                    item: $0,
+                    categoryTitle: category.title,
+                    groupTitle: nil
+                )
+            }
+            + wishlistEntries(
+                in: category.groups,
+                categoryID: category.id,
+                categoryTitle: category.title
+            )
+    }
+
+    private func wishlistSections(in category: CollectionCategory) -> [WishlistSection] {
+        var sections: [WishlistSection] = []
+
+        let rootEntries = category.items
+            .filter { $0.ownershipStatus == .missing }
+            .map {
+                WishlistEntry(
+                    categoryID: category.id,
+                    groupID: nil,
+                    item: $0,
+                    categoryTitle: category.title,
+                    groupTitle: nil
+                )
+            }
+
+        if !rootEntries.isEmpty {
+            sections.append(
+                WishlistSection(
+                    id: "\(category.id.uuidString)-root",
+                    categoryID: category.id,
+                    categoryTitle: category.title,
+                    groupID: nil,
+                    title: L10n.Wishlist.noShelf,
+                    entries: rootEntries
+                )
+            )
+        }
+
+        sections.append(contentsOf: wishlistSections(in: category.groups, categoryID: category.id, categoryTitle: category.title))
+        return sections
+    }
+
+    private func wishlistSections(in groups: [CollectionGroup], categoryID: UUID, categoryTitle: String) -> [WishlistSection] {
+        groups.flatMap { group in
+            var sections: [WishlistSection] = []
+            let entries = group.items
+                .filter { $0.ownershipStatus == .missing }
+                .map {
+                    WishlistEntry(
+                        categoryID: categoryID,
+                        groupID: group.id,
+                        item: $0,
+                        categoryTitle: categoryTitle,
+                        groupTitle: group.title
+                    )
+                }
+
+            if !entries.isEmpty {
+                sections.append(
+                    WishlistSection(
+                        id: "\(categoryID.uuidString)-\(group.id.uuidString)",
+                        categoryID: categoryID,
+                        categoryTitle: categoryTitle,
+                        groupID: group.id,
+                        title: group.title,
+                        entries: entries
+                    )
+                )
+            }
+
+            sections.append(contentsOf: wishlistSections(in: group.groups, categoryID: categoryID, categoryTitle: categoryTitle))
+            return sections
+        }
+    }
+
+    private func wishlistEntries(in groups: [CollectionGroup], categoryID: UUID, categoryTitle: String) -> [WishlistEntry] {
+        groups.flatMap { group in
+            group.items
+                .filter { $0.ownershipStatus == .missing }
+                .map {
+                    WishlistEntry(
+                        categoryID: categoryID,
+                        groupID: group.id,
+                        item: $0,
+                        categoryTitle: categoryTitle,
+                        groupTitle: group.title
+                    )
+                }
+                + wishlistEntries(
+                    in: group.groups,
+                    categoryID: categoryID,
+                    categoryTitle: categoryTitle
+                )
+        }
     }
 
     @discardableResult

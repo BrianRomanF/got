@@ -30,6 +30,12 @@
 "settings.languageSystem" = "Sistema";
 "settings.languageEnglish" = "Ingles";
 "settings.languageSpanish" = "Espanol";
+"settings.generalTitle" = "General";
+"settings.generalHint" = "Define como se muestran tus piezas por defecto para mantener los estantes limpios.";
+"settings.defaultOwnershipFilter" = "Posesion";
+"settings.defaultQuickFilter" = "Filtro rapido";
+"settings.defaultSort" = "Orden";
+"settings.defaultDisplay" = "Vista";
 "settings.onboardingTitle" = "Portada";
 "settings.hideOnboarding" = "Ocultar portada al iniciar";
 "settings.hideOnboardingHint" = "Mientras este apagado, la pantalla de inicio aparecera siempre para revisarla durante desarrollo.";
@@ -98,6 +104,36 @@
 "empty.searchTitle" = "Sin resultados";
 "empty.searchMessage" = "Prueba con otro nombre, revisa la ortografia o confirma que la API este configurada.";
 
+"dashboard.title" = "Resumen";
+"dashboard.subtitle" = "Vista rapida de tu coleccion.";
+"dashboard.collections" = "Colecciones";
+"dashboard.pieces" = "Piezas";
+"dashboard.missing" = "Faltan";
+"dashboard.categoryProgress" = "%d/%d en coleccion";
+
+"wishlist.title" = "Wishlist";
+"wishlist.subtitle" = "Todo lo que marcaste como faltante, junto en un lugar.";
+"wishlist.count" = "%d piezas faltantes";
+"wishlist.emptyTitle" = "Nada pendiente";
+"wishlist.emptyMessage" = "Cuando marques piezas como faltantes apareceran aqui.";
+"wishlist.searchPlaceholder" = "Buscar en wishlist";
+"wishlist.noShelf" = "Sin shelf";
+"wishlist.categorySubtitle" = "Elige un estante para ver sus piezas faltantes.";
+
+"filters.quick" = "Filtro rapido";
+"filters.all" = "Todos";
+"filters.withNotes" = "Con notas";
+"filters.noCover" = "Sin portada";
+
+"sort.title" = "Orden";
+"sort.newest" = "Recientes";
+"sort.ownedFirst" = "Tengo primero";
+"sort.missingFirst" = "Faltan primero";
+"sort.rating" = "Rating";
+
+"displayMode.grid" = "Grilla";
+"displayMode.gallery" = "Galeria";
+
 "detail.groups" = "Estantes";
 "detail.items" = "Piezas";
 "detail.addGroup" = "Agregar estante";
@@ -132,7 +168,7 @@
 "groupDetail.deleteTitle" = "Eliminar shelf?";
 "groupDetail.deleteMessage" = "Esto elimina este shelf, sus shelves internos y todas las piezas que contiene.";
 "groupDetail.deleteConfirm" = "Eliminar shelf";
-"groupDetail.searchPlaceholder" = "Buscar en esta carpeta";
+"groupDetail.searchPlaceholder" = "Buscar en este estante";
 "groupDetail.issueCounter" = "Tengo %d/%d";
 
 "itemEditor.newItem" = "Nueva pieza";
@@ -155,6 +191,9 @@
 "itemDetail.delete" = "Eliminar";
 "itemDetail.deleteTitle" = "Eliminar pieza?";
 "itemDetail.deleteMessage" = "Esto elimina la pieza de esta coleccion.";
+
+"quickActions.markOwned" = "Marcar como tengo";
+"quickActions.markMissing" = "Marcar como me falta";
 
 "comicVine.searchTitle" = "Buscar en Comic Vine";
 "comicVine.importSeriesTitle" = "Importar shelf";
@@ -261,6 +300,42 @@
 "template.collectiblesCategoryHint" = "Figuras, objetos y piezas especiales.";
 "template.customCategory" = "Personalizada";
 "template.customCategoryHint" = "Sin API especifica, flexible para cualquier cosa.";
+
+"templateDetails.title" = "Detalles de coleccion";
+"templateDetails.writer" = "Guion";
+"templateDetails.writerPlaceholder" = "Guionista";
+"templateDetails.artist" = "Arte";
+"templateDetails.artistPlaceholder" = "Dibujante o artista";
+"templateDetails.publisher" = "Editorial";
+"templateDetails.publisherPlaceholder" = "Editorial";
+"templateDetails.variant" = "Variante";
+"templateDetails.variantPlaceholder" = "Cover A, variant, foil...";
+"templateDetails.platform" = "Plataforma";
+"templateDetails.platformPlaceholder" = "Switch, PS5, PC...";
+"templateDetails.region" = "Region";
+"templateDetails.regionPlaceholder" = "USA, JP, PAL...";
+"templateDetails.condition" = "Estado";
+"templateDetails.conditionPlaceholder" = "Nuevo, usado, sellado...";
+"templateDetails.completion" = "Completado";
+"templateDetails.completionPlaceholder" = "Completo, pendiente, 100%...";
+"templateDetails.year" = "Ano";
+"templateDetails.yearPlaceholder" = "Ano";
+"templateDetails.label" = "Sello";
+"templateDetails.labelPlaceholder" = "Sello o label";
+"templateDetails.pressing" = "Prensado";
+"templateDetails.pressingPlaceholder" = "Primera edicion, reedicion...";
+"templateDetails.set" = "Set";
+"templateDetails.setPlaceholder" = "Base Set, Expansion...";
+"templateDetails.number" = "Numero";
+"templateDetails.numberPlaceholder" = "#, local ID, carta...";
+"templateDetails.rarity" = "Rareza";
+"templateDetails.rarityPlaceholder" = "Comun, rare, holo...";
+"templateDetails.maker" = "Marca";
+"templateDetails.makerPlaceholder" = "Fabricante o marca";
+"templateDetails.line" = "Linea";
+"templateDetails.linePlaceholder" = "Linea, serie o escala";
+"templateDetails.location" = "Ubicacion";
+"templateDetails.locationPlaceholder" = "Vitrina, caja, repisa...";
 
 "seed.comicsTitle" = "Comics";
 "seed.comicsSubtitle" = "Numeros, etapas, variantes";

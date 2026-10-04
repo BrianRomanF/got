@@ -13,6 +13,7 @@ struct CategoryDetailView: View {
             if let category = libraryController.category(with: categoryID) {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
+                        ComicBreadcrumbView(parts: [L10n.Home.title, category.title])
                         CategoryHeaderView(category: category)
                         if category.allowsTopLevelGroups {
                             CategoryGroupSection(
@@ -20,12 +21,34 @@ struct CategoryDetailView: View {
                                 movingGroupID: $controller.movingGroupID
                             ) { groupID, direction in
                                 libraryController.moveGroup(with: groupID, direction: direction, inCategory: categoryID)
+                            } onAddGroup: {
+                                controller.isAddingGroup = true
                             }
                         }
 
                         if category.allowsTopLevelItems {
-                            OwnershipFilterControl(selection: $controller.ownershipFilter)
-                            CategoryItemSection(category: category, items: controller.filteredItems(from: category.items))
+                            CategoryItemSection(
+                                category: category,
+                                items: controller.filteredItems(from: category.items),
+                                displayMode: controller.displayMode,
+                                onAddItem: {
+                                    controller.isAddingItem = true
+                                },
+                                onEditItem: { item in
+                                    controller.itemToEdit = item
+                                },
+                                onToggleOwnership: { item in
+                                    libraryController.updateItemOwnership(
+                                        itemID: item.id,
+                                        status: item.ownershipStatus == .owned ? .missing : .owned,
+                                        inCategory: categoryID,
+                                        groupID: nil
+                                    )
+                                },
+                                onDeleteItem: { item in
+                                    controller.itemToDelete = item
+                                }
+                            )
                         }
                     }
                     .padding(20)
@@ -84,6 +107,24 @@ struct CategoryDetailView: View {
                         controller.isAddingItem = false
                     }
                 }
+                .sheet(item: $controller.itemToEdit) { item in
+                    ItemEditorView(template: category.template, mode: .edit(item)) { updatedItem in
+                        libraryController.updateItem(updatedItem, inCategory: categoryID, groupID: nil)
+                        controller.itemToEdit = nil
+                    }
+                }
+                .alert(L10n.ItemDetail.deleteTitle, isPresented: deleteItemAlertBinding) {
+                    Button(L10n.Common.cancel, role: .cancel) {
+                        controller.itemToDelete = nil
+                    }
+                    Button(L10n.ItemDetail.delete, role: .destructive) {
+                        guard let item = controller.itemToDelete else { return }
+                        libraryController.deleteItem(with: item.id, inCategory: categoryID, groupID: nil)
+                        controller.itemToDelete = nil
+                    }
+                } message: {
+                    Text(L10n.ItemDetail.deleteMessage)
+                }
                 .alert(L10n.CategoryDetail.deleteTitle, isPresented: $controller.isConfirmingDelete) {
                     Button(L10n.Common.cancel, role: .cancel) {}
                     Button(L10n.CategoryDetail.deleteConfirm, role: .destructive) {
@@ -96,5 +137,16 @@ struct CategoryDetailView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private var deleteItemAlertBinding: Binding<Bool> {
+        Binding(
+            get: { controller.itemToDelete != nil },
+            set: { isPresented in
+                if !isPresented {
+                    controller.itemToDelete = nil
+                }
+            }
+        )
     }
 }

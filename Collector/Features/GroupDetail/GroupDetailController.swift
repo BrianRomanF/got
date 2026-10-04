@@ -4,11 +4,23 @@ final class GroupDetailController: ObservableObject {
     @Published var isAddingGroup = false
     @Published var isAddingItem = false
     @Published var isConfirmingDelete = false
+    @Published var itemToEdit: CollectibleItem?
+    @Published var itemToDelete: CollectibleItem?
     @Published var groupTitle = ""
     @Published var groupSubtitle = ""
-    @Published var ownershipFilter: ItemOwnershipFilter = .all
+    @Published var ownershipFilter: ItemOwnershipFilter
+    @Published var quickFilter: ItemQuickFilter
+    @Published var sortOption: ItemSortOption
+    @Published var displayMode: ItemDisplayMode
     @Published var searchText = ""
     @Published var movingGroupID: UUID?
+
+    init() {
+        ownershipFilter = AppSettings.defaultOwnershipFilter
+        quickFilter = AppSettings.defaultQuickFilter
+        sortOption = AppSettings.defaultSortOption
+        displayMode = AppSettings.defaultDisplayMode
+    }
 
     func resetGroupForm() {
         groupTitle = ""
@@ -23,8 +35,11 @@ final class GroupDetailController: ObservableObject {
         let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
 
         return items.filter { item in
-            ownershipFilter.includes(item) && matchesSearch(item, query: query)
+            ownershipFilter.includes(item)
+                && quickFilter.includes(item)
+                && matchesSearch(item, query: query)
         }
+        .sorted(using: sortOption)
     }
 
     func ownedCount(from items: [CollectibleItem]) -> Int {

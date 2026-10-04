@@ -15,8 +15,14 @@ struct HomeView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 22) {
                         HomeHeaderView()
+                        HomeDashboardSummaryView(
+                            stats: libraryController.libraryStats(),
+                            categoryCount: libraryController.categories.count
+                        )
+                        HomeWishlistButton(missingCount: libraryController.libraryStats().missingItems)
                         HomeCategoryGrid(
                             categories: libraryController.categories,
+                            stats: { libraryController.stats(for: $0) },
                             onEdit: { category in
                                 controller.prepareForEditing(category)
                                 categoryToEdit = category
@@ -137,6 +143,12 @@ struct HomeView: View {
                     GroupDetailView(categoryID: categoryID, groupID: groupID)
                 case .item(let categoryID, let groupID, let itemID):
                     ItemDetailView(categoryID: categoryID, groupID: groupID, itemID: itemID)
+                case .wishlist:
+                    WishlistView()
+                case .wishlistCategory(let id):
+                    WishlistCategoryView(categoryID: id)
+                case .wishlistSection(let sectionID):
+                    WishlistSectionItemsView(sectionID: sectionID)
                 }
             }
         }
