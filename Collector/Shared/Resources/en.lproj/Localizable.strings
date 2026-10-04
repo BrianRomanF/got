@@ -148,6 +148,9 @@
 "itemEditor.coverURLPlaceholder" = "https://example.com/cover.jpg";
 
 "itemDetail.noNotes" = "No notes yet";
+"itemDetail.notesTitle" = "Notes";
+"itemDetail.notesHint" = "Add details, condition, memories, or anything useful about this piece.";
+"itemDetail.addNotes" = "Add notes";
 "itemDetail.edit" = "Edit";
 "itemDetail.delete" = "Delete";
 "itemDetail.deleteTitle" = "Delete piece?";

@@ -172,6 +172,9 @@ enum L10n {
 
     enum ItemDetail {
         static var noNotes: String { tr("itemDetail.noNotes") }
+        static var notesTitle: String { tr("itemDetail.notesTitle") }
+        static var notesHint: String { tr("itemDetail.notesHint") }
+        static var addNotes: String { tr("itemDetail.addNotes") }
         static var edit: String { tr("itemDetail.edit") }
         static var delete: String { tr("itemDetail.delete") }
         static var deleteTitle: String { tr("itemDetail.deleteTitle") }

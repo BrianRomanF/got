@@ -4,7 +4,9 @@ struct ItemDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var libraryController: CollectionLibraryController
     @State private var isEditing = false
+    @State private var isEditingNotes = false
     @State private var isConfirmingDelete = false
+    @State private var notesDraft = ""
     @State private var currentItemID: UUID
     let categoryID: UUID
     let groupID: UUID?
@@ -26,7 +28,10 @@ struct ItemDetailView: View {
                     VStack(alignment: .leading, spacing: 18) {
                         ItemDetailCoverView(item: item)
                         ItemDetailMetadataView(item: item)
-                        ItemDetailNotesView(notes: item.notes)
+                        ItemDetailNotesView(notes: item.notes) {
+                            notesDraft = item.notes
+                            isEditingNotes = true
+                        }
                     }
                     .padding(20)
                 }
@@ -61,6 +66,13 @@ struct ItemDetailView: View {
                     currentItemID = updatedItem.id
                     isEditing = false
                 }
+            }
+        }
+        .sheet(isPresented: $isEditingNotes) {
+            ItemDetailNotesEditorSheet(notes: $notesDraft) {
+                guard var item else { return }
+                item.notes = notesDraft.trimmingCharacters(in: .whitespacesAndNewlines)
+                libraryController.updateItem(item, inCategory: categoryID, groupID: groupID)
             }
         }
         .alert(L10n.ItemDetail.deleteTitle, isPresented: $isConfirmingDelete) {

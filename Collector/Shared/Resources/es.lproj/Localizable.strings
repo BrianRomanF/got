@@ -148,6 +148,9 @@
 "itemEditor.coverURLPlaceholder" = "https://ejemplo.com/portada.jpg";
 
 "itemDetail.noNotes" = "Sin notas todavia";
+"itemDetail.notesTitle" = "Notas";
+"itemDetail.notesHint" = "Agrega detalles, estado, recuerdos o cualquier dato util de esta pieza.";
+"itemDetail.addNotes" = "Agregar notas";
 "itemDetail.edit" = "Editar";
 "itemDetail.delete" = "Eliminar";
 "itemDetail.deleteTitle" = "Eliminar pieza?";
