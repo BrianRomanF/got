@@ -3,7 +3,7 @@ import UniformTypeIdentifiers
 
 struct SettingsView: View {
     private let privacyPolicyURL = URL(string: "https://gotit.app/privacy")!
-    private let supportURL = URL(string: "mailto:support@gotit.app")!
+    private let supportURL = URL(string: "mailto:broman.89@gmail.com?subject=Support%20Request")!
 
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var libraryController: CollectionLibraryController
