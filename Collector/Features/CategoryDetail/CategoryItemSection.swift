@@ -4,7 +4,10 @@ struct CategoryItemSection: View {
     let category: CollectionCategory
     let items: [CollectibleItem]
     let displayMode: ItemDisplayMode
+    let isSelecting: Bool
+    let selectedItemIDs: Set<UUID>
     let onAddItem: () -> Void
+    let onToggleSelected: (CollectibleItem) -> Void
     let onEditItem: (CollectibleItem) -> Void
     let onToggleOwnership: (CollectibleItem) -> Void
     let onDeleteItem: (CollectibleItem) -> Void
@@ -31,34 +34,58 @@ struct CategoryItemSection: View {
             } else if displayMode == .grid {
                 LazyVGrid(columns: columns, spacing: 16) {
                     ForEach(items) { item in
-                        NavigationLink(value: CollectorRoute.item(categoryID: category.id, groupID: nil, itemID: item.id)) {
+                        itemContent(item) {
                             CategoryItemCell(item: item)
                         }
-                        .buttonStyle(.plain)
-                        .itemQuickActions(
-                            item: item,
-                            onEdit: { onEditItem(item) },
-                            onToggleOwnership: { onToggleOwnership(item) },
-                            onDelete: { onDeleteItem(item) }
-                        )
                     }
                 }
             } else {
                 LazyVStack(spacing: 14) {
                     ForEach(items) { item in
-                        NavigationLink(value: CollectorRoute.item(categoryID: category.id, groupID: nil, itemID: item.id)) {
+                        itemContent(item) {
                             ItemGalleryCell(item: item)
                         }
-                        .buttonStyle(.plain)
-                        .itemQuickActions(
-                            item: item,
-                            onEdit: { onEditItem(item) },
-                            onToggleOwnership: { onToggleOwnership(item) },
-                            onDelete: { onDeleteItem(item) }
-                        )
                     }
                 }
             }
         }
+    }
+
+    @ViewBuilder
+    private func itemContent<Content: View>(_ item: CollectibleItem, @ViewBuilder content: () -> Content) -> some View {
+        if isSelecting {
+            Button {
+                onToggleSelected(item)
+            } label: {
+                content()
+                    .overlay(alignment: .topLeading) {
+                        SelectionBadge(isSelected: selectedItemIDs.contains(item.id))
+                            .padding(8)
+                    }
+            }
+            .buttonStyle(.plain)
+        } else {
+            NavigationLink(value: CollectorRoute.item(categoryID: category.id, groupID: nil, itemID: item.id)) {
+                content()
+            }
+            .buttonStyle(.plain)
+            .itemQuickActions(
+                item: item,
+                onEdit: { onEditItem(item) },
+                onToggleOwnership: { onToggleOwnership(item) },
+                onDelete: { onDeleteItem(item) }
+            )
+        }
+    }
+}
+
+private struct SelectionBadge: View {
+    let isSelected: Bool
+
+    var body: some View {
+        Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+            .font(.title3.weight(.black))
+            .foregroundStyle(isSelected ? ComicTheme.green : ComicTheme.ink.opacity(0.7))
+            .background(Color.white.clipShape(Circle()))
     }
 }

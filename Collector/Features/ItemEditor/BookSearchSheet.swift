@@ -5,7 +5,14 @@ struct BookSearchSheet: View {
     @StateObject private var controller = BookSearchController()
     @State private var isScanningBarcode = false
     let initialQuery: String
+    let autoSearchOnAppear: Bool
     let onSelect: (BookSearchResult) -> Void
+
+    init(initialQuery: String, autoSearchOnAppear: Bool = false, onSelect: @escaping (BookSearchResult) -> Void) {
+        self.initialQuery = initialQuery
+        self.autoSearchOnAppear = autoSearchOnAppear
+        self.onSelect = onSelect
+    }
 
     var body: some View {
         NavigationStack {
@@ -83,6 +90,9 @@ struct BookSearchSheet: View {
             .onAppear {
                 if controller.query.isEmpty {
                     controller.query = initialQuery
+                }
+                if autoSearchOnAppear {
+                    controller.search()
                 }
             }
         }

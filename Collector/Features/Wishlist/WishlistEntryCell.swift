@@ -28,6 +28,8 @@ struct WishlistEntryCell: View {
                     .foregroundStyle(ComicTheme.ink.opacity(0.68))
                     .lineLimit(2)
 
+                ItemTagChipsView(tags: entry.item.tags, limit: 3)
+
                 OwnershipBadge(status: entry.item.ownershipStatus)
             }
 

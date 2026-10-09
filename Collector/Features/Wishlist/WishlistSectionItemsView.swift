@@ -52,6 +52,7 @@ struct WishlistSectionItemsView: View {
             entry.item.title.lowercased().contains(query)
                 || entry.item.subtitle.lowercased().contains(query)
                 || entry.item.notes.lowercased().contains(query)
+                || entry.item.tags.contains { $0.lowercased().contains(query) }
         }
     }
 }

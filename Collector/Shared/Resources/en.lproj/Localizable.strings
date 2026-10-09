@@ -23,6 +23,15 @@
 "home.categorySVGIconURL" = "Direct SVG URL";
 "home.categorySVGIconSelectFile" = "Select SVG from Files";
 "home.categorySVGIconHint" = "Choose an .svg from Downloads/Files or paste a URL that returns the raw SVG file, not a web page.";
+"home.firstRunTitle" = "Build your first shelf";
+"home.firstRunMessage" = "Start with one collection, add a few pieces, then export a backup when it feels worth keeping.";
+"home.firstRunStepCollectionTitle" = "Create a collection";
+"home.firstRunStepCollectionBody" = "Pick comics, books, games, vinyl, cards, or a custom setup.";
+"home.firstRunStepPieceTitle" = "Add your first piece";
+"home.firstRunStepPieceBody" = "Use manual entry, camera covers, barcodes, or an external search service.";
+"home.firstRunStepBackupTitle" = "Keep a backup";
+"home.firstRunStepBackupBody" = "Your library is local to this device until you export it.";
+"home.firstRunPrimaryAction" = "Create collection";
 
 "settings.title" = "Settings";
 "settings.eyebrow" = "Preferences";
@@ -38,7 +47,7 @@
 "settings.defaultDisplay" = "View";
 "settings.onboardingTitle" = "Cover";
 "settings.hideOnboarding" = "Hide cover on launch";
-"settings.hideOnboardingHint" = "While this is off, the intro screen appears every time so it can be reviewed during development.";
+"settings.hideOnboardingHint" = "While this is off, the intro screen appears every time you open the app.";
 "settings.comicVineTitle" = "Comic Vine";
 "settings.comicVineAPIKeyPlaceholder" = "API key";
 "settings.comicVineGuideTitle" = "Quick guide";
@@ -77,6 +86,8 @@
 "settings.apiNotConfigured" = "Not configured";
 "settings.backupTitle" = "Backup";
 "settings.backupBody" = "Export your collections as JSON or import an earlier file. Importing replaces the current library.";
+"settings.backupReminderTitle" = "Local library";
+"settings.backupReminderBody" = "Got it keeps your collection on this device. Export a backup before changing phones, deleting the app, or installing test builds.";
 "settings.exportLibrary" = "Prepare export";
 "settings.shareExportedLibrary" = "Share JSON";
 "settings.importLibrary" = "Import JSON";
@@ -85,6 +96,11 @@
 "settings.importLibraryConfirm" = "Import and replace";
 "settings.importLibraryFailedTitle" = "Import failed";
 "settings.importLibraryFailedMessage" = "The file does not look like a valid Got it library.";
+"settings.importCSV" = "Import CSV";
+"settings.importCSVBody" = "Import pieces into one collection from a UTF-8 CSV with a title column. Optional columns: subtitle, notes, ownership, tags, location.";
+"settings.importCSVDestinationTitle" = "Choose collection";
+"settings.importCSVFailedTitle" = "CSV import failed";
+"settings.importCSVFailedMessage" = "Use a UTF-8 CSV with a title column. Optional columns: subtitle, notes, ownership, tags, location.";
 "settings.privacyTitle" = "Privacy";
 "settings.privacyLocalTitle" = "Local data";
 "settings.privacyLocalBody" = "Your collections, optimized images, and settings are stored on this device.";
@@ -93,7 +109,33 @@
 "settings.privacyMediaTitle" = "Camera and photos";
 "settings.privacyMediaBody" = "The app asks for access only when you choose to take a photo or select an image.";
 "settings.privacyNetworkTitle" = "External requests";
-"settings.privacyNetworkBody" = "Searches send the text you type to the matching API to fetch results and covers.";
+"settings.privacyNetworkBody" = "Searches send the text you type to the selected external service to fetch results and covers.";
+"settings.aboutTitle" = "About and support";
+"settings.aboutBody" = "Got it is built for cataloging collections without accounts or a required cloud service.";
+"settings.appVersionTitle" = "Version";
+"settings.privacyPolicy" = "Privacy policy";
+"settings.contactSupport" = "Contact support";
+"settings.backupShortcut" = "Export backup";
+
+"pro.title" = "Got it Pro";
+"pro.subtitle" = "Unlock unlimited collecting.";
+"pro.unlock" = "Unlock Pro";
+"pro.restore" = "Restore purchase";
+"pro.redeemCode" = "Redeem code";
+"pro.redeemUnavailable" = "The code sheet could not be opened right now.";
+"pro.unlocked" = "Pro unlocked";
+"pro.unavailable" = "Pro is unavailable right now. Try again later.";
+"pro.verificationFailed" = "The purchase could not be verified.";
+"pro.limitTitle" = "Unlock Got it Pro";
+"pro.categoryLimitMessage" = "The free version includes 1 collection. Upgrade to create unlimited collections.";
+"pro.itemLimitMessage" = "The free version includes 10 pieces. Upgrade to add unlimited pieces.";
+"pro.featureLimitMessage" = "This feature is part of Got it Pro.";
+"pro.unlimitedCollections" = "Unlimited collections";
+"pro.unlimitedPieces" = "Unlimited pieces";
+"pro.csvImport" = "CSV import";
+"pro.bulkActions" = "Bulk edit and move";
+"pro.advancedSearch" = "Tags, wishlist, and advanced search";
+"pro.oneTime" = "One-time purchase. No subscription.";
 
 "empty.collectionsTitle" = "No collections";
 "empty.collectionsMessage" = "Create your first collection and choose its type to enable the right tools.";
@@ -109,7 +151,11 @@
 "dashboard.collections" = "Collections";
 "dashboard.pieces" = "Pieces";
 "dashboard.missing" = "Missing";
+"dashboard.shelves" = "Shelves";
+"dashboard.tags" = "Tags";
+"dashboard.reading" = "Reading";
 "dashboard.categoryProgress" = "%d/%d in collection";
+"dashboard.categoryTags" = "%d tags";
 
 "wishlist.title" = "Wishlist";
 "wishlist.subtitle" = "Everything marked as missing, together in one place.";
@@ -126,6 +172,13 @@
 "globalSearch.clear" = "Clear search";
 "globalSearch.startTitle" = "Search everything";
 "globalSearch.startMessage" = "Type a name, number, note, or location to jump straight to it.";
+"globalSearch.filtersTitle" = "Filters";
+"globalSearch.filterAll" = "All";
+"globalSearch.filterCategories" = "Collections";
+"globalSearch.filterShelves" = "Shelves";
+"globalSearch.filterPieces" = "Pieces";
+"globalSearch.allTags" = "All tags";
+"globalSearch.clearFilters" = "Clear filters";
 
 "recentActivity.title" = "Recent activity";
 "recentActivity.subtitle" = "Latest pieces added or edited.";
@@ -200,6 +253,8 @@
 "itemEditor.camera" = "Camera";
 "itemEditor.clearCover" = "Clear";
 "itemEditor.coverURLPlaceholder" = "https://example.com/cover.jpg";
+"itemEditor.tags" = "Tags";
+"itemEditor.tagsPlaceholder" = "reading, signed, priority";
 
 "itemDetail.noNotes" = "No notes yet";
 "itemDetail.notesTitle" = "Notes";
@@ -216,6 +271,14 @@
 
 "quickActions.markOwned" = "Mark as have";
 "quickActions.markMissing" = "Mark as missing";
+"quickActions.select" = "Select";
+"quickActions.done" = "Done";
+"quickActions.move" = "Move";
+"quickActions.deleteSelected" = "Delete selected";
+"quickActions.selectedCount" = "%d selected";
+"quickActions.moveTitle" = "Move selected";
+"quickActions.deleteSelectedTitle" = "Delete selected pieces?";
+"quickActions.deleteSelectedMessage" = "This removes the selected pieces from this collection.";
 
 "comicVine.searchTitle" = "Search Comic Vine";
 "comicVine.importSeriesTitle" = "Import shelf";
@@ -300,10 +363,10 @@
 "template.bookShelfName" = "Shelf name";
 "template.booksCategory" = "Books";
 "template.booksCategoryHint" = "Google Books with Open Library as fallback.";
-"template.vinylArtists" = "Artists";
+"template.vinylStyles" = "Genres & styles";
 "template.vinylAlbums" = "Albums";
-"template.addVinylArtist" = "Add artist";
-"template.vinylArtistName" = "Artist name";
+"template.addVinylStyle" = "Add genre/style";
+"template.vinylStyleName" = "Genre or style name";
 "template.vinylCategory" = "Vinyl and cassettes";
 "template.vinylCategoryHint" = "Discogs for releases and covers.";
 "template.gamePlatforms" = "Platforms";
@@ -358,22 +421,3 @@
 "templateDetails.linePlaceholder" = "Line, series, or scale";
 "templateDetails.location" = "Location";
 "templateDetails.locationPlaceholder" = "Display case, box, shelf...";
-
-"seed.comicsTitle" = "Comics";
-"seed.comicsSubtitle" = "Issues, runs, variants";
-"seed.invincibleTitle" = "Invincible";
-"seed.invincibleSubtitle" = "Skybound run";
-"seed.invincibleOneTitle" = "Invincible #01";
-"seed.invincibleFourTitle" = "Invincible #04";
-"seed.issueSubtitle" = "First issue";
-"seed.wishlistSubtitle" = "Wishlist gap";
-"seed.sampleNote" = "Sample item to show the first gallery path.";
-"seed.missingSampleNote" = "Marked as missing so the run can show gaps.";
-"seed.vinylTitle" = "Vinyl";
-"seed.vinylSubtitle" = "Genres, bands, albums";
-"seed.rockTitle" = "Rock";
-"seed.genreSubtitle" = "Genre shelf";
-"seed.gamesTitle" = "Games";
-"seed.gamesSubtitle" = "Platforms, sagas, editions";
-"seed.booksTitle" = "Books";
-"seed.booksSubtitle" = "Authors, sagas, reading";

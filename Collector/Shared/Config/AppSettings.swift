@@ -13,6 +13,7 @@ enum AppSettings {
     static let defaultQuickFilterKey = "collector.defaultQuickFilter"
     static let defaultSortOptionKey = "collector.defaultSortOption"
     static let defaultDisplayModeKey = "collector.defaultDisplayMode"
+    static let isProUnlockedKey = "collector.isProUnlocked"
 
     static var selectedLanguage: AppLanguage {
         get {
@@ -106,6 +107,15 @@ enum AppSettings {
         }
         set {
             UserDefaults.standard.set(newValue.rawValue, forKey: defaultDisplayModeKey)
+        }
+    }
+
+    static var isProUnlocked: Bool {
+        get {
+            UserDefaults.standard.bool(forKey: isProUnlockedKey)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: isProUnlockedKey)
         }
     }
 }

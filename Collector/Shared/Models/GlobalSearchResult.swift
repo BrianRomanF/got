@@ -1,9 +1,22 @@
 import Foundation
 
-enum GlobalSearchResultKind: Hashable {
+enum GlobalSearchResultKind: String, CaseIterable, Identifiable, Hashable {
     case category
     case shelf
     case piece
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .category:
+            L10n.GlobalSearch.filterCategories
+        case .shelf:
+            L10n.GlobalSearch.filterShelves
+        case .piece:
+            L10n.GlobalSearch.filterPieces
+        }
+    }
 
     var symbolName: String {
         switch self {

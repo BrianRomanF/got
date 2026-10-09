@@ -56,12 +56,22 @@ struct OnboardingView: View {
                     }
                     .padding(.horizontal, 18)
 
-                    HStack(spacing: 8) {
-                        Circle().fill(ComicTheme.ink).frame(width: 9, height: 9)
-                        Circle().fill(ComicTheme.ink.opacity(0.22)).frame(width: 9, height: 9)
-                        Circle().fill(ComicTheme.ink.opacity(0.22)).frame(width: 9, height: 9)
+                    HStack(spacing: 10) {
+                        Capsule()
+                            .fill(ComicTheme.ink.opacity(0.22))
+                            .frame(width: 42, height: 3)
+
+                        Text(L10n.Onboarding.ownership.uppercased())
+                            .font(.caption.weight(.black))
+                            .foregroundStyle(ComicTheme.ink.opacity(0.66))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.72)
+
+                        Capsule()
+                            .fill(ComicTheme.ink.opacity(0.22))
+                            .frame(width: 42, height: 3)
                     }
-                    .padding(.vertical, 2)
+                    .padding(.vertical, 4)
 
                     Button(action: onStart) {
                         HStack {

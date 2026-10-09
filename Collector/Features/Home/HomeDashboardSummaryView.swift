@@ -45,6 +45,12 @@ struct HomeDashboardSummaryView: View {
                 statBox(title: L10n.Dashboard.pieces, value: stats.totalItems)
                 statBox(title: L10n.Dashboard.missing, value: stats.missingItems)
             }
+
+            HStack(spacing: 10) {
+                statBox(title: L10n.Dashboard.shelves, value: stats.groups)
+                statBox(title: L10n.Dashboard.tags, value: stats.uniqueTags)
+                statBox(title: L10n.Dashboard.reading, value: stats.readingItems)
+            }
         }
         .padding(16)
         .comicPanel(fill: ComicTheme.yellow)

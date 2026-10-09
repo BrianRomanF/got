@@ -2,8 +2,11 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject private var libraryController: CollectionLibraryController
+    @EnvironmentObject private var proAccess: ProAccessController
     @StateObject private var controller = HomeController()
     @State private var isShowingSettings = false
+    @State private var isShowingPaywall = false
+    @State private var paywallMessage = L10n.Pro.subtitle
     @State private var categoryToEdit: CollectionCategory?
     @State private var categoryToDelete: CollectionCategory?
 
@@ -19,19 +22,26 @@ struct HomeView: View {
                             stats: libraryController.libraryStats(),
                             categoryCount: libraryController.categories.count
                         )
-                        HomeCategoryGrid(
-                            categories: libraryController.categories,
-                            stats: { libraryController.stats(for: $0) },
-                            onEdit: { category in
-                                controller.prepareForEditing(category)
-                                categoryToEdit = category
-                            },
-                            onDelete: { category in
-                                categoryToDelete = category
+
+                        if libraryController.categories.isEmpty {
+                            HomeFirstRunCard {
+                                startAddingCategory()
                             }
-                        )
-                        HomeRecentActivityButton(count: libraryController.recentActivity(limit: 60).count)
-                        HomeWishlistButton(missingCount: libraryController.libraryStats().missingItems)
+                        } else {
+                            HomeCategoryGrid(
+                                categories: libraryController.categories,
+                                stats: { libraryController.stats(for: $0) },
+                                onEdit: { category in
+                                    controller.prepareForEditing(category)
+                                    categoryToEdit = category
+                                },
+                                onDelete: { category in
+                                    categoryToDelete = category
+                                }
+                            )
+                            HomeRecentActivityButton(count: libraryController.recentActivity(limit: 60).count)
+                            HomeWishlistButton(missingCount: libraryController.libraryStats().missingItems)
+                        }
                     }
                     .padding(20)
                 }
@@ -55,8 +65,7 @@ struct HomeView: View {
 
                 ToolbarItem(placement: .topBarTrailing) {
                     HomeAddCategoryButton {
-                        controller.resetForm()
-                        controller.isAddingCategory = true
+                        startAddingCategory()
                     }
                 }
             }
@@ -130,6 +139,9 @@ struct HomeView: View {
             .sheet(isPresented: $isShowingSettings) {
                 SettingsView()
             }
+            .sheet(isPresented: $isShowingPaywall) {
+                ProPaywallView(message: paywallMessage)
+            }
             .alert(L10n.Home.deleteCategoryTitle, isPresented: deleteAlertBinding, presenting: categoryToDelete) { category in
                 Button(L10n.Common.cancel, role: .cancel) {
                     categoryToDelete = nil
@@ -169,6 +181,17 @@ struct HomeView: View {
         }
     }
 
+    private func startAddingCategory() {
+        guard proAccess.canCreateCategory(currentCount: libraryController.categories.count) else {
+            paywallMessage = L10n.Pro.categoryLimitMessage
+            isShowingPaywall = true
+            return
+        }
+
+        controller.resetForm()
+        controller.isAddingCategory = true
+    }
+
     private var deleteAlertBinding: Binding<Bool> {
         Binding(
             get: { categoryToDelete != nil },
@@ -178,5 +201,92 @@ struct HomeView: View {
                 }
             }
         )
+    }
+}
+
+private struct HomeFirstRunCard: View {
+    let onCreateCollection: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text(L10n.Home.firstRunTitle.uppercased().vintageSafe)
+                    .font(.title3.weight(.black))
+                    .foregroundStyle(ComicTheme.ink)
+
+                Text(L10n.Home.firstRunMessage)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(ComicTheme.ink.opacity(0.76))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            VStack(alignment: .leading, spacing: 10) {
+                HomeFirstRunStep(
+                    systemName: "square.grid.2x2.fill",
+                    title: L10n.Home.firstRunStepCollectionTitle,
+                    description: L10n.Home.firstRunStepCollectionBody
+                )
+                HomeFirstRunStep(
+                    systemName: "plus.rectangle.on.folder.fill",
+                    title: L10n.Home.firstRunStepPieceTitle,
+                    description: L10n.Home.firstRunStepPieceBody
+                )
+                HomeFirstRunStep(
+                    systemName: "externaldrive.fill",
+                    title: L10n.Home.firstRunStepBackupTitle,
+                    description: L10n.Home.firstRunStepBackupBody
+                )
+            }
+
+            Button(action: onCreateCollection) {
+                Label(L10n.Home.firstRunPrimaryAction.uppercased(), systemImage: "plus")
+                    .font(.caption.weight(.black))
+                    .foregroundStyle(ComicTheme.ink)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(ComicTheme.yellow)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 7)
+                            .stroke(ComicTheme.ink, lineWidth: 2)
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 7))
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(16)
+        .comicPanel(fill: ComicTheme.panel)
+    }
+}
+
+private struct HomeFirstRunStep: View {
+    let systemName: String
+    let title: String
+    let description: String
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: systemName)
+                .font(.headline.weight(.black))
+                .foregroundStyle(ComicTheme.red)
+                .frame(width: 26)
+
+            VStack(alignment: .leading, spacing: 3) {
+                Text(title)
+                    .font(.headline.weight(.black))
+                    .foregroundStyle(ComicTheme.ink)
+
+                Text(description)
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(ComicTheme.ink.opacity(0.68))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .padding(12)
+        .background(Color.white)
+        .overlay(
+            RoundedRectangle(cornerRadius: 7)
+                .stroke(ComicTheme.ink, lineWidth: 2)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 7))
     }
 }

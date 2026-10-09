@@ -17,6 +17,7 @@ final class ItemEditorController: ObservableObject {
     @Published var bookFormat: BookOwnershipFormat = .physical
     @Published var templateDetails: [String: String] = [:]
     @Published var physicalLocation = ""
+    @Published var tagsText = ""
     @Published var coverImageData: Data?
     @Published var coverURLString = ""
     private var coverLocalImagePath: String?
@@ -42,6 +43,7 @@ final class ItemEditorController: ObservableObject {
         bookFormat = item.bookFormat ?? .physical
         templateDetails = item.templateDetails ?? [:]
         physicalLocation = item.physicalLocation ?? ""
+        tagsText = item.tags.joined(separator: ", ")
         coverImageData = item.coverImageData ?? item.coverLocalImagePath.flatMap { try? Data(contentsOf: URL(fileURLWithPath: $0)) }
         coverLocalImagePath = item.coverLocalImagePath
         coverURLString = item.coverRemoteURL?.absoluteString ?? ""
@@ -73,6 +75,7 @@ final class ItemEditorController: ObservableObject {
             bookFormat: template == .books ? bookFormat : nil,
             templateDetails: normalizedTemplateDetails(for: template),
             physicalLocation: normalizedText(physicalLocation),
+            tags: normalizedTags,
             ownershipStatus: ownershipStatus,
             readingStatus: template.supportsReadingStatus ? readingStatus : nil,
             createdAt: existingItem?.createdAt ?? .now,
@@ -113,6 +116,19 @@ final class ItemEditorController: ObservableObject {
     private func normalizedText(_ value: String) -> String? {
         let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
         return trimmed.isEmpty ? nil : trimmed
+    }
+
+    private var normalizedTags: [String] {
+        var seen = Set<String>()
+        return tagsText
+            .split(separator: ",")
+            .compactMap { rawTag in
+                let tag = rawTag.trimmingCharacters(in: .whitespacesAndNewlines)
+                let key = tag.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
+                guard !tag.isEmpty, !seen.contains(key) else { return nil }
+                seen.insert(key)
+                return tag
+            }
     }
 
     private func normalizedTemplateDetails(for template: CollectionTemplate) -> [String: String]? {

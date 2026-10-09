@@ -32,11 +32,13 @@ struct ItemGalleryCell: View {
                     .lineLimit(2)
 
                 if !item.subtitle.isEmpty {
-                    Text(item.subtitle)
-                        .font(.caption.weight(.bold))
-                        .foregroundStyle(ComicTheme.ink.opacity(0.68))
-                        .lineLimit(2)
-                }
+                Text(item.subtitle)
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(ComicTheme.ink.opacity(0.68))
+                    .lineLimit(2)
+            }
+
+            ItemTagChipsView(tags: item.tags, limit: 3)
 
                 if let rating = item.bookRating, rating > 0 {
                     HStack(spacing: 4) {

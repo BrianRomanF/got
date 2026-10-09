@@ -3,6 +3,10 @@ import Foundation
 final class GroupDetailController: ObservableObject {
     @Published var isAddingGroup = false
     @Published var isAddingItem = false
+    @Published var isSelectingItems = false
+    @Published var isMovingSelectedItems = false
+    @Published var isConfirmingBulkDelete = false
+    @Published var selectedItemIDs = Set<UUID>()
     @Published var isConfirmingDelete = false
     @Published var itemToEdit: CollectibleItem?
     @Published var itemToDelete: CollectibleItem?
@@ -53,6 +57,19 @@ final class GroupDetailController: ObservableObject {
 
     func ownedCount(from items: [CollectibleItem]) -> Int {
         items.filter { $0.ownershipStatus == .owned }.count
+    }
+
+    func toggleSelection(for item: CollectibleItem) {
+        if selectedItemIDs.contains(item.id) {
+            selectedItemIDs.remove(item.id)
+        } else {
+            selectedItemIDs.insert(item.id)
+        }
+    }
+
+    func clearSelection() {
+        selectedItemIDs.removeAll()
+        isSelectingItems = false
     }
 
     private func matchesSearch(_ item: CollectibleItem, query: String) -> Bool {

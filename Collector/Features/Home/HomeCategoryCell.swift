@@ -41,6 +41,15 @@ struct HomeCategoryCell: View {
                     .foregroundStyle(ComicTheme.ink.opacity(0.72))
                     .lineLimit(1)
                     .minimumScaleFactor(0.75)
+
+                HStack(spacing: 6) {
+                    Label("\(stats.groups)", systemImage: "folder.fill")
+                    Label(String(format: L10n.Dashboard.categoryTags, stats.uniqueTags), systemImage: "tag.fill")
+                }
+                .font(.caption2.weight(.black))
+                .foregroundStyle(ComicTheme.ink.opacity(0.62))
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
             }
 
             Spacer(minLength: 0)

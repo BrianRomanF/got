@@ -23,9 +23,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Got it usa la camara para fotografiar portadas y escanear codigos de libros.</string>
+	<string>Got it uses the camera to photograph covers and scan book barcodes.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Collector usa tu biblioteca para elegir portadas de tus piezas.</string>
+	<string>Got it uses your photo library only when you choose an image as a cover.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>VintageOne.ttf</string>

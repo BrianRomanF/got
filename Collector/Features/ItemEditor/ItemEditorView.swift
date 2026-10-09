@@ -8,6 +8,9 @@ struct ItemEditorView: View {
     @State private var isSearchingBooks = false
     @State private var isSearchingDiscogs = false
     @State private var isSearchingTCGdex = false
+    @State private var isScanningSearchCode = false
+    @State private var shouldAutoSearchBooks = false
+    @State private var shouldAutoSearchGames = false
     let template: CollectionTemplate
     let mode: Mode
     let onSave: (CollectibleItem) -> Void
@@ -56,13 +59,27 @@ struct ItemEditorView: View {
                             }
                         }
                         if template == .games {
-                            TheGamesDBSearchButton {
-                                isSearchingTheGamesDB = true
+                            HStack(spacing: 10) {
+                                TheGamesDBSearchButton {
+                                    shouldAutoSearchGames = false
+                                    isSearchingTheGamesDB = true
+                                }
+
+                                BookBarcodeScanButton {
+                                    isScanningSearchCode = true
+                                }
                             }
                         }
                         if template == .books {
-                            BookSearchButton {
-                                isSearchingBooks = true
+                            HStack(spacing: 10) {
+                                BookSearchButton {
+                                    shouldAutoSearchBooks = false
+                                    isSearchingBooks = true
+                                }
+
+                                BookBarcodeScanButton {
+                                    isScanningSearchCode = true
+                                }
                             }
                         }
                         if template == .vinyl {
@@ -96,6 +113,7 @@ struct ItemEditorView: View {
                             values: $controller.templateDetails
                         )
                         ItemLocationInput(text: $controller.physicalLocation)
+                        ItemTagsInput(text: $controller.tagsText)
                         ItemNotesInput(text: $controller.notes)
                         ItemSaveButton(isEnabled: controller.canSaveItem()) {
                             Task {
@@ -118,12 +136,12 @@ struct ItemEditorView: View {
                 }
             }
             .sheet(isPresented: $isSearchingTheGamesDB) {
-                TheGamesDBSearchSheet(initialQuery: controller.title) { result in
+                TheGamesDBSearchSheet(initialQuery: controller.title, autoSearchOnAppear: shouldAutoSearchGames) { result in
                     controller.applyTheGamesDBResult(result)
                 }
             }
             .sheet(isPresented: $isSearchingBooks) {
-                BookSearchSheet(initialQuery: controller.title) { result in
+                BookSearchSheet(initialQuery: controller.title, autoSearchOnAppear: shouldAutoSearchBooks) { result in
                     controller.applyBookSearchResult(result)
                 }
             }
@@ -136,6 +154,21 @@ struct ItemEditorView: View {
                 TCGdexSearchSheet(initialQuery: controller.title) { result in
                     controller.applyTCGdexResult(result)
                 }
+            }
+            .sheet(isPresented: $isScanningSearchCode) {
+                BookBarcodeScannerView { code in
+                    controller.title = code
+                    isScanningSearchCode = false
+
+                    if template == .books {
+                        shouldAutoSearchBooks = true
+                        isSearchingBooks = true
+                    } else if template == .games {
+                        shouldAutoSearchGames = true
+                        isSearchingTheGamesDB = true
+                    }
+                }
+                .ignoresSafeArea()
             }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

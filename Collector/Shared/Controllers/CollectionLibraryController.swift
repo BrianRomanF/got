@@ -16,7 +16,7 @@ final class CollectionLibraryController: ObservableObject {
         self.persistence = persistence
         self.categories = categories
             ?? persistence.loadCategories()
-            ?? CollectionLibraryController.seedCategories
+            ?? []
     }
 
     func category(with id: UUID) -> CollectionCategory? {
@@ -141,13 +141,16 @@ final class CollectionLibraryController: ObservableObject {
     }
 
     func libraryStats() -> CollectionStats {
-        categories.reduce(CollectionStats(totalItems: 0, ownedItems: 0, missingItems: 0, groups: 0)) { partial, category in
+        categories.reduce(CollectionStats(totalItems: 0, ownedItems: 0, missingItems: 0, groups: 0, taggedItems: 0, uniqueTags: 0, readingItems: 0)) { partial, category in
             let categoryStats = stats(for: category)
             return CollectionStats(
                 totalItems: partial.totalItems + categoryStats.totalItems,
                 ownedItems: partial.ownedItems + categoryStats.ownedItems,
                 missingItems: partial.missingItems + categoryStats.missingItems,
-                groups: partial.groups + categoryStats.groups
+                groups: partial.groups + categoryStats.groups,
+                taggedItems: partial.taggedItems + categoryStats.taggedItems,
+                uniqueTags: allTags(in: categories).count,
+                readingItems: partial.readingItems + categoryStats.readingItems
             )
         }
     }
@@ -187,14 +190,15 @@ final class CollectionLibraryController: ObservableObject {
             .first { $0.id == sectionID }
     }
 
-    func globalSearchResults(query: String) -> [GlobalSearchResult] {
+    func globalSearchResults(query: String, allowedKinds: Set<GlobalSearchResultKind> = Set(GlobalSearchResultKind.allCases), tag: String? = nil) -> [GlobalSearchResult] {
         let normalizedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !normalizedQuery.isEmpty else { return [] }
+        let normalizedTag = tag?.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !normalizedQuery.isEmpty || !(normalizedTag?.isEmpty ?? true) else { return [] }
 
         var results: [GlobalSearchResult] = []
 
         for category in categories {
-            if matches(normalizedQuery, in: [category.title, category.subtitle]) {
+            if allowedKinds.contains(.category), normalizedTag == nil, matches(normalizedQuery, in: [category.title, category.subtitle]) {
                 results.append(
                     GlobalSearchResult(
                         id: "category-\(category.id.uuidString)",
@@ -206,17 +210,22 @@ final class CollectionLibraryController: ObservableObject {
                 )
             }
 
-            results.append(contentsOf: globalSearchResults(
-                query: normalizedQuery,
-                items: category.items,
-                categoryID: category.id,
-                categoryTitle: category.title,
-                groupID: nil,
-                path: category.title
-            ))
+            if allowedKinds.contains(.piece) {
+                results.append(contentsOf: globalSearchResults(
+                    query: normalizedQuery,
+                    tag: normalizedTag,
+                    items: category.items,
+                    categoryID: category.id,
+                    categoryTitle: category.title,
+                    groupID: nil,
+                    path: category.title
+                ))
+            }
 
             results.append(contentsOf: globalSearchResults(
                 query: normalizedQuery,
+                allowedKinds: allowedKinds,
+                tag: normalizedTag,
                 groups: category.groups,
                 categoryID: category.id,
                 categoryTitle: category.title,
@@ -227,19 +236,30 @@ final class CollectionLibraryController: ObservableObject {
         return Array(results.prefix(60))
     }
 
+    func allTags() -> [String] {
+        allTags(in: categories)
+    }
+
     func recentActivity(limit: Int = 20) -> [RecentActivityEntry] {
-        categories
+        let entries = categories
             .flatMap { category in
                 recentActivityEntries(in: category)
             }
             .sorted { $0.activityDate > $1.activityDate }
+
+        return entriesOnLatestActivityDay(entries)
             .prefix(limit)
             .map { $0 }
     }
 
     func recentActivityCategorySummaries() -> [RecentActivityCategorySummary] {
-        categories.compactMap { category in
-            let sections = recentActivitySections(in: category)
+        let latestDate = categories
+            .flatMap { recentActivityEntries(in: $0) }
+            .map(\.activityDate)
+            .max()
+
+        return categories.compactMap { category in
+            let sections = recentActivitySections(in: category, matchingLatestDayOf: latestDate)
             guard !sections.isEmpty else { return nil }
             return RecentActivityCategorySummary(
                 id: category.id,
@@ -252,7 +272,11 @@ final class CollectionLibraryController: ObservableObject {
 
     func recentActivitySections(inCategory categoryID: UUID) -> [RecentActivitySection] {
         guard let category = category(with: categoryID) else { return [] }
-        return recentActivitySections(in: category)
+        let latestDate = categories
+            .flatMap { recentActivityEntries(in: $0) }
+            .map(\.activityDate)
+            .max()
+        return recentActivitySections(in: category, matchingLatestDayOf: latestDate)
     }
 
     func recentActivitySection(with sectionID: String) -> RecentActivitySection? {
@@ -266,9 +290,73 @@ final class CollectionLibraryController: ObservableObject {
         categories[categoryIndex].items.append(item)
     }
 
+    func addItems(_ items: [CollectibleItem], toCategory categoryID: UUID) {
+        guard let categoryIndex = categories.firstIndex(where: { $0.id == categoryID }) else { return }
+        categories[categoryIndex].items.append(contentsOf: items)
+    }
+
     func addItem(_ item: CollectibleItem, toGroup groupID: UUID, inCategory categoryID: UUID) {
         guard let categoryIndex = categories.firstIndex(where: { $0.id == categoryID }) else { return }
         insertItem(item, groupID: groupID, groups: &categories[categoryIndex].groups)
+    }
+
+    func addItems(_ items: [CollectibleItem], toGroup groupID: UUID, inCategory categoryID: UUID) {
+        guard let categoryIndex = categories.firstIndex(where: { $0.id == categoryID }) else { return }
+        for item in items {
+            insertItem(item, groupID: groupID, groups: &categories[categoryIndex].groups)
+        }
+    }
+
+    func moveItems(with itemIDs: Set<UUID>, inCategory categoryID: UUID, fromGroupID: UUID?, toGroupID: UUID?) {
+        guard !itemIDs.isEmpty, fromGroupID != toGroupID else { return }
+        guard let categoryIndex = categories.firstIndex(where: { $0.id == categoryID }) else { return }
+
+        let movedItems: [CollectibleItem]
+        if let fromGroupID {
+            movedItems = extractItems(with: itemIDs, groupID: fromGroupID, groups: &categories[categoryIndex].groups)
+        } else {
+            var extracted: [CollectibleItem] = []
+            categories[categoryIndex].items.removeAll { item in
+                if itemIDs.contains(item.id) {
+                    extracted.append(item)
+                    return true
+                }
+                return false
+            }
+            movedItems = extracted
+        }
+
+        let updatedItems = movedItems.map { item in
+            var updatedItem = item
+            updatedItem.updatedAt = .now
+            return updatedItem
+        }
+
+        if let toGroupID {
+            for item in updatedItems {
+                insertItem(item, groupID: toGroupID, groups: &categories[categoryIndex].groups)
+            }
+        } else {
+            categories[categoryIndex].items.append(contentsOf: updatedItems)
+        }
+    }
+
+    func updateItemsOwnership(itemIDs: Set<UUID>, status: ItemOwnershipStatus, inCategory categoryID: UUID, groupID: UUID?) {
+        for itemID in itemIDs {
+            updateItemOwnership(itemID: itemID, status: status, inCategory: categoryID, groupID: groupID)
+        }
+    }
+
+    func deleteItems(with itemIDs: Set<UUID>, inCategory categoryID: UUID, groupID: UUID?) {
+        for itemID in itemIDs {
+            deleteItem(with: itemID, inCategory: categoryID, groupID: groupID)
+        }
+    }
+
+    func itemMoveDestinations(inCategory categoryID: UUID) -> [ItemMoveDestination] {
+        guard let category = category(with: categoryID) else { return [] }
+        return [ItemMoveDestination(groupID: nil, title: L10n.RecentActivity.noShelf, subtitle: category.title)]
+            + itemMoveDestinations(in: category.groups, path: category.title)
     }
 
     func updateItem(_ item: CollectibleItem, inCategory categoryID: UUID, groupID: UUID?) {
@@ -316,16 +404,52 @@ final class CollectionLibraryController: ObservableObject {
         return nil
     }
 
+    private func itemMoveDestinations(in groups: [CollectionGroup], path: String) -> [ItemMoveDestination] {
+        groups.flatMap { group in
+            let groupPath = [path, group.title].joined(separator: " > ")
+            return [
+                ItemMoveDestination(groupID: group.id, title: group.title, subtitle: groupPath)
+            ] + itemMoveDestinations(in: group.groups, path: groupPath)
+        }
+    }
+
+    private func extractItems(with itemIDs: Set<UUID>, groupID: UUID, groups: inout [CollectionGroup]) -> [CollectibleItem] {
+        for index in groups.indices {
+            if groups[index].id == groupID {
+                var extracted: [CollectibleItem] = []
+                groups[index].items.removeAll { item in
+                    if itemIDs.contains(item.id) {
+                        extracted.append(item)
+                        return true
+                    }
+                    return false
+                }
+                return extracted
+            }
+
+            let extracted = extractItems(with: itemIDs, groupID: groupID, groups: &groups[index].groups)
+            if !extracted.isEmpty {
+                return extracted
+            }
+        }
+
+        return []
+    }
+
     private func stats(items: [CollectibleItem], groups: [CollectionGroup]) -> CollectionStats {
         let directOwned = items.filter { $0.ownershipStatus == .owned }.count
         let directMissing = items.filter { $0.ownershipStatus == .missing }.count
+        let directTags = Set(items.flatMap(\.tags))
 
         return groups.reduce(
             CollectionStats(
                 totalItems: items.count,
                 ownedItems: directOwned,
                 missingItems: directMissing,
-                groups: groups.count
+                groups: groups.count,
+                taggedItems: items.filter { !$0.tags.isEmpty }.count,
+                uniqueTags: directTags.count,
+                readingItems: items.filter { $0.readingStatus == .reading }.count
             )
         ) { partial, group in
             let groupStats = stats(items: group.items, groups: group.groups)
@@ -333,9 +457,41 @@ final class CollectionLibraryController: ObservableObject {
                 totalItems: partial.totalItems + groupStats.totalItems,
                 ownedItems: partial.ownedItems + groupStats.ownedItems,
                 missingItems: partial.missingItems + groupStats.missingItems,
-                groups: partial.groups + groupStats.groups
+                groups: partial.groups + groupStats.groups,
+                taggedItems: partial.taggedItems + groupStats.taggedItems,
+                uniqueTags: allTags(in: items, groups: groups).count,
+                readingItems: partial.readingItems + groupStats.readingItems
             )
         }
+    }
+
+    private func allTags(in categories: [CollectionCategory]) -> [String] {
+        let tags = categories.flatMap { category in
+            allTags(in: category.items, groups: category.groups)
+        }
+
+        return normalizedUniqueTags(tags)
+    }
+
+    private func allTags(in items: [CollectibleItem], groups: [CollectionGroup]) -> [String] {
+        let directTags = items.flatMap(\.tags)
+        let nestedTags = groups.flatMap { group in
+            allTags(in: group.items, groups: group.groups)
+        }
+
+        return normalizedUniqueTags(directTags + nestedTags)
+    }
+
+    private func normalizedUniqueTags(_ tags: [String]) -> [String] {
+        var seen = Set<String>()
+        return tags.compactMap { tag in
+            let trimmed = tag.trimmingCharacters(in: .whitespacesAndNewlines)
+            let key = trimmed.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
+            guard !trimmed.isEmpty, !seen.contains(key) else { return nil }
+            seen.insert(key)
+            return trimmed
+        }
+        .sorted { $0.localizedCaseInsensitiveCompare($1) == .orderedAscending }
     }
 
     private func wishlistEntries(in category: CollectionCategory) -> [WishlistEntry] {
@@ -445,6 +601,8 @@ final class CollectionLibraryController: ObservableObject {
 
     private func globalSearchResults(
         query: String,
+        allowedKinds: Set<GlobalSearchResultKind>,
+        tag: String?,
         groups: [CollectionGroup],
         categoryID: UUID,
         categoryTitle: String,
@@ -454,7 +612,7 @@ final class CollectionLibraryController: ObservableObject {
             let groupPath = [path, group.title].joined(separator: " > ")
             var results: [GlobalSearchResult] = []
 
-            if matches(query, in: [group.title, group.subtitle]) {
+            if allowedKinds.contains(.shelf), tag == nil, matches(query, in: [group.title, group.subtitle]) {
                 results.append(
                     GlobalSearchResult(
                         id: "group-\(categoryID.uuidString)-\(group.id.uuidString)",
@@ -466,17 +624,22 @@ final class CollectionLibraryController: ObservableObject {
                 )
             }
 
-            results.append(contentsOf: globalSearchResults(
-                query: query,
-                items: group.items,
-                categoryID: categoryID,
-                categoryTitle: categoryTitle,
-                groupID: group.id,
-                path: groupPath
-            ))
+            if allowedKinds.contains(.piece) {
+                results.append(contentsOf: globalSearchResults(
+                    query: query,
+                    tag: tag,
+                    items: group.items,
+                    categoryID: categoryID,
+                    categoryTitle: categoryTitle,
+                    groupID: group.id,
+                    path: groupPath
+                ))
+            }
 
             results.append(contentsOf: globalSearchResults(
                 query: query,
+                allowedKinds: allowedKinds,
+                tag: tag,
                 groups: group.groups,
                 categoryID: categoryID,
                 categoryTitle: categoryTitle,
@@ -489,6 +652,7 @@ final class CollectionLibraryController: ObservableObject {
 
     private func globalSearchResults(
         query: String,
+        tag: String?,
         items: [CollectibleItem],
         categoryID: UUID,
         categoryTitle: String,
@@ -501,9 +665,14 @@ final class CollectionLibraryController: ObservableObject {
                 item.subtitle,
                 item.notes,
                 item.physicalLocation ?? ""
-            ] + (item.templateDetails?.map(\.value) ?? [])
+            ] + item.tags + (item.templateDetails?.map(\.value) ?? [])
 
-            guard matches(query, in: searchableValues) else { return nil }
+            let matchesQuery = query.isEmpty || matches(query, in: searchableValues)
+            let matchesTag = tag.map { selectedTag in
+                item.tags.contains { $0.compare(selectedTag, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame }
+            } ?? true
+
+            guard matchesQuery && matchesTag else { return nil }
 
             return GlobalSearchResult(
                 id: "item-\(categoryID.uuidString)-\(groupID?.uuidString ?? "root")-\(item.id.uuidString)",
@@ -543,10 +712,10 @@ final class CollectionLibraryController: ObservableObject {
         }
     }
 
-    private func recentActivitySections(in category: CollectionCategory) -> [RecentActivitySection] {
+    private func recentActivitySections(in category: CollectionCategory, matchingLatestDayOf latestDate: Date?) -> [RecentActivitySection] {
         var sections: [RecentActivitySection] = []
 
-        let rootEntries = category.items
+        let rootEntries = entriesOnLatestActivityDay(category.items
             .map {
                 RecentActivityEntry(
                     categoryID: category.id,
@@ -556,7 +725,7 @@ final class CollectionLibraryController: ObservableObject {
                     groupTitle: nil
                 )
             }
-            .sorted { $0.activityDate > $1.activityDate }
+            .sorted { $0.activityDate > $1.activityDate }, latestDate: latestDate)
 
         if !rootEntries.isEmpty {
             sections.append(
@@ -574,16 +743,22 @@ final class CollectionLibraryController: ObservableObject {
         sections.append(contentsOf: recentActivitySections(
             in: category.groups,
             categoryID: category.id,
-            categoryTitle: category.title
+            categoryTitle: category.title,
+            matchingLatestDayOf: latestDate
         ))
 
         return sections.sorted { ($0.latestDate ?? .distantPast) > ($1.latestDate ?? .distantPast) }
     }
 
-    private func recentActivitySections(in groups: [CollectionGroup], categoryID: UUID, categoryTitle: String) -> [RecentActivitySection] {
+    private func recentActivitySections(
+        in groups: [CollectionGroup],
+        categoryID: UUID,
+        categoryTitle: String,
+        matchingLatestDayOf latestDate: Date?
+    ) -> [RecentActivitySection] {
         groups.flatMap { group in
             var sections: [RecentActivitySection] = []
-            let entries = group.items
+            let entries = entriesOnLatestActivityDay(group.items
                 .map {
                     RecentActivityEntry(
                         categoryID: categoryID,
@@ -593,7 +768,7 @@ final class CollectionLibraryController: ObservableObject {
                         groupTitle: group.title
                     )
                 }
-                .sorted { $0.activityDate > $1.activityDate }
+                .sorted { $0.activityDate > $1.activityDate }, latestDate: latestDate)
 
             if !entries.isEmpty {
                 sections.append(
@@ -608,8 +783,21 @@ final class CollectionLibraryController: ObservableObject {
                 )
             }
 
-            sections.append(contentsOf: recentActivitySections(in: group.groups, categoryID: categoryID, categoryTitle: categoryTitle))
+            sections.append(contentsOf: recentActivitySections(
+                in: group.groups,
+                categoryID: categoryID,
+                categoryTitle: categoryTitle,
+                matchingLatestDayOf: latestDate
+            ))
             return sections.sorted { ($0.latestDate ?? .distantPast) > ($1.latestDate ?? .distantPast) }
+        }
+    }
+
+    private func entriesOnLatestActivityDay(_ entries: [RecentActivityEntry], latestDate: Date? = nil) -> [RecentActivityEntry] {
+        guard let latestDate = latestDate ?? entries.map(\.activityDate).max() else { return [] }
+
+        return entries.filter {
+            Calendar.autoupdatingCurrent.isDate($0.activityDate, inSameDayAs: latestDate)
         }
     }
 
@@ -728,56 +916,4 @@ final class CollectionLibraryController: ObservableObject {
 
         return false
     }
-}
-
-private extension CollectionLibraryController {
-    static let seedCategories: [CollectionCategory] = [
-        CollectionCategory(
-            title: L10n.Seed.comicsTitle,
-            subtitle: L10n.Seed.comicsSubtitle,
-            symbolName: "book.closed.fill",
-            template: .comics,
-            groups: [
-                CollectionGroup(
-                    title: L10n.Seed.invincibleTitle,
-                    subtitle: L10n.Seed.invincibleSubtitle,
-                    items: [
-                        CollectibleItem(
-                            title: L10n.Seed.invincibleOneTitle,
-                            subtitle: L10n.Seed.issueSubtitle,
-                            notes: L10n.Seed.sampleNote,
-                            readingStatus: .read
-                        ),
-                        CollectibleItem(
-                            title: L10n.Seed.invincibleFourTitle,
-                            subtitle: L10n.Seed.wishlistSubtitle,
-                            notes: L10n.Seed.missingSampleNote,
-                            ownershipStatus: .missing
-                        )
-                    ]
-                )
-            ]
-        ),
-        CollectionCategory(
-            title: L10n.Seed.vinylTitle,
-            subtitle: L10n.Seed.vinylSubtitle,
-            symbolName: "record.circle.fill",
-            template: .vinyl,
-            groups: [
-                CollectionGroup(title: L10n.Seed.rockTitle, subtitle: L10n.Seed.genreSubtitle)
-            ]
-        ),
-        CollectionCategory(
-            title: L10n.Seed.gamesTitle,
-            subtitle: L10n.Seed.gamesSubtitle,
-            symbolName: "gamecontroller.fill",
-            template: .games
-        ),
-        CollectionCategory(
-            title: L10n.Seed.booksTitle,
-            subtitle: L10n.Seed.booksSubtitle,
-            symbolName: "books.vertical.fill",
-            template: .books
-        )
-    ]
 }

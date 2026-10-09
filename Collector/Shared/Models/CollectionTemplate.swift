@@ -29,7 +29,7 @@ enum CollectionTemplate: String, CaseIterable, Hashable, Identifiable, Codable {
         case .books:
             L10n.Template.bookShelves
         case .vinyl:
-            L10n.Template.vinylArtists
+            L10n.Template.vinylStyles
         case .games:
             L10n.Template.gamePlatforms
         case .tradingCards:
@@ -46,7 +46,7 @@ enum CollectionTemplate: String, CaseIterable, Hashable, Identifiable, Codable {
         case .books:
             L10n.Template.addBookShelf
         case .vinyl:
-            L10n.Template.addVinylArtist
+            L10n.Template.addVinylStyle
         case .games:
             L10n.Template.addGamePlatform
         case .tradingCards:
@@ -63,7 +63,7 @@ enum CollectionTemplate: String, CaseIterable, Hashable, Identifiable, Codable {
         case .books:
             L10n.Template.bookShelfName
         case .vinyl:
-            L10n.Template.vinylArtistName
+            L10n.Template.vinylStyleName
         case .games:
             L10n.Template.gamePlatformName
         case .tradingCards:

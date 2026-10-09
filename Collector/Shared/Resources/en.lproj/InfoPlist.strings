@@ -1,0 +1,2 @@
+"NSCameraUsageDescription" = "Got it uses the camera to photograph covers and scan book barcodes.";
+"NSPhotoLibraryUsageDescription" = "Got it uses your photo library only when you choose an image as a cover.";

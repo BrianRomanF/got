@@ -29,6 +29,15 @@ enum L10n {
         static var categorySVGIconURL: String { tr("home.categorySVGIconURL") }
         static var categorySVGIconSelectFile: String { tr("home.categorySVGIconSelectFile") }
         static var categorySVGIconHint: String { tr("home.categorySVGIconHint") }
+        static var firstRunTitle: String { tr("home.firstRunTitle") }
+        static var firstRunMessage: String { tr("home.firstRunMessage") }
+        static var firstRunStepCollectionTitle: String { tr("home.firstRunStepCollectionTitle") }
+        static var firstRunStepCollectionBody: String { tr("home.firstRunStepCollectionBody") }
+        static var firstRunStepPieceTitle: String { tr("home.firstRunStepPieceTitle") }
+        static var firstRunStepPieceBody: String { tr("home.firstRunStepPieceBody") }
+        static var firstRunStepBackupTitle: String { tr("home.firstRunStepBackupTitle") }
+        static var firstRunStepBackupBody: String { tr("home.firstRunStepBackupBody") }
+        static var firstRunPrimaryAction: String { tr("home.firstRunPrimaryAction") }
     }
 
     enum Settings {
@@ -85,6 +94,8 @@ enum L10n {
         static var apiNotConfigured: String { tr("settings.apiNotConfigured") }
         static var backupTitle: String { tr("settings.backupTitle") }
         static var backupBody: String { tr("settings.backupBody") }
+        static var backupReminderTitle: String { tr("settings.backupReminderTitle") }
+        static var backupReminderBody: String { tr("settings.backupReminderBody") }
         static var exportLibrary: String { tr("settings.exportLibrary") }
         static var shareExportedLibrary: String { tr("settings.shareExportedLibrary") }
         static var importLibrary: String { tr("settings.importLibrary") }
@@ -93,6 +104,11 @@ enum L10n {
         static var importLibraryConfirm: String { tr("settings.importLibraryConfirm") }
         static var importLibraryFailedTitle: String { tr("settings.importLibraryFailedTitle") }
         static var importLibraryFailedMessage: String { tr("settings.importLibraryFailedMessage") }
+        static var importCSV: String { tr("settings.importCSV") }
+        static var importCSVBody: String { tr("settings.importCSVBody") }
+        static var importCSVDestinationTitle: String { tr("settings.importCSVDestinationTitle") }
+        static var importCSVFailedTitle: String { tr("settings.importCSVFailedTitle") }
+        static var importCSVFailedMessage: String { tr("settings.importCSVFailedMessage") }
         static var privacyTitle: String { tr("settings.privacyTitle") }
         static var privacyLocalTitle: String { tr("settings.privacyLocalTitle") }
         static var privacyLocalBody: String { tr("settings.privacyLocalBody") }
@@ -102,6 +118,34 @@ enum L10n {
         static var privacyMediaBody: String { tr("settings.privacyMediaBody") }
         static var privacyNetworkTitle: String { tr("settings.privacyNetworkTitle") }
         static var privacyNetworkBody: String { tr("settings.privacyNetworkBody") }
+        static var aboutTitle: String { tr("settings.aboutTitle") }
+        static var aboutBody: String { tr("settings.aboutBody") }
+        static var appVersionTitle: String { tr("settings.appVersionTitle") }
+        static var privacyPolicy: String { tr("settings.privacyPolicy") }
+        static var contactSupport: String { tr("settings.contactSupport") }
+        static var backupShortcut: String { tr("settings.backupShortcut") }
+    }
+
+    enum Pro {
+        static var title: String { tr("pro.title") }
+        static var subtitle: String { tr("pro.subtitle") }
+        static var unlock: String { tr("pro.unlock") }
+        static var restore: String { tr("pro.restore") }
+        static var redeemCode: String { tr("pro.redeemCode") }
+        static var redeemUnavailable: String { tr("pro.redeemUnavailable") }
+        static var unlocked: String { tr("pro.unlocked") }
+        static var unavailable: String { tr("pro.unavailable") }
+        static var verificationFailed: String { tr("pro.verificationFailed") }
+        static var limitTitle: String { tr("pro.limitTitle") }
+        static var categoryLimitMessage: String { tr("pro.categoryLimitMessage") }
+        static var itemLimitMessage: String { tr("pro.itemLimitMessage") }
+        static var featureLimitMessage: String { tr("pro.featureLimitMessage") }
+        static var unlimitedCollections: String { tr("pro.unlimitedCollections") }
+        static var unlimitedPieces: String { tr("pro.unlimitedPieces") }
+        static var csvImport: String { tr("pro.csvImport") }
+        static var bulkActions: String { tr("pro.bulkActions") }
+        static var advancedSearch: String { tr("pro.advancedSearch") }
+        static var oneTime: String { tr("pro.oneTime") }
     }
 
     enum Empty {
@@ -121,7 +165,11 @@ enum L10n {
         static var collections: String { tr("dashboard.collections") }
         static var pieces: String { tr("dashboard.pieces") }
         static var missing: String { tr("dashboard.missing") }
+        static var shelves: String { tr("dashboard.shelves") }
+        static var tags: String { tr("dashboard.tags") }
+        static var reading: String { tr("dashboard.reading") }
         static var categoryProgress: String { tr("dashboard.categoryProgress") }
+        static var categoryTags: String { tr("dashboard.categoryTags") }
     }
 
     enum Wishlist {
@@ -142,6 +190,13 @@ enum L10n {
         static var clear: String { tr("globalSearch.clear") }
         static var startTitle: String { tr("globalSearch.startTitle") }
         static var startMessage: String { tr("globalSearch.startMessage") }
+        static var filtersTitle: String { tr("globalSearch.filtersTitle") }
+        static var filterAll: String { tr("globalSearch.filterAll") }
+        static var filterCategories: String { tr("globalSearch.filterCategories") }
+        static var filterShelves: String { tr("globalSearch.filterShelves") }
+        static var filterPieces: String { tr("globalSearch.filterPieces") }
+        static var allTags: String { tr("globalSearch.allTags") }
+        static var clearFilters: String { tr("globalSearch.clearFilters") }
     }
 
     enum RecentActivity {
@@ -238,6 +293,8 @@ enum L10n {
         static var camera: String { tr("itemEditor.camera") }
         static var clearCover: String { tr("itemEditor.clearCover") }
         static var coverURLPlaceholder: String { tr("itemEditor.coverURLPlaceholder") }
+        static var tags: String { tr("itemEditor.tags") }
+        static var tagsPlaceholder: String { tr("itemEditor.tagsPlaceholder") }
     }
 
     enum ItemDetail {
@@ -260,6 +317,14 @@ enum L10n {
     enum QuickActions {
         static var markOwned: String { tr("quickActions.markOwned") }
         static var markMissing: String { tr("quickActions.markMissing") }
+        static var select: String { tr("quickActions.select") }
+        static var done: String { tr("quickActions.done") }
+        static var move: String { tr("quickActions.move") }
+        static var deleteSelected: String { tr("quickActions.deleteSelected") }
+        static var selectedCount: String { tr("quickActions.selectedCount") }
+        static var moveTitle: String { tr("quickActions.moveTitle") }
+        static var deleteSelectedTitle: String { tr("quickActions.deleteSelectedTitle") }
+        static var deleteSelectedMessage: String { tr("quickActions.deleteSelectedMessage") }
     }
 
     enum ComicVine {
@@ -364,10 +429,10 @@ enum L10n {
         static var bookShelfName: String { tr("template.bookShelfName") }
         static var booksCategory: String { tr("template.booksCategory") }
         static var booksCategoryHint: String { tr("template.booksCategoryHint") }
-        static var vinylArtists: String { tr("template.vinylArtists") }
+        static var vinylStyles: String { tr("template.vinylStyles") }
         static var vinylAlbums: String { tr("template.vinylAlbums") }
-        static var addVinylArtist: String { tr("template.addVinylArtist") }
-        static var vinylArtistName: String { tr("template.vinylArtistName") }
+        static var addVinylStyle: String { tr("template.addVinylStyle") }
+        static var vinylStyleName: String { tr("template.vinylStyleName") }
         static var vinylCategory: String { tr("template.vinylCategory") }
         static var vinylCategoryHint: String { tr("template.vinylCategoryHint") }
         static var gamePlatforms: String { tr("template.gamePlatforms") }
@@ -426,26 +491,6 @@ enum L10n {
         static var locationPlaceholder: String { tr("templateDetails.locationPlaceholder") }
     }
 
-    enum Seed {
-        static var comicsTitle: String { tr("seed.comicsTitle") }
-        static var comicsSubtitle: String { tr("seed.comicsSubtitle") }
-        static var invincibleTitle: String { tr("seed.invincibleTitle") }
-        static var invincibleSubtitle: String { tr("seed.invincibleSubtitle") }
-        static var invincibleOneTitle: String { tr("seed.invincibleOneTitle") }
-        static var invincibleFourTitle: String { tr("seed.invincibleFourTitle") }
-        static var issueSubtitle: String { tr("seed.issueSubtitle") }
-        static var wishlistSubtitle: String { tr("seed.wishlistSubtitle") }
-        static var sampleNote: String { tr("seed.sampleNote") }
-        static var missingSampleNote: String { tr("seed.missingSampleNote") }
-        static var vinylTitle: String { tr("seed.vinylTitle") }
-        static var vinylSubtitle: String { tr("seed.vinylSubtitle") }
-        static var rockTitle: String { tr("seed.rockTitle") }
-        static var genreSubtitle: String { tr("seed.genreSubtitle") }
-        static var gamesTitle: String { tr("seed.gamesTitle") }
-        static var gamesSubtitle: String { tr("seed.gamesSubtitle") }
-        static var booksTitle: String { tr("seed.booksTitle") }
-        static var booksSubtitle: String { tr("seed.booksSubtitle") }
-    }
 }
 
 private func tr(_ key: String) -> String {

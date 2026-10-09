@@ -4,6 +4,10 @@ final class CategoryDetailController: ObservableObject {
     @Published var isAddingGroup = false
     @Published var isAddingItem = false
     @Published var isImportingSeries = false
+    @Published var isSelectingItems = false
+    @Published var isMovingSelectedItems = false
+    @Published var isConfirmingBulkDelete = false
+    @Published var selectedItemIDs = Set<UUID>()
     @Published var isConfirmingDelete = false
     @Published var itemToEdit: CollectibleItem?
     @Published var itemToDelete: CollectibleItem?
@@ -44,5 +48,18 @@ final class CategoryDetailController: ObservableObject {
         items
             .filter { ownershipFilter.includes($0) && quickFilter.includes($0) }
             .sorted(using: sortOption)
+    }
+
+    func toggleSelection(for item: CollectibleItem) {
+        if selectedItemIDs.contains(item.id) {
+            selectedItemIDs.remove(item.id)
+        } else {
+            selectedItemIDs.insert(item.id)
+        }
+    }
+
+    func clearSelection() {
+        selectedItemIDs.removeAll()
+        isSelectingItems = false
     }
 }

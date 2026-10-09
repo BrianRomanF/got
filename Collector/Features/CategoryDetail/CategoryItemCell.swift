@@ -29,6 +29,8 @@ struct CategoryItemCell: View {
             if let readingStatus = item.readingStatus {
                 ReadingBadge(status: readingStatus)
             }
+
+            ItemTagChipsView(tags: item.tags, limit: 2)
         }
         .padding(10)
         .comicPanel(fill: item.ownershipStatus == .owned ? ComicTheme.panel : Color.white.opacity(0.82))

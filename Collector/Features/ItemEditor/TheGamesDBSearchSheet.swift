@@ -4,7 +4,14 @@ struct TheGamesDBSearchSheet: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var controller = TheGamesDBSearchController()
     let initialQuery: String
+    let autoSearchOnAppear: Bool
     let onSelect: (TheGamesDBGameSearchResult) -> Void
+
+    init(initialQuery: String, autoSearchOnAppear: Bool = false, onSelect: @escaping (TheGamesDBGameSearchResult) -> Void) {
+        self.initialQuery = initialQuery
+        self.autoSearchOnAppear = autoSearchOnAppear
+        self.onSelect = onSelect
+    }
 
     var body: some View {
         NavigationStack {
@@ -68,6 +75,9 @@ struct TheGamesDBSearchSheet: View {
             .onAppear {
                 if controller.query.isEmpty {
                     controller.query = initialQuery
+                }
+                if autoSearchOnAppear {
+                    controller.search()
                 }
             }
         }

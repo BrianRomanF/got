@@ -2,8 +2,12 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct SettingsView: View {
+    private let privacyPolicyURL = URL(string: "https://gotit.app/privacy")!
+    private let supportURL = URL(string: "mailto:support@gotit.app")!
+
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var libraryController: CollectionLibraryController
+    @EnvironmentObject private var proAccess: ProAccessController
     @AppStorage(AppSettings.selectedLanguageKey) private var selectedLanguage = AppLanguage.system.rawValue
     @AppStorage(AppSettings.hideOnboardingKey) private var hideOnboarding = false
     @AppStorage(AppSettings.comicVineAPIKeyKey) private var comicVineAPIKey = ""
@@ -19,12 +23,19 @@ struct SettingsView: View {
     @State private var isUsageGuideExpanded = false
     @State private var isAPISectionExpanded = false
     @State private var isBackupSectionExpanded = false
+    @State private var isProSectionExpanded = false
     @State private var isPrivacySectionExpanded = false
+    @State private var isAboutSectionExpanded = false
     @State private var isEditingAPIKeys = false
     @State private var exportURL: URL?
     @State private var isImportingLibrary = false
+    @State private var isImportingCSV = false
+    @State private var csvImportURL: URL?
     @State private var pendingImportURL: URL?
     @State private var importFailed = false
+    @State private var csvImportFailed = false
+    @State private var isShowingPaywall = false
+    @State private var paywallMessage = L10n.Pro.subtitle
 
     var body: some View {
         NavigationStack {
@@ -37,10 +48,12 @@ struct SettingsView: View {
                         languageSection
                         generalSection
                         onboardingSection
+                        proSection
                         apiSection
                         backupSection
                         usageGuideSection
                         privacySection
+                        aboutSection
                     }
                     .padding(20)
                 }
@@ -66,6 +79,22 @@ struct SettingsView: View {
                 guard case .success(let urls) = result, let url = urls.first else { return }
                 pendingImportURL = url
             }
+            .fileImporter(
+                isPresented: $isImportingCSV,
+                allowedContentTypes: [UTType(filenameExtension: "csv") ?? .commaSeparatedText],
+                allowsMultipleSelection: false
+            ) { result in
+                guard case .success(let urls) = result, let url = urls.first else { return }
+                csvImportURL = url
+            }
+            .sheet(isPresented: csvDestinationBinding) {
+                CSVImportDestinationPicker(categories: libraryController.categories) { category in
+                    importCSV(into: category)
+                }
+            }
+            .sheet(isPresented: $isShowingPaywall) {
+                ProPaywallView(message: paywallMessage)
+            }
             .alert(L10n.Settings.importLibraryTitle, isPresented: importConfirmationBinding) {
                 Button(L10n.Common.cancel, role: .cancel) {
                     pendingImportURL = nil
@@ -85,6 +114,11 @@ struct SettingsView: View {
             } message: {
                 Text(L10n.Settings.importLibraryFailedMessage)
             }
+            .alert(L10n.Settings.importCSVFailedTitle, isPresented: $csvImportFailed) {
+                Button(L10n.Common.cancel, role: .cancel) {}
+            } message: {
+                Text(L10n.Settings.importCSVFailedMessage)
+            }
         }
     }
 
@@ -97,6 +131,30 @@ struct SettingsView: View {
                 }
             }
         )
+    }
+
+    private var csvDestinationBinding: Binding<Bool> {
+        Binding(
+            get: { csvImportURL != nil },
+            set: { isPresented in
+                if !isPresented {
+                    csvImportURL = nil
+                }
+            }
+        )
+    }
+
+    private func importCSV(into category: CollectionCategory) {
+        guard let csvImportURL else { return }
+
+        do {
+            let items = try CSVItemImportController().importItems(from: csvImportURL, template: category.template)
+            libraryController.addItems(items, toCategory: category.id)
+            self.csvImportURL = nil
+        } catch {
+            self.csvImportURL = nil
+            csvImportFailed = true
+        }
     }
 
     private var languageSection: some View {
@@ -236,6 +294,43 @@ struct SettingsView: View {
         .comicPanel()
     }
 
+    private var proSection: some View {
+        DisclosureGroup(isExpanded: $isProSectionExpanded) {
+            VStack(alignment: .leading, spacing: 12) {
+                SettingsGuideRow(
+                    systemName: proAccess.isProUnlocked ? "checkmark.seal.fill" : "lock.open.fill",
+                    title: proAccess.isProUnlocked ? L10n.Pro.unlocked : L10n.Pro.title,
+                    description: L10n.Pro.subtitle
+                )
+
+                if !proAccess.isProUnlocked {
+                    Button {
+                        paywallMessage = L10n.Pro.subtitle
+                        isShowingPaywall = true
+                    } label: {
+                        SettingsActionLabel(title: L10n.Pro.unlock, systemName: "sparkles")
+                    }
+                    .buttonStyle(.plain)
+
+                    Button {
+                        Task {
+                            await proAccess.redeemOfferCode()
+                        }
+                    } label: {
+                        SettingsActionLabel(title: L10n.Pro.redeemCode, systemName: "giftcard.fill")
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(.top, 12)
+        } label: {
+            SettingsSectionTitle(systemName: "crown.fill", title: L10n.Pro.title)
+        }
+        .tint(ComicTheme.ink)
+        .padding(16)
+        .comicPanel()
+    }
+
     private var usageGuideSection: some View {
         DisclosureGroup(isExpanded: $isUsageGuideExpanded) {
             VStack(alignment: .leading, spacing: 12) {
@@ -333,6 +428,12 @@ struct SettingsView: View {
                     .foregroundStyle(ComicTheme.ink.opacity(0.82))
                     .fixedSize(horizontal: false, vertical: true)
 
+                SettingsGuideRow(
+                    systemName: "exclamationmark.shield.fill",
+                    title: L10n.Settings.backupReminderTitle,
+                    description: L10n.Settings.backupReminderBody
+                )
+
                 Button {
                     exportURL = libraryController.exportLibrary()
                 } label: {
@@ -351,6 +452,24 @@ struct SettingsView: View {
                     isImportingLibrary = true
                 } label: {
                     SettingsActionLabel(title: L10n.Settings.importLibrary, systemName: "square.and.arrow.down.fill")
+                }
+                .buttonStyle(.plain)
+
+                SettingsGuideRow(
+                    systemName: "tablecells.fill",
+                    title: L10n.Settings.importCSV,
+                    description: L10n.Settings.importCSVBody
+                )
+
+                Button {
+                    guard proAccess.isProUnlocked else {
+                        paywallMessage = L10n.Pro.featureLimitMessage
+                        isShowingPaywall = true
+                        return
+                    }
+                    isImportingCSV = true
+                } label: {
+                    SettingsActionLabel(title: L10n.Settings.importCSV, systemName: "doc.badge.plus")
                 }
                 .buttonStyle(.plain)
             }
@@ -378,6 +497,45 @@ struct SettingsView: View {
         .tint(ComicTheme.ink)
         .padding(16)
         .comicPanel()
+    }
+
+    private var aboutSection: some View {
+        DisclosureGroup(isExpanded: $isAboutSectionExpanded) {
+            VStack(alignment: .leading, spacing: 12) {
+                Text(L10n.Settings.aboutBody)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(ComicTheme.ink.opacity(0.82))
+                    .fixedSize(horizontal: false, vertical: true)
+
+                SettingsInfoRow(
+                    systemName: "number.circle.fill",
+                    title: L10n.Settings.appVersionTitle,
+                    value: appVersion
+                )
+
+                SettingsLinkButton(title: L10n.Settings.privacyPolicy, url: privacyPolicyURL)
+                SettingsLinkButton(title: L10n.Settings.contactSupport, url: supportURL)
+
+                Button {
+                    exportURL = libraryController.exportLibrary()
+                } label: {
+                    SettingsActionLabel(title: L10n.Settings.backupShortcut, systemName: "externaldrive.fill")
+                }
+                .buttonStyle(.plain)
+            }
+            .padding(.top, 12)
+        } label: {
+            SettingsSectionTitle(systemName: "info.circle.fill", title: L10n.Settings.aboutTitle)
+        }
+        .tint(ComicTheme.ink)
+        .padding(16)
+        .comicPanel()
+    }
+
+    private var appVersion: String {
+        let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0"
+        let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "1"
+        return "\(version) (\(build))"
     }
 
     private var discogsAPISection: some View {
@@ -634,6 +792,40 @@ private struct SettingsActionLabel: View {
     }
 }
 
+private struct SettingsInfoRow: View {
+    let systemName: String
+    let title: String
+    let value: String
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: systemName)
+                .font(.headline.weight(.black))
+                .foregroundStyle(ComicTheme.red)
+                .frame(width: 28)
+
+            Text(title)
+                .font(.headline.weight(.black))
+                .foregroundStyle(ComicTheme.ink)
+
+            Spacer(minLength: 12)
+
+            Text(value)
+                .font(.caption.weight(.black))
+                .foregroundStyle(ComicTheme.ink.opacity(0.68))
+                .lineLimit(1)
+                .minimumScaleFactor(0.75)
+        }
+        .padding(12)
+        .background(Color.white)
+        .overlay(
+            RoundedRectangle(cornerRadius: 7)
+                .stroke(ComicTheme.ink, lineWidth: 2)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 7))
+    }
+}
+
 private struct SettingsGuideRow: View {
     let systemName: String
     let title: String
@@ -664,5 +856,61 @@ private struct SettingsGuideRow: View {
                 .stroke(ComicTheme.ink, lineWidth: 2)
         )
         .clipShape(RoundedRectangle(cornerRadius: 7))
+    }
+}
+
+private struct CSVImportDestinationPicker: View {
+    @Environment(\.dismiss) private var dismiss
+    let categories: [CollectionCategory]
+    let onSelect: (CollectionCategory) -> Void
+
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                HalftoneBackground()
+
+                ScrollView {
+                    LazyVStack(spacing: 12) {
+                        ForEach(categories.filter(\.allowsTopLevelItems)) { category in
+                            Button {
+                                onSelect(category)
+                                dismiss()
+                            } label: {
+                                HStack(spacing: 12) {
+                                    CategoryIconView(category: category, size: 44, symbolSize: 24)
+
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text(category.title.uppercased().vintageSafe)
+                                            .font(.headline.weight(.black))
+                                            .foregroundStyle(ComicTheme.ink)
+                                            .lineLimit(2)
+
+                                        Text(category.subtitle)
+                                            .font(.caption.weight(.bold))
+                                            .foregroundStyle(ComicTheme.ink.opacity(0.68))
+                                            .lineLimit(2)
+                                    }
+
+                                    Spacer(minLength: 0)
+                                }
+                                .padding(14)
+                                .comicPanel(fill: ComicTheme.panel)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    .padding(20)
+                }
+            }
+            .navigationTitle(L10n.Settings.importCSVDestinationTitle)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(L10n.Common.cancel) {
+                        dismiss()
+                    }
+                }
+            }
+        }
     }
 }

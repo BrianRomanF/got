@@ -6,7 +6,7 @@
 "common.notes" = "Notas";
 
 "home.title" = "Got it";
-"home.eyebrow" = "The collector app";
+"home.eyebrow" = "La app para coleccionistas";
 "home.empty" = "Inicia una coleccion";
 "home.addCategory" = "Agregar coleccion";
 "home.newCategoryHint" = "Crea una nueva categoria para ordenar tus piezas.";
@@ -23,6 +23,15 @@
 "home.categorySVGIconURL" = "URL directa del SVG";
 "home.categorySVGIconSelectFile" = "Seleccionar SVG desde Archivos";
 "home.categorySVGIconHint" = "Puedes elegir un .svg desde Downloads/Archivos o pegar una URL que devuelva el SVG directo, no una pagina web.";
+"home.firstRunTitle" = "Arma tu primer estante";
+"home.firstRunMessage" = "Parte con una colección, agrega algunas piezas y exporta un respaldo cuando ya valga la pena conservarla.";
+"home.firstRunStepCollectionTitle" = "Crea una colección";
+"home.firstRunStepCollectionBody" = "Elige comics, libros, videojuegos, vinilos, cartas o una organización personalizada.";
+"home.firstRunStepPieceTitle" = "Agrega tu primera pieza";
+"home.firstRunStepPieceBody" = "Usa ingreso manual, portadas con cámara, códigos o un servicio externo de búsqueda.";
+"home.firstRunStepBackupTitle" = "Guarda un respaldo";
+"home.firstRunStepBackupBody" = "Tu biblioteca vive en este dispositivo hasta que la exportes.";
+"home.firstRunPrimaryAction" = "Crear colección";
 
 "settings.title" = "Configuracion";
 "settings.eyebrow" = "Preferencias";
@@ -38,7 +47,7 @@
 "settings.defaultDisplay" = "Vista";
 "settings.onboardingTitle" = "Portada";
 "settings.hideOnboarding" = "Ocultar portada al iniciar";
-"settings.hideOnboardingHint" = "Mientras este apagado, la pantalla de inicio aparecera siempre para revisarla durante desarrollo.";
+"settings.hideOnboardingHint" = "Mientras esté apagado, la pantalla de inicio aparecerá cada vez que abras la app.";
 "settings.comicVineTitle" = "Comic Vine";
 "settings.comicVineAPIKeyPlaceholder" = "API key";
 "settings.comicVineGuideTitle" = "Guia rapida";
@@ -66,7 +75,7 @@
 "settings.guideShelvesTitle" = "Ordena con estantes";
 "settings.guideShelvesBody" = "Dentro de cada coleccion puedes crear estantes y subestantes para series, bandas, plataformas o sets.";
 "settings.guideCoversTitle" = "Agrega portadas";
-"settings.guideCoversBody" = "Puedes usar camara, galeria, una URL directa o las APIs disponibles para traer imagenes.";
+"settings.guideCoversBody" = "Puedes usar cámara, galería, una URL directa o las APIs disponibles para traer imágenes.";
 "settings.guideTrackingTitle" = "Marca tu avance";
 "settings.guideTrackingBody" = "Usa Tengo/Me falta y, en libros o comics, lectura para saber que falta completar.";
 "settings.apiSectionTitle" = "APIs e importaciones";
@@ -77,6 +86,8 @@
 "settings.apiNotConfigured" = "Sin configurar";
 "settings.backupTitle" = "Backup";
 "settings.backupBody" = "Exporta tus colecciones como JSON o importa un archivo anterior. Importar reemplaza la libreria actual.";
+"settings.backupReminderTitle" = "Biblioteca local";
+"settings.backupReminderBody" = "Got it guarda tu colección en este dispositivo. Exporta un respaldo antes de cambiar de teléfono, borrar la app o instalar builds de prueba.";
 "settings.exportLibrary" = "Preparar exportacion";
 "settings.shareExportedLibrary" = "Compartir JSON";
 "settings.importLibrary" = "Importar JSON";
@@ -85,6 +96,11 @@
 "settings.importLibraryConfirm" = "Importar y reemplazar";
 "settings.importLibraryFailedTitle" = "No se pudo importar";
 "settings.importLibraryFailedMessage" = "El archivo no parece ser una libreria valida de Got it.";
+"settings.importCSV" = "Importar CSV";
+"settings.importCSVBody" = "Importa piezas a una colección desde un CSV UTF-8 con una columna title. Columnas opcionales: subtitle, notes, ownership, tags, location.";
+"settings.importCSVDestinationTitle" = "Elegir colección";
+"settings.importCSVFailedTitle" = "No se pudo importar CSV";
+"settings.importCSVFailedMessage" = "Usa un CSV UTF-8 con una columna title. Columnas opcionales: subtitle, notes, ownership, tags, location.";
 "settings.privacyTitle" = "Privacidad";
 "settings.privacyLocalTitle" = "Datos locales";
 "settings.privacyLocalBody" = "Tus colecciones, imagenes optimizadas y configuraciones se guardan en este dispositivo.";
@@ -93,7 +109,33 @@
 "settings.privacyMediaTitle" = "Camara y fotos";
 "settings.privacyMediaBody" = "La app pide acceso solo cuando eliges tomar una foto o seleccionar una imagen.";
 "settings.privacyNetworkTitle" = "Consultas externas";
-"settings.privacyNetworkBody" = "Las busquedas envian el texto que escribes a la API correspondiente para traer resultados y portadas.";
+"settings.privacyNetworkBody" = "Las búsquedas envían el texto que escribes al servicio externo seleccionado para traer resultados y portadas.";
+"settings.aboutTitle" = "Acerca y soporte";
+"settings.aboutBody" = "Got it está hecha para catalogar colecciones sin cuentas ni nube obligatoria.";
+"settings.appVersionTitle" = "Versión";
+"settings.privacyPolicy" = "Política de privacidad";
+"settings.contactSupport" = "Contactar soporte";
+"settings.backupShortcut" = "Exportar respaldo";
+
+"pro.title" = "Got it Pro";
+"pro.subtitle" = "Desbloquea todo el potencial de tus colecciones.";
+"pro.unlock" = "Desbloquear Pro";
+"pro.restore" = "Restaurar compra";
+"pro.redeemCode" = "Canjear código";
+"pro.redeemUnavailable" = "No se pudo abrir el canje de códigos por ahora.";
+"pro.unlocked" = "Pro desbloqueado";
+"pro.unavailable" = "Pro no está disponible por ahora. Intenta más tarde.";
+"pro.verificationFailed" = "No se pudo verificar la compra.";
+"pro.limitTitle" = "Desbloquea Got it Pro";
+"pro.categoryLimitMessage" = "La versión gratis incluye 1 colección. Actualiza para crear colecciones ilimitadas.";
+"pro.itemLimitMessage" = "La versión gratis incluye 10 piezas. Actualiza para agregar piezas ilimitadas.";
+"pro.featureLimitMessage" = "Esta función es parte de Got it Pro.";
+"pro.unlimitedCollections" = "Colecciones ilimitadas";
+"pro.unlimitedPieces" = "Piezas ilimitadas";
+"pro.csvImport" = "Importar CSV";
+"pro.bulkActions" = "Edición y movimiento masivo";
+"pro.advancedSearch" = "Tags, wishlist y búsqueda avanzada";
+"pro.oneTime" = "Compra única. Sin suscripción.";
 
 "empty.collectionsTitle" = "Sin colecciones";
 "empty.collectionsMessage" = "Crea tu primera coleccion y elige su tipo para activar las herramientas correctas.";
@@ -109,7 +151,11 @@
 "dashboard.collections" = "Colecciones";
 "dashboard.pieces" = "Piezas";
 "dashboard.missing" = "Faltan";
+"dashboard.shelves" = "Estantes";
+"dashboard.tags" = "Tags";
+"dashboard.reading" = "Leyendo";
 "dashboard.categoryProgress" = "%d/%d en coleccion";
+"dashboard.categoryTags" = "%d tags";
 
 "wishlist.title" = "Wishlist";
 "wishlist.subtitle" = "Todo lo que marcaste como faltante, junto en un lugar.";
@@ -126,6 +172,13 @@
 "globalSearch.clear" = "Limpiar busqueda";
 "globalSearch.startTitle" = "Busca en todo";
 "globalSearch.startMessage" = "Escribe un nombre, numero, nota o ubicacion para saltar directo a lo que buscas.";
+"globalSearch.filtersTitle" = "Filtros";
+"globalSearch.filterAll" = "Todo";
+"globalSearch.filterCategories" = "Colecciones";
+"globalSearch.filterShelves" = "Estantes";
+"globalSearch.filterPieces" = "Piezas";
+"globalSearch.allTags" = "Todos los tags";
+"globalSearch.clearFilters" = "Limpiar filtros";
 
 "recentActivity.title" = "Actividad reciente";
 "recentActivity.subtitle" = "Ultimas piezas agregadas o editadas.";
@@ -200,6 +253,8 @@
 "itemEditor.camera" = "Camara";
 "itemEditor.clearCover" = "Quitar";
 "itemEditor.coverURLPlaceholder" = "https://ejemplo.com/portada.jpg";
+"itemEditor.tags" = "Tags";
+"itemEditor.tagsPlaceholder" = "leyendo, firmado, prioridad";
 
 "itemDetail.noNotes" = "Sin notas todavia";
 "itemDetail.notesTitle" = "Notas";
@@ -216,6 +271,14 @@
 
 "quickActions.markOwned" = "Marcar como tengo";
 "quickActions.markMissing" = "Marcar como me falta";
+"quickActions.select" = "Seleccionar";
+"quickActions.done" = "Listo";
+"quickActions.move" = "Mover";
+"quickActions.deleteSelected" = "Eliminar seleccionadas";
+"quickActions.selectedCount" = "%d seleccionadas";
+"quickActions.moveTitle" = "Mover seleccionadas";
+"quickActions.deleteSelectedTitle" = "Eliminar piezas seleccionadas?";
+"quickActions.deleteSelectedMessage" = "Esto elimina las piezas seleccionadas de esta colección.";
 
 "comicVine.searchTitle" = "Buscar en Comic Vine";
 "comicVine.importSeriesTitle" = "Importar shelf";
@@ -300,10 +363,10 @@
 "template.bookShelfName" = "Nombre del estante";
 "template.booksCategory" = "Libros";
 "template.booksCategoryHint" = "Google Books con Open Library como respaldo.";
-"template.vinylArtists" = "Artistas";
+"template.vinylStyles" = "Generos y estilos";
 "template.vinylAlbums" = "Albumes";
-"template.addVinylArtist" = "Agregar artista";
-"template.vinylArtistName" = "Nombre del artista";
+"template.addVinylStyle" = "Agregar genero/estilo";
+"template.vinylStyleName" = "Nombre del genero o estilo";
 "template.vinylCategory" = "Vinilos y cassettes";
 "template.vinylCategoryHint" = "Discogs para buscar lanzamientos y portadas.";
 "template.gamePlatforms" = "Plataformas";
@@ -358,22 +421,3 @@
 "templateDetails.linePlaceholder" = "Linea, serie o escala";
 "templateDetails.location" = "Ubicacion";
 "templateDetails.locationPlaceholder" = "Vitrina, caja, repisa...";
-
-"seed.comicsTitle" = "Comics";
-"seed.comicsSubtitle" = "Numeros, etapas, variantes";
-"seed.invincibleTitle" = "Invincible";
-"seed.invincibleSubtitle" = "Etapa Skybound";
-"seed.invincibleOneTitle" = "Invincible #01";
-"seed.invincibleFourTitle" = "Invincible #04";
-"seed.issueSubtitle" = "Primer numero";
-"seed.wishlistSubtitle" = "Hueco pendiente";
-"seed.sampleNote" = "Item de ejemplo para mostrar el primer camino de galeria.";
-"seed.missingSampleNote" = "Marcado como faltante para visualizar huecos en la coleccion.";
-"seed.vinylTitle" = "Vinilos";
-"seed.vinylSubtitle" = "Generos, bandas, albumes";
-"seed.rockTitle" = "Rock";
-"seed.genreSubtitle" = "Estante de genero";
-"seed.gamesTitle" = "Juegos";
-"seed.gamesSubtitle" = "Plataformas, sagas, ediciones";
-"seed.booksTitle" = "Libros";
-"seed.booksSubtitle" = "Autores, sagas, lecturas";
