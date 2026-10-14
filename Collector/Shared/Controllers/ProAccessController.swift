@@ -8,6 +8,14 @@ final class ProAccessController: ObservableObject {
     static let freeCollectionLimit = 1
     static let freeItemLimit = 10
 
+    private static var isLocalProEnabled: Bool {
+        #if DEBUG && LOCAL_DEVICE_BUILD
+        true
+        #else
+        false
+        #endif
+    }
+
     @Published private(set) var isProUnlocked: Bool
     @Published private(set) var product: Product?
     @Published private(set) var isLoading = false
@@ -17,8 +25,10 @@ final class ProAccessController: ObservableObject {
     private var updatesTask: Task<Void, Never>?
 
     init() {
-        isProUnlocked = AppSettings.isProUnlocked
-        updatesTask = observeTransactions()
+        isProUnlocked = Self.isLocalProEnabled || AppSettings.isProUnlocked
+        if !Self.isLocalProEnabled {
+            updatesTask = observeTransactions()
+        }
 
         Task {
             await refresh()
@@ -30,11 +40,13 @@ final class ProAccessController: ObservableObject {
     }
 
     func refresh() async {
+        guard !activateLocalProIfEnabled() else { return }
         await loadProduct()
         await refreshEntitlements()
     }
 
     func purchasePro() async {
+        guard !activateLocalProIfEnabled() else { return }
         isLoading = true
         errorMessage = nil
         statusMessage = nil
@@ -74,6 +86,7 @@ final class ProAccessController: ObservableObject {
     }
 
     func restorePurchases() async {
+        guard !activateLocalProIfEnabled() else { return }
         isLoading = true
         errorMessage = nil
         statusMessage = nil
@@ -89,6 +102,7 @@ final class ProAccessController: ObservableObject {
     }
 
     func redeemOfferCode() async {
+        guard !activateLocalProIfEnabled() else { return }
         errorMessage = nil
         statusMessage = nil
 
@@ -171,11 +185,20 @@ final class ProAccessController: ObservableObject {
 
     private func unlockPro(message: String? = nil) {
         isProUnlocked = true
-        AppSettings.isProUnlocked = true
+        if !Self.isLocalProEnabled {
+            AppSettings.isProUnlocked = true
+        }
 
         if let message {
             statusMessage = message
         }
+    }
+
+    private func activateLocalProIfEnabled() -> Bool {
+        guard Self.isLocalProEnabled else { return false }
+        errorMessage = nil
+        unlockPro(message: L10n.Pro.unlocked)
+        return true
     }
 }
 
