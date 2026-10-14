@@ -156,6 +156,8 @@
 "dashboard.reading" = "Reading";
 "dashboard.categoryProgress" = "%d/%d in collection";
 "dashboard.categoryTags" = "%d tags";
+"dashboard.utilityTitle" = "Utility dashboard";
+"dashboard.utilitySubtitle" = "Books, comics, games, and vinyl at a glance.";
 
 "wishlist.title" = "Wishlist";
 "wishlist.subtitle" = "Everything marked as missing, together in one place.";
@@ -291,12 +293,46 @@
 "comicVine.invalidURL" = "Comic Vine URL could not be built.";
 "comicVine.requestFailed" = "Comic Vine request failed.";
 
+"comicWidgets.title" = "Comic widgets";
+"comicWidgets.subtitle" = "Series, gaps, and reading at a glance.";
+"comicWidgets.series" = "Series";
+"comicWidgets.owned" = "Have";
+"comicWidgets.missing" = "Missing";
+"comicWidgets.read" = "Read";
+"comicWidgets.currentIssue" = "Reading";
+"comicWidgets.currentIssueEmpty" = "Mark an issue as reading";
+"comicWidgets.incompleteSeries" = "Gaps";
+"comicWidgets.incompleteSeriesEmpty" = "No missing issues";
+"comicWidgets.incompleteSeriesProgress" = "Have %d/%d";
+
+"comicMissingIssues.title" = "Missing issues";
+"comicMissingIssues.count" = "%d gaps detected";
+"comicMissingIssues.none" = "No missing issues";
+
 "theGamesDB.searchTitle" = "Search TheGamesDB";
 "theGamesDB.search" = "Search";
 "theGamesDB.searchPlaceholder" = "The Legend of Zelda";
 "theGamesDB.missingAPIKey" = "To search TheGamesDB, register on its website and generate an API key. Check the guide in Settings > APIs and imports.";
 "theGamesDB.invalidURL" = "TheGamesDB URL could not be built.";
 "theGamesDB.requestFailed" = "TheGamesDB request failed.";
+
+"gameWidgets.title" = "Game widgets";
+"gameWidgets.subtitle" = "Backlog, platforms, and completions.";
+"gameWidgets.platforms" = "Platforms";
+"gameWidgets.backlog" = "Backlog";
+"gameWidgets.completed" = "Done";
+"gameWidgets.wishlist" = "Wishlist";
+"gameWidgets.currentGame" = "Playing";
+"gameWidgets.currentGameEmpty" = "Tag a game as playing";
+"gameWidgets.shortBacklog" = "Quick pick";
+"gameWidgets.shortBacklogEmpty" = "Add a backlog game";
+
+"gameBacklogStatus.title" = "Backlog status";
+"gameBacklogStatus.pending" = "Pending";
+"gameBacklogStatus.playing" = "Playing";
+"gameBacklogStatus.finished" = "Finished";
+"gameBacklogStatus.completed" = "100% complete";
+"gameBacklogStatus.abandoned" = "Abandoned";
 
 "bookSearch.searchTitle" = "Search books";
 "bookSearch.search" = "Search";
@@ -317,6 +353,29 @@
 "bookDetails.seriesPlaceholder" = "Saga, series, or universe";
 "bookDetails.editionPlaceholder" = "Edition, format, or publisher";
 
+"bookProgress.title" = "Reading progress";
+"bookProgress.currentPagePlaceholder" = "Current page";
+"bookProgress.totalPagesPlaceholder" = "Total pages";
+"bookProgress.startedAt" = "Started";
+"bookProgress.finishedAt" = "Finished";
+"bookProgress.pagesRead" = "%d/%d pages";
+"bookProgress.currentPage" = "Page %d";
+"bookProgress.totalPages" = "%d pages";
+"bookProgress.noPages" = "No pages tracked";
+"bookProgress.percentComplete" = "%d%% complete";
+
+"bookWidgets.title" = "Reading widgets";
+"bookWidgets.subtitle" = "Your book shelf at a glance.";
+"bookWidgets.owned" = "Owned";
+"bookWidgets.reading" = "Reading";
+"bookWidgets.read" = "Read";
+"bookWidgets.wishlist" = "Wishlist";
+"bookWidgets.currentBook" = "Current";
+"bookWidgets.currentBookEmpty" = "Mark a book as reading";
+"bookWidgets.nextBook" = "Next";
+"bookWidgets.nextBookEmpty" = "Add an unread book";
+"bookWidgets.wishlistPreview" = "Wishlist";
+
 "discogs.searchTitle" = "Search Discogs";
 "discogs.search" = "Search";
 "discogs.searchPlaceholder" = "Daft Punk Discovery";
@@ -326,6 +385,33 @@
 "discogs.missingAPIKey" = "To search Discogs, register on its website and generate a consumer key and consumer secret. Check the guide in Settings > APIs and imports.";
 "discogs.invalidURL" = "Discogs URL could not be built.";
 "discogs.requestFailed" = "Discogs request failed.";
+
+"vinylWidgets.title" = "Vinyl widgets";
+"vinylWidgets.subtitle" = "Catalog, condition, and what to spin.";
+"vinylWidgets.styles" = "Styles";
+"vinylWidgets.owned" = "Owned";
+"vinylWidgets.condition" = "Condition";
+"vinylWidgets.wishlist" = "Wishlist";
+"vinylWidgets.listenToday" = "Spin today";
+"vinylWidgets.listenTodayEmpty" = "Add a release to play";
+"vinylWidgets.wishlistPick" = "Wishlist";
+"vinylWidgets.wishlistPickEmpty" = "No wanted releases";
+
+"vinylDetails.title" = "Vinyl details";
+"vinylDetails.mediaCondition" = "Media";
+"vinylDetails.sleeveCondition" = "Sleeve";
+"vinylDetails.catalogNumber" = "Catalog #";
+"vinylDetails.catalogNumberPlaceholder" = "Catalog number";
+
+"vinylCondition.unknown" = "Unknown";
+"vinylCondition.mint" = "M";
+"vinylCondition.nearMint" = "NM";
+"vinylCondition.veryGoodPlus" = "VG+";
+"vinylCondition.veryGood" = "VG";
+"vinylCondition.goodPlus" = "G+";
+"vinylCondition.good" = "G";
+"vinylCondition.fair" = "F";
+"vinylCondition.poor" = "P";
 
 "tcgdex.searchTitle" = "Search TCGdex";
 "tcgdex.search" = "Search";

@@ -12,11 +12,19 @@ struct CollectibleItem: Identifiable, Hashable, Codable {
     var comicVineID: Int?
     var comicVineSiteURL: URL?
     var theGamesDBID: Int?
+    var gameBacklogStatus: GameBacklogStatus?
     var bookRating: Int?
     var bookProtagonist: String?
     var bookSeries: String?
     var bookEdition: String?
     var bookFormat: BookOwnershipFormat?
+    var bookCurrentPage: Int?
+    var bookTotalPages: Int?
+    var bookStartedAt: Date?
+    var bookFinishedAt: Date?
+    var vinylMediaCondition: VinylConditionGrade?
+    var vinylSleeveCondition: VinylConditionGrade?
+    var vinylCatalogNumber: String?
     var templateDetails: [String: String]?
     var physicalLocation: String?
     var tags: [String]
@@ -37,11 +45,19 @@ struct CollectibleItem: Identifiable, Hashable, Codable {
         case comicVineID
         case comicVineSiteURL
         case theGamesDBID
+        case gameBacklogStatus
         case bookRating
         case bookProtagonist
         case bookSeries
         case bookEdition
         case bookFormat
+        case bookCurrentPage
+        case bookTotalPages
+        case bookStartedAt
+        case bookFinishedAt
+        case vinylMediaCondition
+        case vinylSleeveCondition
+        case vinylCatalogNumber
         case templateDetails
         case physicalLocation
         case tags
@@ -63,11 +79,19 @@ struct CollectibleItem: Identifiable, Hashable, Codable {
         comicVineID: Int? = nil,
         comicVineSiteURL: URL? = nil,
         theGamesDBID: Int? = nil,
+        gameBacklogStatus: GameBacklogStatus? = nil,
         bookRating: Int? = nil,
         bookProtagonist: String? = nil,
         bookSeries: String? = nil,
         bookEdition: String? = nil,
         bookFormat: BookOwnershipFormat? = nil,
+        bookCurrentPage: Int? = nil,
+        bookTotalPages: Int? = nil,
+        bookStartedAt: Date? = nil,
+        bookFinishedAt: Date? = nil,
+        vinylMediaCondition: VinylConditionGrade? = nil,
+        vinylSleeveCondition: VinylConditionGrade? = nil,
+        vinylCatalogNumber: String? = nil,
         templateDetails: [String: String]? = nil,
         physicalLocation: String? = nil,
         tags: [String] = [],
@@ -87,11 +111,19 @@ struct CollectibleItem: Identifiable, Hashable, Codable {
         self.comicVineID = comicVineID
         self.comicVineSiteURL = comicVineSiteURL
         self.theGamesDBID = theGamesDBID
+        self.gameBacklogStatus = gameBacklogStatus
         self.bookRating = bookRating
         self.bookProtagonist = bookProtagonist
         self.bookSeries = bookSeries
         self.bookEdition = bookEdition
         self.bookFormat = bookFormat
+        self.bookCurrentPage = bookCurrentPage
+        self.bookTotalPages = bookTotalPages
+        self.bookStartedAt = bookStartedAt
+        self.bookFinishedAt = bookFinishedAt
+        self.vinylMediaCondition = vinylMediaCondition
+        self.vinylSleeveCondition = vinylSleeveCondition
+        self.vinylCatalogNumber = vinylCatalogNumber
         self.templateDetails = templateDetails
         self.physicalLocation = physicalLocation
         self.tags = tags
@@ -114,11 +146,19 @@ struct CollectibleItem: Identifiable, Hashable, Codable {
         comicVineID = try container.decodeIfPresent(Int.self, forKey: .comicVineID)
         comicVineSiteURL = try container.decodeIfPresent(URL.self, forKey: .comicVineSiteURL)
         theGamesDBID = try container.decodeIfPresent(Int.self, forKey: .theGamesDBID)
+        gameBacklogStatus = try container.decodeIfPresent(GameBacklogStatus.self, forKey: .gameBacklogStatus)
         bookRating = try container.decodeIfPresent(Int.self, forKey: .bookRating)
         bookProtagonist = try container.decodeIfPresent(String.self, forKey: .bookProtagonist)
         bookSeries = try container.decodeIfPresent(String.self, forKey: .bookSeries)
         bookEdition = try container.decodeIfPresent(String.self, forKey: .bookEdition)
         bookFormat = try container.decodeIfPresent(BookOwnershipFormat.self, forKey: .bookFormat)
+        bookCurrentPage = try container.decodeIfPresent(Int.self, forKey: .bookCurrentPage)
+        bookTotalPages = try container.decodeIfPresent(Int.self, forKey: .bookTotalPages)
+        bookStartedAt = try container.decodeIfPresent(Date.self, forKey: .bookStartedAt)
+        bookFinishedAt = try container.decodeIfPresent(Date.self, forKey: .bookFinishedAt)
+        vinylMediaCondition = try container.decodeIfPresent(VinylConditionGrade.self, forKey: .vinylMediaCondition)
+        vinylSleeveCondition = try container.decodeIfPresent(VinylConditionGrade.self, forKey: .vinylSleeveCondition)
+        vinylCatalogNumber = try container.decodeIfPresent(String.self, forKey: .vinylCatalogNumber)
         templateDetails = try container.decodeIfPresent([String: String].self, forKey: .templateDetails)
         physicalLocation = try container.decodeIfPresent(String.self, forKey: .physicalLocation)
         tags = try container.decodeIfPresent([String].self, forKey: .tags) ?? []

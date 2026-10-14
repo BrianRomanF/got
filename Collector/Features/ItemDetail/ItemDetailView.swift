@@ -29,7 +29,14 @@ struct ItemDetailView: View {
                         ItemDetailCoverView(item: item)
                         ItemDetailMetadataView(item: item)
                         if libraryController.category(with: categoryID)?.template == .books {
+                            ItemDetailBookProgressView(item: item)
                             ItemDetailBookDetailsView(item: item)
+                        }
+                        if libraryController.category(with: categoryID)?.template == .games {
+                            ItemDetailGameBacklogView(status: item.resolvedGameBacklogStatus)
+                        }
+                        if libraryController.category(with: categoryID)?.template == .vinyl {
+                            ItemDetailVinylDetailsView(item: item)
                         }
                         if let category = libraryController.category(with: categoryID) {
                             ItemDetailTemplateDetailsView(

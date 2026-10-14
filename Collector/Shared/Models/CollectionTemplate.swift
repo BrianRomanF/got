@@ -169,15 +169,13 @@ enum CollectionTemplate: String, CaseIterable, Hashable, Identifiable, Codable {
             return [
                 TemplateDetailField(key: "platform", title: L10n.TemplateDetails.platform, placeholder: L10n.TemplateDetails.platformPlaceholder),
                 TemplateDetailField(key: "region", title: L10n.TemplateDetails.region, placeholder: L10n.TemplateDetails.regionPlaceholder),
-                TemplateDetailField(key: "condition", title: L10n.TemplateDetails.condition, placeholder: L10n.TemplateDetails.conditionPlaceholder),
-                TemplateDetailField(key: "completion", title: L10n.TemplateDetails.completion, placeholder: L10n.TemplateDetails.completionPlaceholder)
+                TemplateDetailField(key: "condition", title: L10n.TemplateDetails.condition, placeholder: L10n.TemplateDetails.conditionPlaceholder)
             ]
         case .vinyl:
             return [
                 TemplateDetailField(key: "year", title: L10n.TemplateDetails.year, placeholder: L10n.TemplateDetails.yearPlaceholder),
                 TemplateDetailField(key: "label", title: L10n.TemplateDetails.label, placeholder: L10n.TemplateDetails.labelPlaceholder),
-                TemplateDetailField(key: "pressing", title: L10n.TemplateDetails.pressing, placeholder: L10n.TemplateDetails.pressingPlaceholder),
-                TemplateDetailField(key: "condition", title: L10n.TemplateDetails.condition, placeholder: L10n.TemplateDetails.conditionPlaceholder)
+                TemplateDetailField(key: "pressing", title: L10n.TemplateDetails.pressing, placeholder: L10n.TemplateDetails.pressingPlaceholder)
             ]
         case .tradingCards:
             return [

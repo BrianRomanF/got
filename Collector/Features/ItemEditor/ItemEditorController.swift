@@ -15,6 +15,16 @@ final class ItemEditorController: ObservableObject {
     @Published var bookSeries = ""
     @Published var bookEdition = ""
     @Published var bookFormat: BookOwnershipFormat = .physical
+    @Published var bookCurrentPage = ""
+    @Published var bookTotalPages = ""
+    @Published var hasBookStartedAt = false
+    @Published var bookStartedAt: Date = .now
+    @Published var hasBookFinishedAt = false
+    @Published var bookFinishedAt: Date = .now
+    @Published var gameBacklogStatus: GameBacklogStatus = .pending
+    @Published var vinylMediaCondition: VinylConditionGrade = .unknown
+    @Published var vinylSleeveCondition: VinylConditionGrade = .unknown
+    @Published var vinylCatalogNumber = ""
     @Published var templateDetails: [String: String] = [:]
     @Published var physicalLocation = ""
     @Published var tagsText = ""
@@ -41,6 +51,16 @@ final class ItemEditorController: ObservableObject {
         bookSeries = item.bookSeries ?? ""
         bookEdition = item.bookEdition ?? ""
         bookFormat = item.bookFormat ?? .physical
+        bookCurrentPage = item.bookCurrentPage.map(String.init) ?? ""
+        bookTotalPages = item.bookTotalPages.map(String.init) ?? ""
+        hasBookStartedAt = item.bookStartedAt != nil
+        bookStartedAt = item.bookStartedAt ?? .now
+        hasBookFinishedAt = item.bookFinishedAt != nil
+        bookFinishedAt = item.bookFinishedAt ?? .now
+        gameBacklogStatus = item.resolvedGameBacklogStatus
+        vinylMediaCondition = item.vinylMediaCondition ?? .unknown
+        vinylSleeveCondition = item.vinylSleeveCondition ?? .unknown
+        vinylCatalogNumber = item.vinylCatalogNumber ?? ""
         templateDetails = item.templateDetails ?? [:]
         physicalLocation = item.physicalLocation ?? ""
         tagsText = item.tags.joined(separator: ", ")
@@ -68,11 +88,19 @@ final class ItemEditorController: ObservableObject {
             comicVineID: comicVineID,
             comicVineSiteURL: comicVineSiteURL,
             theGamesDBID: theGamesDBID,
+            gameBacklogStatus: template == .games ? gameBacklogStatus : nil,
             bookRating: template == .books ? normalizedBookRating : nil,
             bookProtagonist: template == .books ? normalizedBookText(bookProtagonist) : nil,
             bookSeries: template == .books ? normalizedBookText(bookSeries) : nil,
             bookEdition: template == .books ? normalizedBookText(bookEdition) : nil,
             bookFormat: template == .books ? bookFormat : nil,
+            bookCurrentPage: template == .books ? normalizedBookCurrentPage : nil,
+            bookTotalPages: template == .books ? normalizedPositiveInt(bookTotalPages) : nil,
+            bookStartedAt: template == .books && hasBookStartedAt ? bookStartedAt : nil,
+            bookFinishedAt: template == .books && hasBookFinishedAt ? bookFinishedAt : nil,
+            vinylMediaCondition: template == .vinyl ? vinylMediaCondition : nil,
+            vinylSleeveCondition: template == .vinyl ? vinylSleeveCondition : nil,
+            vinylCatalogNumber: template == .vinyl ? normalizedText(vinylCatalogNumber) : nil,
             templateDetails: normalizedTemplateDetails(for: template),
             physicalLocation: normalizedText(physicalLocation),
             tags: normalizedTags,
@@ -116,6 +144,18 @@ final class ItemEditorController: ObservableObject {
     private func normalizedText(_ value: String) -> String? {
         let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
         return trimmed.isEmpty ? nil : trimmed
+    }
+
+    private func normalizedPositiveInt(_ value: String) -> Int? {
+        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let number = Int(trimmed), number > 0 else { return nil }
+        return number
+    }
+
+    private var normalizedBookCurrentPage: Int? {
+        guard let currentPage = normalizedPositiveInt(bookCurrentPage) else { return nil }
+        guard let totalPages = normalizedPositiveInt(bookTotalPages) else { return currentPage }
+        return min(currentPage, totalPages)
     }
 
     private var normalizedTags: [String] {
@@ -185,6 +225,9 @@ final class ItemEditorController: ObservableObject {
         title = result.title
         subtitle = result.displaySubtitle
         notes = result.description ?? notes
+        if let pageCount = result.pageCount {
+            bookTotalPages = "\(pageCount)"
+        }
         coverURLString = result.coverURL?.absoluteString ?? ""
         coverImageData = nil
         coverLocalImagePath = nil
@@ -205,6 +248,13 @@ final class ItemEditorController: ObservableObject {
         title = result.title
         subtitle = result.displaySubtitle
         notes = result.format.title
+        if let year = result.year {
+            templateDetails["year"] = year
+        }
+        if let label = result.label {
+            templateDetails["label"] = label
+        }
+        vinylCatalogNumber = result.catalogNumber ?? vinylCatalogNumber
         coverURLString = result.coverURL?.absoluteString ?? ""
         coverImageData = nil
         coverLocalImagePath = nil

@@ -156,6 +156,8 @@
 "dashboard.reading" = "Leyendo";
 "dashboard.categoryProgress" = "%d/%d en coleccion";
 "dashboard.categoryTags" = "%d tags";
+"dashboard.utilityTitle" = "Panel de utilidades";
+"dashboard.utilitySubtitle" = "Libros, comics, juegos y vinilos de un vistazo.";
 
 "wishlist.title" = "Wishlist";
 "wishlist.subtitle" = "Todo lo que marcaste como faltante, junto en un lugar.";
@@ -291,12 +293,46 @@
 "comicVine.invalidURL" = "No se pudo crear la URL de Comic Vine.";
 "comicVine.requestFailed" = "La solicitud a Comic Vine fallo.";
 
+"comicWidgets.title" = "Widgets de comics";
+"comicWidgets.subtitle" = "Series, faltantes y lectura de un vistazo.";
+"comicWidgets.series" = "Series";
+"comicWidgets.owned" = "Tengo";
+"comicWidgets.missing" = "Faltan";
+"comicWidgets.read" = "Leidos";
+"comicWidgets.currentIssue" = "Leyendo";
+"comicWidgets.currentIssueEmpty" = "Marca un issue como leyendo";
+"comicWidgets.incompleteSeries" = "Faltantes";
+"comicWidgets.incompleteSeriesEmpty" = "Sin issues faltantes";
+"comicWidgets.incompleteSeriesProgress" = "Tengo %d/%d";
+
+"comicMissingIssues.title" = "Issues faltantes";
+"comicMissingIssues.count" = "%d faltantes detectados";
+"comicMissingIssues.none" = "Sin issues faltantes";
+
 "theGamesDB.searchTitle" = "Buscar en TheGamesDB";
 "theGamesDB.search" = "Buscar";
 "theGamesDB.searchPlaceholder" = "The Legend of Zelda";
 "theGamesDB.missingAPIKey" = "Para buscar en TheGamesDB necesitas registrarte en su pagina y generar una API key. Revisa la guia en Configuracion > APIs e importaciones.";
 "theGamesDB.invalidURL" = "No se pudo crear la URL de TheGamesDB.";
 "theGamesDB.requestFailed" = "La solicitud a TheGamesDB fallo.";
+
+"gameWidgets.title" = "Widgets de juegos";
+"gameWidgets.subtitle" = "Backlog, plataformas y completados.";
+"gameWidgets.platforms" = "Plataformas";
+"gameWidgets.backlog" = "Backlog";
+"gameWidgets.completed" = "Listos";
+"gameWidgets.wishlist" = "Wishlist";
+"gameWidgets.currentGame" = "Jugando";
+"gameWidgets.currentGameEmpty" = "Etiqueta un juego como jugando";
+"gameWidgets.shortBacklog" = "Partida corta";
+"gameWidgets.shortBacklogEmpty" = "Agrega un juego pendiente";
+
+"gameBacklogStatus.title" = "Estado de backlog";
+"gameBacklogStatus.pending" = "Pendiente";
+"gameBacklogStatus.playing" = "Jugando";
+"gameBacklogStatus.finished" = "Terminado";
+"gameBacklogStatus.completed" = "100% completo";
+"gameBacklogStatus.abandoned" = "Abandonado";
 
 "bookSearch.searchTitle" = "Buscar libro";
 "bookSearch.search" = "Buscar";
@@ -317,6 +353,29 @@
 "bookDetails.seriesPlaceholder" = "Saga, serie o universo";
 "bookDetails.editionPlaceholder" = "Edicion, formato o editorial";
 
+"bookProgress.title" = "Progreso de lectura";
+"bookProgress.currentPagePlaceholder" = "Pagina actual";
+"bookProgress.totalPagesPlaceholder" = "Paginas totales";
+"bookProgress.startedAt" = "Inicio";
+"bookProgress.finishedAt" = "Termino";
+"bookProgress.pagesRead" = "%d/%d paginas";
+"bookProgress.currentPage" = "Pagina %d";
+"bookProgress.totalPages" = "%d paginas";
+"bookProgress.noPages" = "Sin paginas registradas";
+"bookProgress.percentComplete" = "%d%% completado";
+
+"bookWidgets.title" = "Widgets de lectura";
+"bookWidgets.subtitle" = "Tu estante de libros de un vistazo.";
+"bookWidgets.owned" = "Tengo";
+"bookWidgets.reading" = "Leyendo";
+"bookWidgets.read" = "Leidos";
+"bookWidgets.wishlist" = "Wishlist";
+"bookWidgets.currentBook" = "Actual";
+"bookWidgets.currentBookEmpty" = "Marca un libro como leyendo";
+"bookWidgets.nextBook" = "Siguiente";
+"bookWidgets.nextBookEmpty" = "Agrega un libro no leido";
+"bookWidgets.wishlistPreview" = "Wishlist";
+
 "discogs.searchTitle" = "Buscar en Discogs";
 "discogs.search" = "Buscar";
 "discogs.searchPlaceholder" = "Daft Punk Discovery";
@@ -326,6 +385,33 @@
 "discogs.missingAPIKey" = "Para buscar en Discogs necesitas registrarte en su pagina y generar consumer key y consumer secret. Revisa la guia en Configuracion > APIs e importaciones.";
 "discogs.invalidURL" = "No se pudo crear la URL de Discogs.";
 "discogs.requestFailed" = "La solicitud a Discogs fallo.";
+
+"vinylWidgets.title" = "Widgets de vinilos";
+"vinylWidgets.subtitle" = "Catalogo, estado y que escuchar.";
+"vinylWidgets.styles" = "Estilos";
+"vinylWidgets.owned" = "Tengo";
+"vinylWidgets.condition" = "Estado";
+"vinylWidgets.wishlist" = "Wishlist";
+"vinylWidgets.listenToday" = "Escuchar hoy";
+"vinylWidgets.listenTodayEmpty" = "Agrega un disco para escuchar";
+"vinylWidgets.wishlistPick" = "Wishlist";
+"vinylWidgets.wishlistPickEmpty" = "Sin discos buscados";
+
+"vinylDetails.title" = "Detalles de vinilo";
+"vinylDetails.mediaCondition" = "Disco";
+"vinylDetails.sleeveCondition" = "Caratula";
+"vinylDetails.catalogNumber" = "Catalogo #";
+"vinylDetails.catalogNumberPlaceholder" = "Numero de catalogo";
+
+"vinylCondition.unknown" = "Sin definir";
+"vinylCondition.mint" = "M";
+"vinylCondition.nearMint" = "NM";
+"vinylCondition.veryGoodPlus" = "VG+";
+"vinylCondition.veryGood" = "VG";
+"vinylCondition.goodPlus" = "G+";
+"vinylCondition.good" = "G";
+"vinylCondition.fair" = "F";
+"vinylCondition.poor" = "P";
 
 "tcgdex.searchTitle" = "Buscar en TCGdex";
 "tcgdex.search" = "Buscar";

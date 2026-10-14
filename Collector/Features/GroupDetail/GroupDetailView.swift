@@ -42,6 +42,9 @@ struct GroupDetailView: View {
                                 ownedCount: controller.ownedCount(from: group.items),
                                 totalCount: group.items.count
                             )
+                            if category.template == .comics {
+                                ComicMissingIssuesView(summary: ComicMissingIssueSummary(items: group.allItems))
+                            }
                             GroupFolderSearchBar(text: $controller.searchText)
                             ItemOptionsPanel(
                                 isExpanded: $controller.isOptionsExpanded,

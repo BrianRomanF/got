@@ -170,6 +170,8 @@ enum L10n {
         static var reading: String { tr("dashboard.reading") }
         static var categoryProgress: String { tr("dashboard.categoryProgress") }
         static var categoryTags: String { tr("dashboard.categoryTags") }
+        static var utilityTitle: String { tr("dashboard.utilityTitle") }
+        static var utilitySubtitle: String { tr("dashboard.utilitySubtitle") }
     }
 
     enum Wishlist {
@@ -340,6 +342,26 @@ enum L10n {
         static var requestFailed: String { tr("comicVine.requestFailed") }
     }
 
+    enum ComicWidgets {
+        static var title: String { tr("comicWidgets.title") }
+        static var subtitle: String { tr("comicWidgets.subtitle") }
+        static var series: String { tr("comicWidgets.series") }
+        static var owned: String { tr("comicWidgets.owned") }
+        static var missing: String { tr("comicWidgets.missing") }
+        static var read: String { tr("comicWidgets.read") }
+        static var currentIssue: String { tr("comicWidgets.currentIssue") }
+        static var currentIssueEmpty: String { tr("comicWidgets.currentIssueEmpty") }
+        static var incompleteSeries: String { tr("comicWidgets.incompleteSeries") }
+        static var incompleteSeriesEmpty: String { tr("comicWidgets.incompleteSeriesEmpty") }
+        static var incompleteSeriesProgress: String { tr("comicWidgets.incompleteSeriesProgress") }
+    }
+
+    enum ComicMissingIssues {
+        static var title: String { tr("comicMissingIssues.title") }
+        static var count: String { tr("comicMissingIssues.count") }
+        static var none: String { tr("comicMissingIssues.none") }
+    }
+
     enum TheGamesDB {
         static var searchTitle: String { tr("theGamesDB.searchTitle") }
         static var search: String { tr("theGamesDB.search") }
@@ -347,6 +369,28 @@ enum L10n {
         static var missingAPIKey: String { tr("theGamesDB.missingAPIKey") }
         static var invalidURL: String { tr("theGamesDB.invalidURL") }
         static var requestFailed: String { tr("theGamesDB.requestFailed") }
+    }
+
+    enum GameWidgets {
+        static var title: String { tr("gameWidgets.title") }
+        static var subtitle: String { tr("gameWidgets.subtitle") }
+        static var platforms: String { tr("gameWidgets.platforms") }
+        static var backlog: String { tr("gameWidgets.backlog") }
+        static var completed: String { tr("gameWidgets.completed") }
+        static var wishlist: String { tr("gameWidgets.wishlist") }
+        static var currentGame: String { tr("gameWidgets.currentGame") }
+        static var currentGameEmpty: String { tr("gameWidgets.currentGameEmpty") }
+        static var shortBacklog: String { tr("gameWidgets.shortBacklog") }
+        static var shortBacklogEmpty: String { tr("gameWidgets.shortBacklogEmpty") }
+    }
+
+    enum GameBacklogStatus {
+        static var title: String { tr("gameBacklogStatus.title") }
+        static var pending: String { tr("gameBacklogStatus.pending") }
+        static var playing: String { tr("gameBacklogStatus.playing") }
+        static var finished: String { tr("gameBacklogStatus.finished") }
+        static var completed: String { tr("gameBacklogStatus.completed") }
+        static var abandoned: String { tr("gameBacklogStatus.abandoned") }
     }
 
     enum BookSearch {
@@ -372,6 +416,33 @@ enum L10n {
         static var editionPlaceholder: String { tr("bookDetails.editionPlaceholder") }
     }
 
+    enum BookProgress {
+        static var title: String { tr("bookProgress.title") }
+        static var currentPagePlaceholder: String { tr("bookProgress.currentPagePlaceholder") }
+        static var totalPagesPlaceholder: String { tr("bookProgress.totalPagesPlaceholder") }
+        static var startedAt: String { tr("bookProgress.startedAt") }
+        static var finishedAt: String { tr("bookProgress.finishedAt") }
+        static var pagesRead: String { tr("bookProgress.pagesRead") }
+        static var currentPage: String { tr("bookProgress.currentPage") }
+        static var totalPages: String { tr("bookProgress.totalPages") }
+        static var noPages: String { tr("bookProgress.noPages") }
+        static var percentComplete: String { tr("bookProgress.percentComplete") }
+    }
+
+    enum BookWidgets {
+        static var title: String { tr("bookWidgets.title") }
+        static var subtitle: String { tr("bookWidgets.subtitle") }
+        static var owned: String { tr("bookWidgets.owned") }
+        static var reading: String { tr("bookWidgets.reading") }
+        static var read: String { tr("bookWidgets.read") }
+        static var wishlist: String { tr("bookWidgets.wishlist") }
+        static var currentBook: String { tr("bookWidgets.currentBook") }
+        static var currentBookEmpty: String { tr("bookWidgets.currentBookEmpty") }
+        static var nextBook: String { tr("bookWidgets.nextBook") }
+        static var nextBookEmpty: String { tr("bookWidgets.nextBookEmpty") }
+        static var wishlistPreview: String { tr("bookWidgets.wishlistPreview") }
+    }
+
     enum Discogs {
         static var searchTitle: String { tr("discogs.searchTitle") }
         static var search: String { tr("discogs.search") }
@@ -382,6 +453,39 @@ enum L10n {
         static var missingAPIKey: String { tr("discogs.missingAPIKey") }
         static var invalidURL: String { tr("discogs.invalidURL") }
         static var requestFailed: String { tr("discogs.requestFailed") }
+    }
+
+    enum VinylWidgets {
+        static var title: String { tr("vinylWidgets.title") }
+        static var subtitle: String { tr("vinylWidgets.subtitle") }
+        static var styles: String { tr("vinylWidgets.styles") }
+        static var owned: String { tr("vinylWidgets.owned") }
+        static var condition: String { tr("vinylWidgets.condition") }
+        static var wishlist: String { tr("vinylWidgets.wishlist") }
+        static var listenToday: String { tr("vinylWidgets.listenToday") }
+        static var listenTodayEmpty: String { tr("vinylWidgets.listenTodayEmpty") }
+        static var wishlistPick: String { tr("vinylWidgets.wishlistPick") }
+        static var wishlistPickEmpty: String { tr("vinylWidgets.wishlistPickEmpty") }
+    }
+
+    enum VinylDetails {
+        static var title: String { tr("vinylDetails.title") }
+        static var mediaCondition: String { tr("vinylDetails.mediaCondition") }
+        static var sleeveCondition: String { tr("vinylDetails.sleeveCondition") }
+        static var catalogNumber: String { tr("vinylDetails.catalogNumber") }
+        static var catalogNumberPlaceholder: String { tr("vinylDetails.catalogNumberPlaceholder") }
+    }
+
+    enum VinylCondition {
+        static var unknown: String { tr("vinylCondition.unknown") }
+        static var mint: String { tr("vinylCondition.mint") }
+        static var nearMint: String { tr("vinylCondition.nearMint") }
+        static var veryGoodPlus: String { tr("vinylCondition.veryGoodPlus") }
+        static var veryGood: String { tr("vinylCondition.veryGood") }
+        static var goodPlus: String { tr("vinylCondition.goodPlus") }
+        static var good: String { tr("vinylCondition.good") }
+        static var fair: String { tr("vinylCondition.fair") }
+        static var poor: String { tr("vinylCondition.poor") }
     }
 
     enum TCGdex {

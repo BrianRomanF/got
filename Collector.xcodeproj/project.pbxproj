@@ -8,15 +8,53 @@
 
 /* Begin PBXFileReference section */
 		9A1000000000000000000001 /* Collector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Collector.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A2000000000000000000001 /* CollectorWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CollectorWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXBuildFile section */
+		9A2000000000000000000002 /* CollectorWidgets.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9A2000000000000000000001 /* CollectorWidgets.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9A2000000000000000000003 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9A1000000000000000000010 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9A2000000000000000000006;
+			remoteInfo = CollectorWidgets;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9A2000000000000000000004 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				9A2000000000000000000002 /* CollectorWidgets.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
 		9A1000000000000000000016 /* Exceptions for "Collector" folder in "Collector" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Collector.entitlements,
 				Info.plist,
 			);
 			target = 9A1000000000000000000006 /* Collector */;
+		};
+		9A2000000000000000000016 /* Exceptions for "CollectorWidgets" folder in "CollectorWidgets" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				CollectorWidgets.entitlements,
+				Info.plist,
+			);
+			target = 9A2000000000000000000006 /* CollectorWidgets */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -29,10 +67,25 @@
 			path = Collector;
 			sourceTree = "<group>";
 		};
+		9A2000000000000000000005 /* CollectorWidgets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				9A2000000000000000000016 /* Exceptions for "CollectorWidgets" folder in "CollectorWidgets" target */,
+			);
+			path = CollectorWidgets;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		9A1000000000000000000003 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A2000000000000000000007 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -46,6 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				9A1000000000000000000002 /* Collector */,
+				9A2000000000000000000005 /* CollectorWidgets */,
 				9A1000000000000000000005 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,6 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				9A1000000000000000000001 /* Collector.app */,
+				9A2000000000000000000001 /* CollectorWidgets.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -68,10 +123,12 @@
 				9A1000000000000000000008 /* Sources */,
 				9A1000000000000000000003 /* Frameworks */,
 				9A1000000000000000000009 /* Resources */,
+				9A2000000000000000000004 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				9A2000000000000000000017 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				9A1000000000000000000002 /* Collector */,
@@ -82,6 +139,28 @@
 			productName = Collector;
 			productReference = 9A1000000000000000000001 /* Collector.app */;
 			productType = "com.apple.product-type.application";
+		};
+		9A2000000000000000000006 /* CollectorWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9A2000000000000000000009 /* Build configuration list for PBXNativeTarget "CollectorWidgets" */;
+			buildPhases = (
+				9A2000000000000000000008 /* Sources */,
+				9A2000000000000000000007 /* Frameworks */,
+				9A2000000000000000000010 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				9A2000000000000000000005 /* CollectorWidgets */,
+			);
+			name = CollectorWidgets;
+			packageProductDependencies = (
+			);
+			productName = CollectorWidgets;
+			productReference = 9A2000000000000000000001 /* CollectorWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -94,6 +173,9 @@
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					9A1000000000000000000006 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					9A2000000000000000000006 = {
 						CreatedOnToolsVersion = 16.0;
 					};
 				};
@@ -114,12 +196,20 @@
 			projectRoot = "";
 			targets = (
 				9A1000000000000000000006 /* Collector */,
+				9A2000000000000000000006 /* CollectorWidgets */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		9A1000000000000000000009 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A2000000000000000000010 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -136,7 +226,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9A2000000000000000000008 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9A2000000000000000000017 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9A2000000000000000000006 /* CollectorWidgets */;
+			targetProxy = 9A2000000000000000000003 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		9A1000000000000000000012 /* Debug */ = {
@@ -264,6 +369,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_ENTITLEMENTS = Collector/Collector.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "";
@@ -295,6 +401,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_ENTITLEMENTS = Collector/Collector.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "";
@@ -320,6 +427,66 @@
 			};
 			name = Release;
 		};
+		9A2000000000000000000011 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = CollectorWidgets/CollectorWidgets.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = L92ZZ676BJ;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = CollectorWidgets/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.brianroman.Collectorappmen.CollectorWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		9A2000000000000000000012 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = CollectorWidgets/CollectorWidgets.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = L92ZZ676BJ;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = CollectorWidgets/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.brianroman.Collectorappmen.CollectorWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -328,6 +495,15 @@
 			buildConfigurations = (
 				9A1000000000000000000014 /* Debug */,
 				9A1000000000000000000015 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9A2000000000000000000009 /* Build configuration list for PBXNativeTarget "CollectorWidgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A2000000000000000000011 /* Debug */,
+				9A2000000000000000000012 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

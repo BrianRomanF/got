@@ -4,6 +4,7 @@ final class CollectionLibraryController: ObservableObject {
     @Published private(set) var categories: [CollectionCategory] {
         didSet {
             persistence.saveCategories(categories)
+            WidgetDashboardPublisher.publish(categories: categories)
         }
     }
 
@@ -17,6 +18,7 @@ final class CollectionLibraryController: ObservableObject {
         self.categories = categories
             ?? persistence.loadCategories()
             ?? []
+        WidgetDashboardPublisher.publish(categories: self.categories)
     }
 
     func category(with id: UUID) -> CollectionCategory? {

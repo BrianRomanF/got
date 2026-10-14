@@ -72,6 +72,7 @@ final class BookSearchAPIClient {
                 authors: item.volumeInfo.authors ?? [],
                 publishedYear: item.volumeInfo.publishedDate?.split(separator: "-").first.map(String.init),
                 publisher: item.volumeInfo.publisher,
+                pageCount: item.volumeInfo.pageCount,
                 description: item.volumeInfo.description,
                 coverURL: item.volumeInfo.imageLinks?.bestURL
             )
@@ -94,6 +95,7 @@ final class BookSearchAPIClient {
                 authors: book.authorNames,
                 publishedYear: book.publishedYear,
                 publisher: book.publishers?.first,
+                pageCount: book.pageCount,
                 description: book.descriptionText,
                 coverURL: book.coverURL(isbn: isbn)
             )
@@ -108,7 +110,7 @@ final class BookSearchAPIClient {
         components.queryItems = [
             URLQueryItem(name: "q", value: query),
             URLQueryItem(name: "limit", value: "20"),
-            URLQueryItem(name: "fields", value: "key,title,author_name,first_publish_year,publisher,cover_i")
+            URLQueryItem(name: "fields", value: "key,title,author_name,first_publish_year,publisher,cover_i,number_of_pages_median")
         ]
 
         let response = try await decodedResponse(OpenLibraryResponse.self, components: components)
@@ -123,6 +125,7 @@ final class BookSearchAPIClient {
                 authors: book.authorNames ?? [],
                 publishedYear: book.firstPublishYear.map(String.init),
                 publisher: book.publishers?.first,
+                pageCount: book.pageCount,
                 description: nil,
                 coverURL: book.coverURL
             )
@@ -182,6 +185,7 @@ private struct GoogleBookVolumeInfoDTO: Decodable {
     let authors: [String]?
     let publisher: String?
     let publishedDate: String?
+    let pageCount: Int?
     let description: String?
     let imageLinks: GoogleBookImageLinksDTO?
 }
@@ -204,6 +208,7 @@ private struct OpenLibraryISBNBookDTO: Decodable {
     let title: String?
     let publishDate: String?
     let publishers: [String]?
+    let pageCount: Int?
     let covers: [Int]?
     let byStatement: String?
     let description: OpenLibraryDescriptionDTO?
@@ -213,6 +218,7 @@ private struct OpenLibraryISBNBookDTO: Decodable {
         case title
         case publishDate = "publish_date"
         case publishers
+        case pageCount = "number_of_pages"
         case covers
         case byStatement = "by_statement"
         case description
@@ -266,6 +272,7 @@ private struct OpenLibraryBookDTO: Decodable {
     let authorNames: [String]?
     let firstPublishYear: Int?
     let publishers: [String]?
+    let pageCount: Int?
 
     enum CodingKeys: String, CodingKey {
         case key
@@ -274,6 +281,7 @@ private struct OpenLibraryBookDTO: Decodable {
         case authorNames = "author_name"
         case firstPublishYear = "first_publish_year"
         case publishers = "publisher"
+        case pageCount = "number_of_pages_median"
     }
 
     var coverURL: URL? {

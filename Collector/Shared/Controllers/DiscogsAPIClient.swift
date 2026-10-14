@@ -65,6 +65,7 @@ final class DiscogsAPIClient {
                 artist: titleParts.count > 1 ? titleParts.dropLast().joined(separator: " - ") : nil,
                 year: result.year,
                 label: result.label?.first,
+                catalogNumber: result.catalogNumber,
                 format: format,
                 coverURL: result.coverURL
             )
@@ -101,6 +102,7 @@ private struct DiscogsReleaseDTO: Decodable {
     let title: String?
     let year: String?
     let label: [String]?
+    let catalogNumber: String?
     let coverImage: String?
     let thumb: String?
 
@@ -109,6 +111,7 @@ private struct DiscogsReleaseDTO: Decodable {
         case title
         case year
         case label
+        case catalogNumber = "catno"
         case coverImage = "cover_image"
         case thumb
     }

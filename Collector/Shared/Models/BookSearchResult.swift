@@ -12,6 +12,7 @@ struct BookSearchResult: Identifiable, Hashable {
     let authors: [String]
     let publishedYear: String?
     let publisher: String?
+    let pageCount: Int?
     let description: String?
     let coverURL: URL?
 

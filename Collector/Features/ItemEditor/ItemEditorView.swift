@@ -106,6 +106,24 @@ struct ItemEditorView: View {
                                 edition: $controller.bookEdition,
                                 format: $controller.bookFormat
                             )
+                            ItemBookProgressInput(
+                                currentPage: $controller.bookCurrentPage,
+                                totalPages: $controller.bookTotalPages,
+                                hasStartedAt: $controller.hasBookStartedAt,
+                                startedAt: $controller.bookStartedAt,
+                                hasFinishedAt: $controller.hasBookFinishedAt,
+                                finishedAt: $controller.bookFinishedAt
+                            )
+                        }
+                        if template == .games {
+                            ItemGameBacklogInput(selection: $controller.gameBacklogStatus)
+                        }
+                        if template == .vinyl {
+                            ItemVinylDetailsInput(
+                                mediaCondition: $controller.vinylMediaCondition,
+                                sleeveCondition: $controller.vinylSleeveCondition,
+                                catalogNumber: $controller.vinylCatalogNumber
+                            )
                         }
                         ItemTemplateDetailsInput(
                             title: L10n.TemplateDetails.title,

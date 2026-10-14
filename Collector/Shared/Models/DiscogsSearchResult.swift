@@ -24,6 +24,7 @@ struct DiscogsSearchResult: Identifiable, Hashable {
     let artist: String?
     let year: String?
     let label: String?
+    let catalogNumber: String?
     let format: DiscogsMediaFormat
     let coverURL: URL?
 
