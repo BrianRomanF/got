@@ -27,6 +27,9 @@ struct CollectorWidgetProvider: TimelineProvider {
     }
 
     private func metric() -> WidgetMetricSnapshot {
+        #if LOCAL_DEVICE_BUILD
+        return kind.placeholder
+        #else
         guard
             let defaults = UserDefaults(suiteName: appGroupIdentifier),
             let data = defaults.data(forKey: snapshotKey),
@@ -45,6 +48,7 @@ struct CollectorWidgetProvider: TimelineProvider {
         case .vinyl:
             return snapshot.vinyl
         }
+        #endif
     }
 }
 

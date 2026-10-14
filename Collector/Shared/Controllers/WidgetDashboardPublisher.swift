@@ -6,6 +6,7 @@ enum WidgetDashboardPublisher {
     static let snapshotKey = "collector.widgetDashboardSnapshot"
 
     static func publish(categories: [CollectionCategory]) {
+        #if !LOCAL_DEVICE_BUILD
         guard let defaults = UserDefaults(suiteName: appGroupIdentifier) else { return }
 
         let snapshot = WidgetDashboardSnapshot.make(from: categories)
@@ -13,5 +14,6 @@ enum WidgetDashboardPublisher {
         guard let data = try? JSONEncoder().encode(snapshot) else { return }
         defaults.set(data, forKey: snapshotKey)
         WidgetCenter.shared.reloadAllTimelines()
+        #endif
     }
 }

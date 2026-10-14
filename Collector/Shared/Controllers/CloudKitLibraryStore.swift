@@ -27,15 +27,19 @@ actor CloudKitLibraryStore {
     private static let snapshotField = "snapshot"
     private static let subscriptionID = "collector-library-changes"
 
-    private let container: CKContainer
-    private let database: CKDatabase
+    private let container: CKContainer?
+    private let database: CKDatabase?
     private let encoder: JSONEncoder
     private let decoder: JSONDecoder
 
     init(container: CKContainer? = nil) {
-        let resolvedContainer = container ?? CKContainer(identifier: Self.containerIdentifier)
+        #if LOCAL_DEVICE_BUILD
+        let resolvedContainer = container
+        #else
+        let resolvedContainer: CKContainer? = container ?? CKContainer(identifier: Self.containerIdentifier)
+        #endif
         self.container = resolvedContainer
-        self.database = resolvedContainer.privateCloudDatabase
+        self.database = resolvedContainer?.privateCloudDatabase
 
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]
@@ -48,10 +52,12 @@ actor CloudKitLibraryStore {
     }
 
     func accountStatus() async throws -> CKAccountStatus {
-        try await container.accountStatus()
+        guard let container else { return .noAccount }
+        return try await container.accountStatus()
     }
 
     func ensureLibrarySubscription() async throws {
+        guard let database else { throw CloudKitLibraryError.accountUnavailable }
         let subscriptionID = Self.subscriptionID
 
         do {
@@ -72,6 +78,7 @@ actor CloudKitLibraryStore {
     }
 
     func loadCategories() async throws -> [CollectionCategory] {
+        guard let database else { throw CloudKitLibraryError.accountUnavailable }
         let record = try await database.record(for: recordID)
         guard let data = record[Self.snapshotField] as? Data else {
             throw CloudKitLibraryError.invalidSnapshot
@@ -81,6 +88,7 @@ actor CloudKitLibraryStore {
     }
 
     func saveCategories(_ categories: [CollectionCategory]) async throws {
+        guard let database else { throw CloudKitLibraryError.accountUnavailable }
         let data = try encoder.encode(categories)
         let record: CKRecord
         do {
@@ -94,6 +102,7 @@ actor CloudKitLibraryStore {
     }
 
     func deleteRemoteLibrary() async throws {
+        guard let database else { throw CloudKitLibraryError.accountUnavailable }
         _ = try await database.deleteRecord(withID: recordID)
     }
 
