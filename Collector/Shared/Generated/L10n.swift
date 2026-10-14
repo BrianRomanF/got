@@ -124,6 +124,30 @@ enum L10n {
         static var privacyPolicy: String { tr("settings.privacyPolicy") }
         static var contactSupport: String { tr("settings.contactSupport") }
         static var backupShortcut: String { tr("settings.backupShortcut") }
+        static var syncTitle: String { tr("settings.syncTitle") }
+        static var syncBody: String { tr("settings.syncBody") }
+        static var syncStatusTitle: String { tr("settings.syncStatusTitle") }
+        static var syncStatusUnavailable: String { tr("settings.syncStatusUnavailable") }
+        static var syncStatusIdle: String { tr("settings.syncStatusIdle") }
+        static var syncStatusSyncing: String { tr("settings.syncStatusSyncing") }
+        static var syncStatusSynced: String { tr("settings.syncStatusSynced") }
+        static var syncStatusPending: String { tr("settings.syncStatusPending") }
+        static var syncStatusOffline: String { tr("settings.syncStatusOffline") }
+        static var syncStatusConflict: String { tr("settings.syncStatusConflict") }
+        static var syncStatusFailed: String { tr("settings.syncStatusFailed") }
+        static var syncNow: String { tr("settings.syncNow") }
+        static var syncBackupNow: String { tr("settings.syncBackupNow") }
+        static var syncBackupConfirmTitle: String { tr("settings.syncBackupConfirmTitle") }
+        static var syncBackupConfirmMessage: String { tr("settings.syncBackupConfirmMessage") }
+        static var syncBackupCreated: String { tr("settings.syncBackupCreated") }
+        static var syncBackupFailed: String { tr("settings.syncBackupFailed") }
+        static var syncReviewTitle: String { tr("settings.syncReviewTitle") }
+        static var syncUploadLocal: String { tr("settings.syncUploadLocal") }
+        static var syncDownloadRemote: String { tr("settings.syncDownloadRemote") }
+        static var syncKeepLocal: String { tr("settings.syncKeepLocal") }
+        static var syncKeepRemote: String { tr("settings.syncKeepRemote") }
+        static var syncMerge: String { tr("settings.syncMerge") }
+        static var syncFailedTitle: String { tr("settings.syncFailedTitle") }
     }
 
     enum Pro {

@@ -4,6 +4,9 @@ import SwiftUI
 struct CollectorApp: App {
     @StateObject private var libraryController = CollectionLibraryController()
     @StateObject private var proAccessController = ProAccessController()
+    @StateObject private var cloudKitCoordinator = CloudKitSyncCoordinator(
+        syncStateController: .shared
+    )
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage(AppSettings.selectedLanguageKey) private var selectedLanguage = AppLanguage.system.rawValue
     @AppStorage(AppSettings.hideOnboardingKey) private var hideOnboarding = false
@@ -14,12 +17,16 @@ struct CollectorApp: App {
                 HomeView()
                     .environmentObject(libraryController)
                     .environmentObject(proAccessController)
+                    .environmentObject(libraryController.syncStateController)
+                    .environmentObject(cloudKitCoordinator)
                     .environment(\.locale, Locale(identifier: currentLocaleIdentifier))
             } else {
                 OnboardingView {
                     hideOnboarding = true
                 }
                 .environmentObject(proAccessController)
+                .environmentObject(libraryController.syncStateController)
+                .environmentObject(cloudKitCoordinator)
                 .environment(\.locale, Locale(identifier: currentLocaleIdentifier))
             }
         }
@@ -28,6 +35,10 @@ struct CollectorApp: App {
 
             Task {
                 await proAccessController.refresh()
+                await cloudKitCoordinator.refreshAccountStatus()
+                await cloudKitCoordinator.synchronizeAutomatically(
+                    localCategories: libraryController.categories
+                )
             }
         }
     }

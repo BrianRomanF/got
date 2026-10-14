@@ -3,22 +3,63 @@ import Foundation
 final class CollectionLibraryController: ObservableObject {
     @Published private(set) var categories: [CollectionCategory] {
         didSet {
-            persistence.saveCategories(categories)
+            repository.saveCategories(categories)
             WidgetDashboardPublisher.publish(categories: categories)
+
+            guard !isApplyingSync else { return }
+            syncStateController.markPendingChanges(count: totalItemCount(in: categories))
         }
     }
 
-    private let persistence: CollectionLibraryPersistenceController
+    private let repository: LibraryRepository
+    private let backupController: LibraryLocalBackupController
+    let syncStateController: LibrarySyncStateController
+    private var isApplyingSync = false
 
     init(
         categories: [CollectionCategory]? = nil,
-        persistence: CollectionLibraryPersistenceController = .shared
+        repository: LibraryRepository = LocalLibraryRepository(),
+        backupController: LibraryLocalBackupController = .shared,
+        syncStateController: LibrarySyncStateController = .shared
     ) {
-        self.persistence = persistence
+        self.repository = repository
+        self.backupController = backupController
+        self.syncStateController = syncStateController
         self.categories = categories
-            ?? persistence.loadCategories()
-            ?? []
+            ?? repository.loadCategories()
         WidgetDashboardPublisher.publish(categories: self.categories)
+    }
+
+    init(
+        categories: [CollectionCategory]? = nil,
+        persistence: CollectionLibraryPersistenceController
+    ) {
+        self.init(
+            categories: categories,
+            repository: LocalLibraryRepository(persistence: persistence)
+        )
+    }
+
+    @discardableResult
+    func createSyncBackup() -> LibraryLocalBackup? {
+        do {
+            let backup = try backupController.createBackup(for: categories)
+            syncStateController.markBackupCreated(at: backup.createdAt)
+            return backup
+        } catch {
+            syncStateController.markFailed(message: error.localizedDescription)
+            return nil
+        }
+    }
+
+    func replaceCategoriesFromSync(_ categories: [CollectionCategory]) {
+        isApplyingSync = true
+        self.categories = categories
+        isApplyingSync = false
+    }
+
+    private func totalItemCount(in categories: [CollectionCategory]) -> Int {
+        categories.reduce(0) { $0 + $1.allItems.count }
     }
 
     func category(with id: UUID) -> CollectionCategory? {
@@ -66,12 +107,12 @@ final class CollectionLibraryController: ObservableObject {
     }
 
     func exportLibrary() -> URL? {
-        persistence.exportCategories(categories)
+        repository.exportCategories(categories)
     }
 
     func importLibrary(from fileURL: URL) -> Bool {
         do {
-            categories = try persistence.loadCategories(from: fileURL)
+            categories = try repository.loadCategories(from: fileURL)
             return true
         } catch {
             return false

@@ -51,6 +51,7 @@ struct SettingsView: View {
                         proSection
                         apiSection
                         backupSection
+                        SettingsSyncSectionView()
                         usageGuideSection
                         privacySection
                         aboutSection
@@ -632,7 +633,7 @@ private struct SettingsHeaderView: View {
     }
 }
 
-private struct SettingsSectionTitle: View {
+struct SettingsSectionTitle: View {
     let systemName: String
     let title: String
 
@@ -771,7 +772,7 @@ private struct SettingsLinkButton: View {
     }
 }
 
-private struct SettingsActionLabel: View {
+struct SettingsActionLabel: View {
     let title: String
     let systemName: String
 
@@ -826,7 +827,7 @@ private struct SettingsInfoRow: View {
     }
 }
 
-private struct SettingsGuideRow: View {
+struct SettingsGuideRow: View {
     let systemName: String
     let title: String
     let description: String
