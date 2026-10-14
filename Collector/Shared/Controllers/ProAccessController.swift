@@ -12,6 +12,7 @@ final class ProAccessController: ObservableObject {
     @Published private(set) var product: Product?
     @Published private(set) var isLoading = false
     @Published var errorMessage: String?
+    @Published var statusMessage: String?
 
     private var updatesTask: Task<Void, Never>?
 
@@ -36,6 +37,7 @@ final class ProAccessController: ObservableObject {
     func purchasePro() async {
         isLoading = true
         errorMessage = nil
+        statusMessage = nil
         defer { isLoading = false }
 
         do {
@@ -57,10 +59,12 @@ final class ProAccessController: ObservableObject {
             switch result {
             case .success(let verification):
                 let transaction = try verifiedTransaction(from: verification)
-                unlockPro()
+                unlockPro(message: L10n.Pro.purchaseSuccess)
                 await transaction.finish()
-            case .userCancelled, .pending:
-                break
+            case .userCancelled:
+                statusMessage = L10n.Pro.purchaseCancelled
+            case .pending:
+                statusMessage = L10n.Pro.purchasePending
             @unknown default:
                 break
             }
@@ -72,11 +76,13 @@ final class ProAccessController: ObservableObject {
     func restorePurchases() async {
         isLoading = true
         errorMessage = nil
+        statusMessage = nil
         defer { isLoading = false }
 
         do {
             try await AppStore.sync()
-            await refreshEntitlements()
+            let restoredPro = await refreshEntitlements()
+            statusMessage = restoredPro ? L10n.Pro.restoreSuccess : L10n.Pro.restoreEmpty
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -84,6 +90,7 @@ final class ProAccessController: ObservableObject {
 
     func redeemOfferCode() async {
         errorMessage = nil
+        statusMessage = nil
 
         guard let scene = UIApplication.shared.connectedScenes
             .compactMap({ $0 as? UIWindowScene })
@@ -94,7 +101,8 @@ final class ProAccessController: ObservableObject {
 
         do {
             try await AppStore.presentOfferCodeRedeemSheet(in: scene)
-            await refreshEntitlements()
+            let redeemedPro = await refreshEntitlements()
+            statusMessage = redeemedPro ? L10n.Pro.purchaseSuccess : L10n.Pro.redeemCheck
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -116,7 +124,8 @@ final class ProAccessController: ObservableObject {
         }
     }
 
-    private func refreshEntitlements() async {
+    @discardableResult
+    private func refreshEntitlements() async -> Bool {
         var hasPro = false
 
         for await result in Transaction.currentEntitlements {
@@ -132,6 +141,8 @@ final class ProAccessController: ObservableObject {
             isProUnlocked = false
             AppSettings.isProUnlocked = false
         }
+
+        return hasPro
     }
 
     private func observeTransactions() -> Task<Void, Never> {
@@ -141,7 +152,7 @@ final class ProAccessController: ObservableObject {
                 guard let transaction = try? self.verifiedTransaction(from: result) else { continue }
 
                 if transaction.productID == Self.proProductID {
-                    self.unlockPro()
+                    self.unlockPro(message: L10n.Pro.purchaseSuccess)
                 }
 
                 await transaction.finish()
@@ -158,9 +169,13 @@ final class ProAccessController: ObservableObject {
         }
     }
 
-    private func unlockPro() {
+    private func unlockPro(message: String? = nil) {
         isProUnlocked = true
         AppSettings.isProUnlocked = true
+
+        if let message {
+            statusMessage = message
+        }
     }
 }
 

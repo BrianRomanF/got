@@ -147,6 +147,12 @@
 "pro.restore" = "Restaurar compra";
 "pro.redeemCode" = "Canjear código";
 "pro.redeemUnavailable" = "No se pudo abrir el canje de códigos por ahora.";
+"pro.purchaseSuccess" = "Got it Pro quedó desbloqueado en este dispositivo.";
+"pro.purchaseCancelled" = "La compra fue cancelada.";
+"pro.purchasePending" = "La compra quedó pendiente de aprobación de Apple. Got it desbloqueará Pro cuando Apple la confirme.";
+"pro.restoreSuccess" = "Tu compra Pro fue restaurada.";
+"pro.restoreEmpty" = "No se encontró una compra Pro para este Apple ID.";
+"pro.redeemCheck" = "Si el código fue aceptado, vuelve a Got it y toca Restaurar compra.";
 "pro.unlocked" = "Pro desbloqueado";
 "pro.unavailable" = "Pro no está disponible por ahora. Intenta más tarde.";
 "pro.verificationFailed" = "No se pudo verificar la compra.";

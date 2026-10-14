@@ -322,6 +322,22 @@ struct SettingsView: View {
                     }
                     .buttonStyle(.plain)
                 }
+
+                if let statusMessage = proAccess.statusMessage {
+                    SettingsGuideRow(
+                        systemName: "info.circle.fill",
+                        title: L10n.Pro.title,
+                        description: statusMessage
+                    )
+                }
+
+                if let errorMessage = proAccess.errorMessage {
+                    SettingsGuideRow(
+                        systemName: "exclamationmark.triangle.fill",
+                        title: L10n.Pro.title,
+                        description: errorMessage
+                    )
+                }
             }
             .padding(.top, 12)
         } label: {

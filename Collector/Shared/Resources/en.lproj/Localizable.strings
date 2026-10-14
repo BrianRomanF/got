@@ -147,6 +147,12 @@
 "pro.restore" = "Restore purchase";
 "pro.redeemCode" = "Redeem code";
 "pro.redeemUnavailable" = "The code sheet could not be opened right now.";
+"pro.purchaseSuccess" = "Got it Pro is unlocked on this device.";
+"pro.purchaseCancelled" = "The purchase was cancelled.";
+"pro.purchasePending" = "The purchase is pending Apple approval. Got it will unlock Pro when Apple confirms it.";
+"pro.restoreSuccess" = "Your Pro purchase was restored.";
+"pro.restoreEmpty" = "No Pro purchase was found for this Apple ID.";
+"pro.redeemCheck" = "If the code was accepted, return to Got it and tap Restore purchase.";
 "pro.unlocked" = "Pro unlocked";
 "pro.unavailable" = "Pro is unavailable right now. Try again later.";
 "pro.verificationFailed" = "The purchase could not be verified.";

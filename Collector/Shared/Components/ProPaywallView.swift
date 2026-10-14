@@ -40,12 +40,23 @@ struct ProPaywallView: View {
                             .foregroundStyle(ComicTheme.ink.opacity(0.66))
                             .frame(maxWidth: .infinity, alignment: .center)
 
+                        if proAccess.isProUnlocked {
+                            ProStatusBanner(
+                                systemName: "checkmark.seal.fill",
+                                message: L10n.Pro.unlocked,
+                                isError: false
+                            )
+                        } else if let statusMessage = proAccess.statusMessage {
+                            ProStatusBanner(
+                                systemName: "info.circle.fill",
+                                message: statusMessage,
+                                isError: false
+                            )
+                        }
+
                         Button {
                             Task {
                                 await proAccess.purchasePro()
-                                if proAccess.isProUnlocked {
-                                    dismiss()
-                                }
                             }
                         } label: {
                             HStack {
@@ -77,9 +88,6 @@ struct ProPaywallView: View {
                         Button(L10n.Pro.restore) {
                             Task {
                                 await proAccess.restorePurchases()
-                                if proAccess.isProUnlocked {
-                                    dismiss()
-                                }
                             }
                         }
                         .font(.caption.weight(.black))
@@ -90,9 +98,6 @@ struct ProPaywallView: View {
                         Button(L10n.Pro.redeemCode) {
                             Task {
                                 await proAccess.redeemOfferCode()
-                                if proAccess.isProUnlocked {
-                                    dismiss()
-                                }
                             }
                         }
                         .font(.caption.weight(.black))
@@ -101,10 +106,11 @@ struct ProPaywallView: View {
                         .disabled(proAccess.isLoading)
 
                         if let errorMessage = proAccess.errorMessage {
-                            Text(errorMessage)
-                                .font(.caption.weight(.bold))
-                                .foregroundStyle(ComicTheme.red)
-                                .frame(maxWidth: .infinity, alignment: .center)
+                            ProStatusBanner(
+                                systemName: "exclamationmark.triangle.fill",
+                                message: errorMessage,
+                                isError: true
+                            )
                         }
                     }
                     .padding(20)
@@ -114,7 +120,7 @@ struct ProPaywallView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(L10n.Common.cancel) {
+                    Button(proAccess.isProUnlocked ? L10n.Common.save : L10n.Common.cancel) {
                         dismiss()
                     }
                 }
@@ -131,6 +137,33 @@ struct ProPaywallView: View {
         } else {
             L10n.Pro.unlock
         }
+    }
+}
+
+private struct ProStatusBanner: View {
+    let systemName: String
+    let message: String
+    let isError: Bool
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 10) {
+            Image(systemName: systemName)
+                .font(.headline.weight(.black))
+
+            Text(message)
+                .font(.caption.weight(.black))
+                .fixedSize(horizontal: false, vertical: true)
+
+            Spacer(minLength: 0)
+        }
+        .foregroundStyle(isError ? ComicTheme.red : ComicTheme.ink)
+        .padding(12)
+        .background(Color.white)
+        .overlay(
+            RoundedRectangle(cornerRadius: 7)
+                .stroke(isError ? ComicTheme.red : ComicTheme.ink, lineWidth: 2)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 7))
     }
 }
 

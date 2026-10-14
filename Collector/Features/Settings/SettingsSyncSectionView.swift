@@ -129,7 +129,7 @@ struct SettingsSyncSectionView: View {
             return L10n.Settings.syncStatusUnavailable
         }
 
-        switch syncStateController.state.status {
+        return switch syncStateController.state.status {
         case .unavailable:
             L10n.Settings.syncStatusUnavailable
         case .idle:

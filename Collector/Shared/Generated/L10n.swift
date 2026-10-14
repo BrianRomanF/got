@@ -157,6 +157,12 @@ enum L10n {
         static var restore: String { tr("pro.restore") }
         static var redeemCode: String { tr("pro.redeemCode") }
         static var redeemUnavailable: String { tr("pro.redeemUnavailable") }
+        static var purchaseSuccess: String { tr("pro.purchaseSuccess") }
+        static var purchaseCancelled: String { tr("pro.purchaseCancelled") }
+        static var purchasePending: String { tr("pro.purchasePending") }
+        static var restoreSuccess: String { tr("pro.restoreSuccess") }
+        static var restoreEmpty: String { tr("pro.restoreEmpty") }
+        static var redeemCheck: String { tr("pro.redeemCheck") }
         static var unlocked: String { tr("pro.unlocked") }
         static var unavailable: String { tr("pro.unavailable") }
         static var verificationFailed: String { tr("pro.verificationFailed") }

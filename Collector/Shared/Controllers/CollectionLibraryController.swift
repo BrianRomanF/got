@@ -30,7 +30,7 @@ final class CollectionLibraryController: ObservableObject {
         WidgetDashboardPublisher.publish(categories: self.categories)
     }
 
-    init(
+    convenience init(
         categories: [CollectionCategory]? = nil,
         persistence: CollectionLibraryPersistenceController
     ) {
