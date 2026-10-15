@@ -16,7 +16,7 @@ Release keeps the original iCloud, push and App Group entitlements and requires
 a development team and provisioning profiles that support those capabilities.
 
 The Books widget shows the single currently reading book from the shared
-snapshot, with its book icon and progress. Selecting another current book
+snapshot, with its cover thumbnail (or a book icon when unavailable) and progress. Selecting another current book
 removes the previous book's reading status while preserving its pages and dates.
 Existing libraries with multiple current books keep the most recently updated
 one selected. Comics retain their independent reading statuses. Tapping a book uses
@@ -24,3 +24,10 @@ one selected. Comics retain their independent reading statuses. Tapping a book u
 nested shelves. `gotit://reading` opens the most recently updated current book.
 Open the app after installing to publish the library to the shared App Group.
 Saving a reading update publishes a new snapshot and requests a widget refresh.
+
+Open a comics series and select Follow this series to feature it in the Comics
+widget. Following is exclusive across comics collections and is saved with the
+series. The widget shows that series' owned/missing counts and the first issue's
+cover, ordered by issue number. Tapping opens the series via
+`gotit://comics/<category UUID>/<group UUID>`. Covers are downsampled to at most
+160 pixels and stored in the shared snapshot for both books and comics.

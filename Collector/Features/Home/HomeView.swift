@@ -185,7 +185,12 @@ struct HomeView: View {
             }
         }
         .onOpenURL { url in
-            guard url.scheme == "gotit", url.host == "reading" else { return }
+            guard url.scheme == "gotit" else { return }
+            if url.host == "comics" {
+                openComicWidgetURL(url)
+                return
+            }
+            guard url.host == "reading" else { return }
             let rawID = url.pathComponents.dropFirst().first
             let id = rawID.flatMap(UUID.init(uuidString:))
             guard rawID == nil || id != nil else { return }
@@ -203,6 +208,27 @@ struct HomeView: View {
             readingRequestID = UUID()
             navigationPath = [.bookProgress(categoryID: book.categoryID, groupID: book.groupID, itemID: book.item.id)]
         }
+    }
+
+    private func openComicWidgetURL(_ url: URL) {
+        let parts = Array(url.pathComponents.dropFirst())
+        let route: CollectorRoute
+        if parts.isEmpty, let category = libraryController.categories.first(where: { $0.template == .comics }) {
+            route = .category(category.id)
+        } else if parts.count == 2,
+                  let categoryID = UUID(uuidString: parts[0]),
+                  let groupID = UUID(uuidString: parts[1]),
+                  libraryController.category(with: categoryID)?.template == .comics,
+                  libraryController.group(with: groupID, in: categoryID) != nil {
+            route = .group(categoryID: categoryID, groupID: groupID)
+        } else {
+            return
+        }
+        isShowingSettings = false
+        isShowingPaywall = false
+        categoryToEdit = nil
+        controller.isAddingCategory = false
+        navigationPath = [route]
     }
 
     private func startAddingCategory() {

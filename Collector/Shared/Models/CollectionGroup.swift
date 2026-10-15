@@ -6,18 +6,21 @@ struct CollectionGroup: Identifiable, Hashable, Codable {
     var subtitle: String
     var groups: [CollectionGroup]
     var items: [CollectibleItem]
+    var isFollowing: Bool? = nil
 
     init(
         id: UUID = UUID(),
         title: String,
         subtitle: String = "",
         groups: [CollectionGroup] = [],
-        items: [CollectibleItem] = []
+        items: [CollectibleItem] = [],
+        isFollowing: Bool? = nil
     ) {
         self.id = id
         self.title = title
         self.subtitle = subtitle
         self.groups = groups
         self.items = items
+        self.isFollowing = isFollowing
     }
 }

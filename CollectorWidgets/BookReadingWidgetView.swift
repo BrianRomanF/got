@@ -13,7 +13,7 @@ struct BookReadingWidgetView: View {
 
             if let book = entry.readingBooks.first {
                 HStack(alignment: .center, spacing: 10) {
-                    bookIcon
+                    WidgetCoverThumbnailView(data: book.coverData, width: family == .systemSmall ? 40 : 52, height: 56)
                     VStack(alignment: .leading, spacing: 5) {
                         Text(book.title).font(.subheadline.weight(.black)).lineLimit(2)
                         Text(pageDescription(book))
@@ -41,16 +41,6 @@ struct BookReadingWidgetView: View {
         .environment(\.colorScheme, .light)
         .widgetURL(entry.readingBooks.first?.url ?? URL(string: "gotit://reading"))
         .containerBackground(for: .widget) { WidgetComicBackground() }
-    }
-
-    private var bookIcon: some View {
-        Image(systemName: "book.closed.fill")
-            .font(.system(size: family == .systemSmall ? 28 : 34, weight: .black))
-            .foregroundStyle(WidgetComicStyle.red)
-            .frame(width: family == .systemSmall ? 40 : 52, height: 56)
-            .background(WidgetComicStyle.panel, in: RoundedRectangle(cornerRadius: 5))
-            .overlay(RoundedRectangle(cornerRadius: 5).stroke(WidgetComicStyle.ink, lineWidth: 2))
-            .accessibilityHidden(true)
     }
 
     private func pageDescription(_ book: ReadingBookWidgetItem) -> String {

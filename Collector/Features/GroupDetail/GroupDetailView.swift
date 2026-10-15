@@ -20,6 +20,11 @@ struct GroupDetailView: View {
                     VStack(alignment: .leading, spacing: 24) {
                         ComicBreadcrumbView(parts: [category.title, group.title])
                         GroupHeaderView(group: group)
+                        if category.template == .comics {
+                            ComicFollowSeriesButton(isFollowing: group.isFollowing == true) {
+                                libraryController.toggleFollowingComicSeries(groupID: groupID, categoryID: categoryID)
+                            }
+                        }
                         if category.allowsNestedGroups {
                             GroupChildrenSection(
                                 categoryID: categoryID,

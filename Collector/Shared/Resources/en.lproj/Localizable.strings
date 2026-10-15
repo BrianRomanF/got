@@ -539,3 +539,6 @@
 "bookReading.update" = "Update reading progress";
 "bookReading.hint" = "Keep one book marked as reading. Choosing another keeps your previous book's progress. Save your page here; reaching the final page marks the book as read.";
 "bookReading.invalidPages" = "Enter a page of 0 or more, no higher than the total. The total is optional and must be greater than 0.";
+"comicFollowing.follow" = "Follow this series";
+"comicFollowing.following" = "Following";
+"comicFollowing.hint" = "Show this series, its first cover and your owned and missing issues in the widget. Follow one series at a time.";

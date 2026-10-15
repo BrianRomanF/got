@@ -8,6 +8,7 @@ struct CollectorWidgetEntry: TimelineEntry {
     let date: Date
     let metric: WidgetMetricSnapshot
     var readingBooks: [ReadingBookWidgetItem] = []
+    var followedComic: FollowedComicWidgetItem? = nil
 }
 
 struct CollectorWidgetProvider: TimelineProvider {
@@ -18,11 +19,11 @@ struct CollectorWidgetProvider: TimelineProvider {
     }
 
     func getSnapshot(in context: Context, completion: @escaping (CollectorWidgetEntry) -> Void) {
-        completion(CollectorWidgetEntry(date: .now, metric: metric(), readingBooks: readingBooks()))
+        completion(CollectorWidgetEntry(date: .now, metric: metric(), readingBooks: readingBooks(), followedComic: followedComic()))
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<CollectorWidgetEntry>) -> Void) {
-        let entry = CollectorWidgetEntry(date: .now, metric: metric(), readingBooks: readingBooks())
+        let entry = CollectorWidgetEntry(date: .now, metric: metric(), readingBooks: readingBooks(), followedComic: followedComic())
         let nextRefresh = Calendar.current.date(byAdding: .minute, value: 30, to: .now) ?? .now.addingTimeInterval(1800)
         completion(Timeline(entries: [entry], policy: .after(nextRefresh)))
     }
@@ -31,6 +32,12 @@ struct CollectorWidgetProvider: TimelineProvider {
         guard let data = UserDefaults(suiteName: appGroupIdentifier)?.data(forKey: snapshotKey),
               let snapshot = try? JSONDecoder().decode(WidgetDashboardSnapshot.self, from: data) else { return [] }
         return snapshot.readingBooks ?? []
+    }
+
+    private func followedComic() -> FollowedComicWidgetItem? {
+        guard let data = UserDefaults(suiteName: appGroupIdentifier)?.data(forKey: snapshotKey),
+              let snapshot = try? JSONDecoder().decode(WidgetDashboardSnapshot.self, from: data) else { return nil }
+        return snapshot.followedComic
     }
 
     private func metric() -> WidgetMetricSnapshot {
@@ -155,7 +162,7 @@ struct ComicsCollectorWidget: Widget {
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: CollectorWidgetProvider(kind: .comics)) { entry in
-            CollectorWidgetView(entry: entry)
+            ComicFollowingWidgetView(entry: entry)
         }
         .configurationDisplayName("Got it Comics")
         .description("Comic issues, missing gaps, and current reading.")

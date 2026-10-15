@@ -8,7 +8,8 @@ extension WidgetDashboardSnapshot {
             games: gamesSnapshot(from: categories),
             vinyl: vinylSnapshot(from: categories),
             updatedAt: .now,
-            readingBooks: readingBooks(from: categories)
+            readingBooks: readingBooks(from: categories),
+            followedComic: followedComic(from: categories)
         )
     }
 
@@ -20,8 +21,18 @@ extension WidgetDashboardSnapshot {
             .map { item in
                 return ReadingBookWidgetItem(id: item.id, title: item.title,
                     currentPage: item.bookCurrentPage ?? 0, totalPages: item.bookTotalPages,
-                    progress: item.bookProgressRatio, coverData: nil)
+                    progress: item.bookProgressRatio, coverData: WidgetCoverThumbnail.make(from: item))
             }
+    }
+
+    private static func followedComic(from categories: [CollectionCategory]) -> FollowedComicWidgetItem? {
+        guard let selection = ComicFollowingSelection.followedSeries(in: categories) else { return nil }
+        let issues = selection.group.allItems
+        return FollowedComicWidgetItem(categoryID: selection.categoryID, groupID: selection.group.id,
+            title: selection.group.title,
+            ownedCount: issues.filter { $0.ownershipStatus == .owned }.count,
+            missingCount: issues.filter { $0.ownershipStatus == .missing }.count,
+            coverData: WidgetCoverThumbnail.make(from: selection.firstIssue))
     }
 
     private static func booksSnapshot(from categories: [CollectionCategory]) -> WidgetMetricSnapshot {

@@ -5,3 +5,9 @@
 "reading.pages" = "%d of %d pages";
 "reading.page" = "Page %d";
 "reading.choose" = "Open a book in Got it and tap Read this book to add it here.";
+"following.title" = "FOLLOWING";
+"following.owned" = "Owned";
+"following.missing" = "Missing";
+"following.open" = "Tap to open the series →";
+"following.empty" = "Follow a series";
+"following.choose" = "Open a series in Got it and tap Follow this series to see it here.";

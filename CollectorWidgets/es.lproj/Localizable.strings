@@ -5,3 +5,9 @@
 "reading.pages" = "%d de %d páginas";
 "reading.page" = "Página %d";
 "reading.choose" = "Abre un libro en Got it y toca Leer este libro para agregarlo aquí.";
+"following.title" = "SIGUIENDO";
+"following.owned" = "Tengo";
+"following.missing" = "Faltan";
+"following.open" = "Toca para abrir la serie →";
+"following.empty" = "Sigue una serie";
+"following.choose" = "Abre una serie en Got it y toca Seguir esta serie para verla aquí.";

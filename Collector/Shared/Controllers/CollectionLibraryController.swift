@@ -67,6 +67,12 @@ final class CollectionLibraryController: ObservableObject {
         isApplyingSync = false
     }
 
+    func setComicFollowing(groupID: UUID?, categoryID: UUID) {
+        guard category(with: categoryID)?.template == .comics else { return }
+        if let groupID, group(with: groupID, in: categoryID) == nil { return }
+        categories = ComicFollowingSelection.selecting(groupID: groupID, categoryID: categoryID, in: categories)
+    }
+
     private func totalItemCount(in categories: [CollectionCategory]) -> Int {
         categories.reduce(0) { $0 + $1.allItems.count }
     }

@@ -457,6 +457,12 @@ enum L10n {
         static var percentComplete: String { tr("bookProgress.percentComplete") }
     }
 
+    enum ComicFollowing {
+        static var follow: String { tr("comicFollowing.follow") }
+        static var following: String { tr("comicFollowing.following") }
+        static var hint: String { tr("comicFollowing.hint") }
+    }
+
     enum BookReading {
         static var start: String { tr("bookReading.start") }
         static var update: String { tr("bookReading.update") }

@@ -7,6 +7,7 @@ struct WidgetDashboardSnapshot: Codable, Hashable {
     let vinyl: WidgetMetricSnapshot
     let updatedAt: Date
     var readingBooks: [ReadingBookWidgetItem]? = nil
+    var followedComic: FollowedComicWidgetItem? = nil
 }
 
 struct ReadingBookWidgetItem: Codable, Hashable, Identifiable {
@@ -29,4 +30,20 @@ struct WidgetMetricSnapshot: Codable, Hashable {
     let highlightTitle: String
     let highlightSubtitle: String
     let progress: Double
+}
+
+struct FollowedComicWidgetItem: Codable, Hashable {
+    let categoryID: UUID
+    let groupID: UUID
+    let title: String
+    let ownedCount: Int
+    let missingCount: Int
+    let coverData: Data?
+
+    var progress: Double {
+        let total = ownedCount + missingCount
+        return total > 0 ? Double(ownedCount) / Double(total) : 0
+    }
+
+    var url: URL? { URL(string: "gotit://comics/\(categoryID.uuidString)/\(groupID.uuidString)") }
 }

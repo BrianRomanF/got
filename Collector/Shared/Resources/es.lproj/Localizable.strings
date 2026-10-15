@@ -539,3 +539,6 @@
 "bookReading.update" = "Actualizar lectura";
 "bookReading.hint" = "Solo un libro estará marcado como leyendo. Al elegir otro, el anterior conserva su progreso. Guarda aquí tu página; al llegar a la última se marcará como leído.";
 "bookReading.invalidPages" = "Ingresa una página desde 0 que no supere el total. El total es opcional y debe ser mayor que 0.";
+"comicFollowing.follow" = "Seguir esta serie";
+"comicFollowing.following" = "Siguiendo";
+"comicFollowing.hint" = "Muestra esta serie, su primera portada y los números que tienes y te faltan en el widget. Solo puedes seguir una serie a la vez.";
