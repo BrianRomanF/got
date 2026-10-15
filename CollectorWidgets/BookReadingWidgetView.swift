@@ -86,10 +86,6 @@ struct BookReadingWidgetView: View {
     }
 
     private var emptyDescription: String {
-        #if LOCAL_DEVICE_BUILD
-        String(localized: "reading.local")
-        #else
         String(localized: "reading.choose")
-        #endif
     }
 }

@@ -32,6 +32,7 @@ struct CollectorApp: App {
         }
         .onChange(of: scenePhase) { _, newPhase in
             guard newPhase == .active else { return }
+            WidgetDashboardPublisher.publish(categories: libraryController.categories)
 
             Task {
                 await proAccessController.refresh()

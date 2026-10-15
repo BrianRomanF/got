@@ -4,5 +4,4 @@
 "reading.open" = "Open my reading";
 "reading.pages" = "%d of %d pages";
 "reading.page" = "Page %d";
-"reading.local" = "Live progress requires App Groups. Tap to update your reading in the app.";
 "reading.choose" = "Open a book in Got it and tap Read this book to add it here.";

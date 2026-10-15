@@ -175,6 +175,9 @@
 					9A1000000000000000000006 = {
 						CreatedOnToolsVersion = 16.0;
 						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
 							com.apple.iCloud = {
 								enabled = 1;
 							};
@@ -182,6 +185,11 @@
 					};
 					9A2000000000000000000006 = {
 						CreatedOnToolsVersion = 16.0;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};

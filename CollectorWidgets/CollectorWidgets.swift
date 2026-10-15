@@ -28,19 +28,12 @@ struct CollectorWidgetProvider: TimelineProvider {
     }
 
     private func readingBooks() -> [ReadingBookWidgetItem] {
-        #if LOCAL_DEVICE_BUILD
-        return []
-        #else
         guard let data = UserDefaults(suiteName: appGroupIdentifier)?.data(forKey: snapshotKey),
               let snapshot = try? JSONDecoder().decode(WidgetDashboardSnapshot.self, from: data) else { return [] }
         return snapshot.readingBooks ?? []
-        #endif
     }
 
     private func metric() -> WidgetMetricSnapshot {
-        #if LOCAL_DEVICE_BUILD
-        return kind.placeholder
-        #else
         guard
             let defaults = UserDefaults(suiteName: appGroupIdentifier),
             let data = defaults.data(forKey: snapshotKey),
@@ -59,7 +52,6 @@ struct CollectorWidgetProvider: TimelineProvider {
         case .vinyl:
             return snapshot.vinyl
         }
-        #endif
     }
 }
 
