@@ -62,7 +62,8 @@ struct ItemDetailBookProgressView: View {
     }
 
     private var shouldShowProgress: Bool {
-        item.bookCurrentPage != nil
+        item.readingStatus == .reading
+            || item.bookCurrentPage != nil
             || item.bookTotalPages != nil
             || item.bookStartedAt != nil
             || item.bookFinishedAt != nil

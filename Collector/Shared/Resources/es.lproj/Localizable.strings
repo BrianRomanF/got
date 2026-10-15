@@ -535,3 +535,8 @@
 "templateDetails.linePlaceholder" = "Linea, serie o escala";
 "templateDetails.location" = "Ubicacion";
 "templateDetails.locationPlaceholder" = "Vitrina, caja, repisa...";
+"bookReading.start" = "Leer este libro";
+"bookReading.update" = "Actualizar lectura";
+"bookReading.hint" = "Puedes leer hasta 4 libros en paralelo. Guarda aquí la página en la que vas; al llegar a la última se marcará como leído.";
+"bookReading.limit" = "Ya estás leyendo 4 libros. Termina uno o cambia su estado de lectura para agregar otro.";
+"bookReading.invalidPages" = "Ingresa una página desde 0 que no supere el total. El total es opcional y debe ser mayor que 0.";

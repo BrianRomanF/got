@@ -6,6 +6,18 @@ struct WidgetDashboardSnapshot: Codable, Hashable {
     let games: WidgetMetricSnapshot
     let vinyl: WidgetMetricSnapshot
     let updatedAt: Date
+    var readingBooks: [ReadingBookWidgetItem]? = nil
+}
+
+struct ReadingBookWidgetItem: Codable, Hashable, Identifiable {
+    let id: UUID
+    let title: String
+    let currentPage: Int
+    let totalPages: Int?
+    let progress: Double
+    let coverData: Data?
+
+    var url: URL? { URL(string: "gotit://reading/\(id.uuidString)") }
 }
 
 struct WidgetMetricSnapshot: Codable, Hashable {

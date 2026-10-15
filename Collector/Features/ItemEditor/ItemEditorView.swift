@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ItemEditorView: View {
+    @EnvironmentObject private var library: CollectionLibraryController
     @Environment(\.dismiss) private var dismiss
     @StateObject private var controller: ItemEditorController
     @State private var isSearchingComicVine = false
@@ -133,9 +134,15 @@ struct ItemEditorView: View {
                         ItemLocationInput(text: $controller.physicalLocation)
                         ItemTagsInput(text: $controller.tagsText)
                         ItemNotesInput(text: $controller.notes)
-                        ItemSaveButton(isEnabled: controller.canSaveItem()) {
+                        if template == .books && !library.canTrackReading(controller.makeItem(template: template)) {
+                            Text(L10n.BookReading.limit)
+                                .font(.caption.weight(.bold))
+                                .foregroundStyle(ComicTheme.red)
+                        }
+                        ItemSaveButton(isEnabled: controller.canSaveItem() && (template != .books || library.canTrackReading(controller.makeItem(template: template)))) {
                             Task {
                                 let item = await controller.makeItemAfterPreparingCover(template: template)
+                                guard template != .books || library.canTrackReading(item) else { return }
                                 onSave(item)
                             }
                         }

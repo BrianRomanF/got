@@ -7,6 +7,7 @@ private let snapshotKey = "collector.widgetDashboardSnapshot"
 struct CollectorWidgetEntry: TimelineEntry {
     let date: Date
     let metric: WidgetMetricSnapshot
+    var readingBooks: [ReadingBookWidgetItem] = []
 }
 
 struct CollectorWidgetProvider: TimelineProvider {
@@ -17,13 +18,23 @@ struct CollectorWidgetProvider: TimelineProvider {
     }
 
     func getSnapshot(in context: Context, completion: @escaping (CollectorWidgetEntry) -> Void) {
-        completion(CollectorWidgetEntry(date: .now, metric: metric()))
+        completion(CollectorWidgetEntry(date: .now, metric: metric(), readingBooks: readingBooks()))
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<CollectorWidgetEntry>) -> Void) {
-        let entry = CollectorWidgetEntry(date: .now, metric: metric())
+        let entry = CollectorWidgetEntry(date: .now, metric: metric(), readingBooks: readingBooks())
         let nextRefresh = Calendar.current.date(byAdding: .minute, value: 30, to: .now) ?? .now.addingTimeInterval(1800)
         completion(Timeline(entries: [entry], policy: .after(nextRefresh)))
+    }
+
+    private func readingBooks() -> [ReadingBookWidgetItem] {
+        #if LOCAL_DEVICE_BUILD
+        return []
+        #else
+        guard let data = UserDefaults(suiteName: appGroupIdentifier)?.data(forKey: snapshotKey),
+              let snapshot = try? JSONDecoder().decode(WidgetDashboardSnapshot.self, from: data) else { return [] }
+        return snapshot.readingBooks ?? []
+        #endif
     }
 
     private func metric() -> WidgetMetricSnapshot {
@@ -139,7 +150,7 @@ struct BooksCollectorWidget: Widget {
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: CollectorWidgetProvider(kind: .books)) { entry in
-            CollectorWidgetView(entry: entry)
+            BookReadingWidgetView(entry: entry)
         }
         .configurationDisplayName("Got it Books")
         .description("Reading, wishlist, and next book.")

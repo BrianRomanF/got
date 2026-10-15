@@ -9,9 +9,11 @@ struct HomeView: View {
     @State private var paywallMessage = L10n.Pro.subtitle
     @State private var categoryToEdit: CollectionCategory?
     @State private var categoryToDelete: CollectionCategory?
+    @State private var navigationPath: [CollectorRoute] = []
+    @State private var readingRequestID = UUID()
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             ZStack {
                 HalftoneBackground()
 
@@ -170,6 +172,9 @@ struct HomeView: View {
                     GroupDetailView(categoryID: categoryID, groupID: groupID)
                 case .item(let categoryID, let groupID, let itemID):
                     ItemDetailView(categoryID: categoryID, groupID: groupID, itemID: itemID)
+                case .bookProgress(let categoryID, let groupID, let itemID):
+                    ItemDetailView(categoryID: categoryID, groupID: groupID, itemID: itemID, updateReading: true)
+                        .id(readingRequestID)
                 case .wishlist:
                     WishlistView()
                 case .wishlistCategory(let id):
@@ -178,6 +183,25 @@ struct HomeView: View {
                     WishlistSectionItemsView(sectionID: sectionID)
                 }
             }
+        }
+        .onOpenURL { url in
+            guard url.scheme == "gotit", url.host == "reading" else { return }
+            let rawID = url.pathComponents.dropFirst().first
+            let id = rawID.flatMap(UUID.init(uuidString:))
+            guard rawID == nil || id != nil else { return }
+            guard let book = libraryController.bookLocation(id: id) else {
+                if rawID == nil, let category = libraryController.categories.first(where: { $0.template == .books }) {
+                    navigationPath = [.category(category.id)]
+                }
+                return
+            }
+            guard book.item.ownershipStatus == .owned else { return }
+            isShowingSettings = false
+            isShowingPaywall = false
+            categoryToEdit = nil
+            controller.isAddingCategory = false
+            readingRequestID = UUID()
+            navigationPath = [.bookProgress(categoryID: book.categoryID, groupID: book.groupID, itemID: book.item.id)]
         }
     }
 

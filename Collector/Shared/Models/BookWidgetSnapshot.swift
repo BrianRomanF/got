@@ -34,10 +34,7 @@ struct BookWidgetSnapshot: Hashable {
         unreadCount = unreadItems.count
         wishlistCount = wishlistItems.count
         currentBook = readingItems.sorted {
-            if $0.bookProgressRatio == $1.bookProgressRatio {
-                return ($0.updatedAt ?? $0.createdAt) > ($1.updatedAt ?? $1.createdAt)
-            }
-            return $0.bookProgressRatio > $1.bookProgressRatio
+            ($0.updatedAt ?? $0.createdAt) > ($1.updatedAt ?? $1.createdAt)
         }
         .first
         nextBook = unreadItems.sortedByRecentActivity().first

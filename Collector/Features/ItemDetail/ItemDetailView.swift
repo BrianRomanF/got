@@ -5,6 +5,7 @@ struct ItemDetailView: View {
     @EnvironmentObject private var libraryController: CollectionLibraryController
     @State private var isEditing = false
     @State private var isEditingNotes = false
+    @State private var isUpdatingReading: Bool
     @State private var isConfirmingDelete = false
     @State private var notesDraft = ""
     @State private var currentItemID: UUID
@@ -12,11 +13,12 @@ struct ItemDetailView: View {
     let groupID: UUID?
     let itemID: UUID
 
-    init(categoryID: UUID, groupID: UUID?, itemID: UUID) {
+    init(categoryID: UUID, groupID: UUID?, itemID: UUID, updateReading: Bool = false) {
         self.categoryID = categoryID
         self.groupID = groupID
         self.itemID = itemID
         _currentItemID = State(initialValue: itemID)
+        _isUpdatingReading = State(initialValue: updateReading)
     }
 
     var body: some View {
@@ -29,6 +31,20 @@ struct ItemDetailView: View {
                         ItemDetailCoverView(item: item)
                         ItemDetailMetadataView(item: item)
                         if libraryController.category(with: categoryID)?.template == .books {
+                            if item.ownershipStatus == .owned {
+                                Button {
+                                    isUpdatingReading = true
+                                } label: {
+                                    Label(item.readingStatus == .reading || item.readingStatus == .read ? L10n.BookReading.update : L10n.BookReading.start,
+                                          systemImage: "book.pages.fill")
+                                        .font(.headline.weight(.black))
+                                        .foregroundStyle(ComicTheme.ink)
+                                        .frame(maxWidth: .infinity)
+                                        .padding(16)
+                                        .comicPanel(fill: ComicTheme.yellow)
+                                }
+                                .buttonStyle(.plain)
+                            }
                             ItemDetailBookProgressView(item: item)
                             ItemDetailBookDetailsView(item: item)
                         }
@@ -91,6 +107,11 @@ struct ItemDetailView: View {
                 guard var item else { return }
                 item.notes = notesDraft.trimmingCharacters(in: .whitespacesAndNewlines)
                 libraryController.updateItem(item, inCategory: categoryID, groupID: groupID)
+            }
+        }
+        .sheet(isPresented: $isUpdatingReading) {
+            if let item, item.ownershipStatus == .owned {
+                BookReadingProgressSheet(item: item, categoryID: categoryID, groupID: groupID)
             }
         }
         .alert(L10n.ItemDetail.deleteTitle, isPresented: $isConfirmingDelete) {

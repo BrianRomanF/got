@@ -13,3 +13,10 @@ write a purchased entitlement to device storage. Release uses real purchases.
 
 Release keeps the original iCloud, push and App Group entitlements and requires
 a development team and provisioning profiles that support those capabilities.
+
+The Books widget shows up to four currently reading books from the shared
+snapshot, with the most recently updated book featured. Tapping a book uses
+`gotit://reading/<item UUID>` to open its progress editor, including books on
+nested shelves. `gotit://reading` opens the most recently updated current book.
+Personal Team builds show an explanatory state and this shortcut instead of
+pretending that sample book data is live.

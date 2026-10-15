@@ -153,7 +153,7 @@ final class ItemEditorController: ObservableObject {
     }
 
     private var normalizedBookCurrentPage: Int? {
-        guard let currentPage = normalizedPositiveInt(bookCurrentPage) else { return nil }
+        guard let currentPage = Int(bookCurrentPage.trimmingCharacters(in: .whitespacesAndNewlines)), currentPage >= 0 else { return nil }
         guard let totalPages = normalizedPositiveInt(bookTotalPages) else { return currentPage }
         return min(currentPage, totalPages)
     }
