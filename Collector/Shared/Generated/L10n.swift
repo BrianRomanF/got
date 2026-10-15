@@ -458,6 +458,7 @@ enum L10n {
     }
 
     enum ComicFollowing {
+        static var followShort: String { tr("comicFollowing.followShort") }
         static var follow: String { tr("comicFollowing.follow") }
         static var following: String { tr("comicFollowing.following") }
         static var hint: String { tr("comicFollowing.hint") }

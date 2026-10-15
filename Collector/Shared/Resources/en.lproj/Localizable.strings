@@ -542,3 +542,4 @@
 "comicFollowing.follow" = "Follow this series";
 "comicFollowing.following" = "Following";
 "comicFollowing.hint" = "Show this series, its first cover and your owned and missing issues in the widget. Follow one series at a time.";
+"comicFollowing.followShort" = "Follow";

@@ -542,3 +542,4 @@
 "comicFollowing.follow" = "Seguir esta serie";
 "comicFollowing.following" = "Siguiendo";
 "comicFollowing.hint" = "Muestra esta serie, su primera portada y los números que tienes y te faltan en el widget. Solo puedes seguir una serie a la vez.";
+"comicFollowing.followShort" = "Seguir";

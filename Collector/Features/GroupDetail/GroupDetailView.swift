@@ -19,12 +19,13 @@ struct GroupDetailView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
                         ComicBreadcrumbView(parts: [category.title, group.title])
-                        GroupHeaderView(group: group)
-                        if category.template == .comics {
-                            ComicFollowSeriesButton(isFollowing: group.isFollowing == true) {
+                        GroupHeaderView(
+                            group: group,
+                            comicProgress: category.template == .comics ? ComicSeriesProgress(group: group) : nil,
+                            onToggleFollowing: {
                                 libraryController.toggleFollowingComicSeries(groupID: groupID, categoryID: categoryID)
                             }
-                        }
+                        )
                         if category.allowsNestedGroups {
                             GroupChildrenSection(
                                 categoryID: categoryID,
@@ -42,13 +43,12 @@ struct GroupDetailView: View {
                             }
                         }
                         if category.allowsGroupItems {
-                            GroupIssueCounterView(
-                                itemTitle: category.template.itemTitle,
-                                ownedCount: controller.ownedCount(from: group.items),
-                                totalCount: group.items.count
-                            )
-                            if category.template == .comics {
-                                ComicMissingIssuesView(summary: ComicMissingIssueSummary(items: group.allItems))
+                            if category.template != .comics {
+                                GroupIssueCounterView(
+                                    itemTitle: category.template.itemTitle,
+                                    ownedCount: controller.ownedCount(from: group.items),
+                                    totalCount: group.items.count
+                                )
                             }
                             GroupFolderSearchBar(text: $controller.searchText)
                             ItemOptionsPanel(

@@ -2,6 +2,8 @@ import SwiftUI
 
 struct GroupHeaderView: View {
     let group: CollectionGroup
+    var comicProgress: ComicSeriesProgress? = nil
+    var onToggleFollowing: (() -> Void)? = nil
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -15,6 +17,13 @@ struct GroupHeaderView: View {
                 Text(group.subtitle)
                     .font(ComicTheme.bodyFont)
                     .foregroundStyle(ComicTheme.ink.opacity(0.72))
+            }
+            if let comicProgress, let onToggleFollowing {
+                ComicSeriesHeaderSummaryView(
+                    progress: comicProgress,
+                    isFollowing: group.isFollowing == true,
+                    onToggleFollowing: onToggleFollowing
+                )
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
