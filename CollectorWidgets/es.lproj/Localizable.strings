@@ -11,3 +11,8 @@
 "following.open" = "Toca para abrir la serie →";
 "following.empty" = "Sigue una serie";
 "following.choose" = "Abre una serie en Got it y toca Seguir esta serie para verla aquí.";
+"album.favorite" = "ÁLBUM FAVORITO";
+"album.listen" = "PARA ESCUCHAR";
+"album.open" = "Toca para abrir el álbum →";
+"album.empty" = "Tu álbum destacado";
+"album.choose" = "Abre un álbum en Got it y toca Destacar en el widget para mostrarlo aquí.";

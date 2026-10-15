@@ -8,6 +8,7 @@ struct WidgetDashboardSnapshot: Codable, Hashable {
     let updatedAt: Date
     var readingBooks: [ReadingBookWidgetItem]? = nil
     var followedComic: FollowedComicWidgetItem? = nil
+    var featuredAlbum: VinylAlbumWidgetItem? = nil
 }
 
 struct ReadingBookWidgetItem: Codable, Hashable, Identifiable {
@@ -46,4 +47,14 @@ struct FollowedComicWidgetItem: Codable, Hashable {
     }
 
     var url: URL? { URL(string: "gotit://comics/\(categoryID.uuidString)/\(groupID.uuidString)") }
+}
+
+struct VinylAlbumWidgetItem: Codable, Hashable {
+    let id: UUID
+    let title: String
+    let subtitle: String
+    let coverData: Data?
+    let isFavorite: Bool
+
+    var url: URL? { URL(string: "gotit://vinyl/\(id.uuidString)") }
 }

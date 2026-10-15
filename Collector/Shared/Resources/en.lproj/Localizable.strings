@@ -543,3 +543,6 @@
 "comicFollowing.following" = "Following";
 "comicFollowing.hint" = "Show this series, its first cover and your owned and missing issues in the widget. Follow one series at a time.";
 "comicFollowing.followShort" = "Follow";
+"vinylFavorite.select" = "Feature in widget";
+"vinylFavorite.selected" = "Favorite album";
+"vinylFavorite.hint" = "Choose a favorite album to show its cover and name in the widget. Choosing another changes the featured album.";

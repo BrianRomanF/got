@@ -9,8 +9,16 @@ extension WidgetDashboardSnapshot {
             vinyl: vinylSnapshot(from: categories),
             updatedAt: .now,
             readingBooks: readingBooks(from: categories),
-            followedComic: followedComic(from: categories)
+            followedComic: followedComic(from: categories),
+            featuredAlbum: featuredAlbum(from: categories)
         )
+    }
+
+    private static func featuredAlbum(from categories: [CollectionCategory]) -> VinylAlbumWidgetItem? {
+        guard let selection = VinylFavoriteSelection.featuredAlbum(in: categories) else { return nil }
+        let item = selection.item
+        return VinylAlbumWidgetItem(id: item.id, title: item.title, subtitle: item.subtitle,
+            coverData: WidgetCoverThumbnail.make(from: item), isFavorite: item.isFavorite == true)
     }
 
     private static func readingBooks(from categories: [CollectionCategory]) -> [ReadingBookWidgetItem] {

@@ -543,3 +543,6 @@
 "comicFollowing.following" = "Siguiendo";
 "comicFollowing.hint" = "Muestra esta serie, su primera portada y los números que tienes y te faltan en el widget. Solo puedes seguir una serie a la vez.";
 "comicFollowing.followShort" = "Seguir";
+"vinylFavorite.select" = "Destacar en el widget";
+"vinylFavorite.selected" = "Álbum favorito";
+"vinylFavorite.hint" = "Elige un álbum favorito para mostrar su portada y nombre en el widget. Al elegir otro, cambia el álbum destacado.";

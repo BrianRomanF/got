@@ -52,6 +52,9 @@ struct ItemDetailView: View {
                             ItemDetailGameBacklogView(status: item.resolvedGameBacklogStatus)
                         }
                         if libraryController.category(with: categoryID)?.template == .vinyl {
+                            VinylFavoriteButton(isFavorite: item.isFavorite == true) {
+                                libraryController.toggleVinylFavorite(itemID: item.id)
+                            }
                             ItemDetailVinylDetailsView(item: item)
                         }
                         if let category = libraryController.category(with: categoryID) {

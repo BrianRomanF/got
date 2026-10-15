@@ -9,6 +9,7 @@ struct CollectorWidgetEntry: TimelineEntry {
     let metric: WidgetMetricSnapshot
     var readingBooks: [ReadingBookWidgetItem] = []
     var followedComic: FollowedComicWidgetItem? = nil
+    var featuredAlbum: VinylAlbumWidgetItem? = nil
 }
 
 struct CollectorWidgetProvider: TimelineProvider {
@@ -19,11 +20,11 @@ struct CollectorWidgetProvider: TimelineProvider {
     }
 
     func getSnapshot(in context: Context, completion: @escaping (CollectorWidgetEntry) -> Void) {
-        completion(CollectorWidgetEntry(date: .now, metric: metric(), readingBooks: readingBooks(), followedComic: followedComic()))
+        completion(CollectorWidgetEntry(date: .now, metric: metric(), readingBooks: readingBooks(), followedComic: followedComic(), featuredAlbum: featuredAlbum()))
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<CollectorWidgetEntry>) -> Void) {
-        let entry = CollectorWidgetEntry(date: .now, metric: metric(), readingBooks: readingBooks(), followedComic: followedComic())
+        let entry = CollectorWidgetEntry(date: .now, metric: metric(), readingBooks: readingBooks(), followedComic: followedComic(), featuredAlbum: featuredAlbum())
         let nextRefresh = Calendar.current.date(byAdding: .minute, value: 30, to: .now) ?? .now.addingTimeInterval(1800)
         completion(Timeline(entries: [entry], policy: .after(nextRefresh)))
     }
@@ -38,6 +39,12 @@ struct CollectorWidgetProvider: TimelineProvider {
         guard let data = UserDefaults(suiteName: appGroupIdentifier)?.data(forKey: snapshotKey),
               let snapshot = try? JSONDecoder().decode(WidgetDashboardSnapshot.self, from: data) else { return nil }
         return snapshot.followedComic
+    }
+
+    private func featuredAlbum() -> VinylAlbumWidgetItem? {
+        guard let data = UserDefaults(suiteName: appGroupIdentifier)?.data(forKey: snapshotKey),
+              let snapshot = try? JSONDecoder().decode(WidgetDashboardSnapshot.self, from: data) else { return nil }
+        return snapshot.featuredAlbum
     }
 
     private func metric() -> WidgetMetricSnapshot {
@@ -188,7 +195,7 @@ struct VinylCollectorWidget: Widget {
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: CollectorWidgetProvider(kind: .vinyl)) { entry in
-            CollectorWidgetView(entry: entry)
+            VinylAlbumWidgetView(entry: entry)
         }
         .configurationDisplayName("Got it Vinyl")
         .description("Collection, wishlist, and something to play.")

@@ -31,3 +31,10 @@ series. The widget shows that series' owned/missing counts and the first issue's
 cover, ordered by issue number. Tapping opens the series via
 `gotit://comics/<category UUID>/<group UUID>`. Covers are downsampled to at most
 160 pixels and stored in the shared snapshot for both books and comics.
+
+Open an album and select Feature in widget to make it the single favorite album
+across vinyl collections. The Vinyl widget shows its square cover, title and
+subtitle, alongside the existing collection counts. Without an explicit favorite,
+the previous tagged/recently added owned-album selection remains the fallback.
+The favorite flag is saved with the item and preserved by the editor. Tapping
+uses `gotit://vinyl/<item UUID>` and resolves albums on nested shelves as well.

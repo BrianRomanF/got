@@ -4,6 +4,7 @@ struct WidgetCoverThumbnailView: View {
     let data: Data?
     let width: CGFloat
     let height: CGFloat
+    var fallbackSymbolName = "book.closed.fill"
 
     var body: some View {
         ZStack {
@@ -13,7 +14,7 @@ struct WidgetCoverThumbnailView: View {
                     .resizable()
                     .scaledToFit()
             } else {
-                Image(systemName: "book.closed.fill")
+                Image(systemName: fallbackSymbolName)
                     .font(.system(size: 26, weight: .black))
                     .foregroundStyle(WidgetComicStyle.red)
             }

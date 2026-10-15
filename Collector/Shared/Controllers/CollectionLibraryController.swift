@@ -73,6 +73,11 @@ final class CollectionLibraryController: ObservableObject {
         categories = ComicFollowingSelection.selecting(groupID: groupID, categoryID: categoryID, in: categories)
     }
 
+    func toggleVinylFavorite(itemID: UUID) {
+        guard let album = VinylFavoriteSelection.locations(in: categories).first(where: { $0.item.id == itemID }) else { return }
+        categories = VinylFavoriteSelection.selecting(itemID: album.item.isFavorite == true ? nil : itemID, in: categories)
+    }
+
     private func totalItemCount(in categories: [CollectionCategory]) -> Int {
         categories.reduce(0) { $0 + $1.allItems.count }
     }

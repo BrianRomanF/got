@@ -11,3 +11,8 @@
 "following.open" = "Tap to open the series →";
 "following.empty" = "Follow a series";
 "following.choose" = "Open a series in Got it and tap Follow this series to see it here.";
+"album.favorite" = "FAVORITE ALBUM";
+"album.listen" = "LISTEN TODAY";
+"album.open" = "Tap to open the album →";
+"album.empty" = "Your featured album";
+"album.choose" = "Open an album in Got it and tap Feature in widget to show it here.";

@@ -190,6 +190,10 @@ struct HomeView: View {
                 openComicWidgetURL(url)
                 return
             }
+            if url.host == "vinyl" {
+                openVinylWidgetURL(url)
+                return
+            }
             guard url.host == "reading" else { return }
             let rawID = url.pathComponents.dropFirst().first
             let id = rawID.flatMap(UUID.init(uuidString:))
@@ -221,6 +225,24 @@ struct HomeView: View {
                   libraryController.category(with: categoryID)?.template == .comics,
                   libraryController.group(with: groupID, in: categoryID) != nil {
             route = .group(categoryID: categoryID, groupID: groupID)
+        } else {
+            return
+        }
+        isShowingSettings = false
+        isShowingPaywall = false
+        categoryToEdit = nil
+        controller.isAddingCategory = false
+        navigationPath = [route]
+    }
+
+    private func openVinylWidgetURL(_ url: URL) {
+        let parts = Array(url.pathComponents.dropFirst())
+        let route: CollectorRoute
+        if parts.isEmpty, let category = libraryController.categories.first(where: { $0.template == .vinyl }) {
+            route = .category(category.id)
+        } else if parts.count == 1, let itemID = UUID(uuidString: parts[0]),
+                  let album = VinylFavoriteSelection.locations(in: libraryController.categories).first(where: { $0.item.id == itemID }) {
+            route = .item(categoryID: album.categoryID, groupID: album.groupID, itemID: album.item.id)
         } else {
             return
         }

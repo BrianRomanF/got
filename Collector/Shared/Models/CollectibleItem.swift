@@ -32,6 +32,7 @@ struct CollectibleItem: Identifiable, Hashable, Codable {
     var readingStatus: ReadingStatus?
     var createdAt: Date
     var updatedAt: Date?
+    var isFavorite: Bool?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -65,6 +66,7 @@ struct CollectibleItem: Identifiable, Hashable, Codable {
         case readingStatus
         case createdAt
         case updatedAt
+        case isFavorite
     }
 
     init(
@@ -98,7 +100,8 @@ struct CollectibleItem: Identifiable, Hashable, Codable {
         ownershipStatus: ItemOwnershipStatus = .owned,
         readingStatus: ReadingStatus? = nil,
         createdAt: Date = .now,
-        updatedAt: Date? = nil
+        updatedAt: Date? = nil,
+        isFavorite: Bool? = nil
     ) {
         self.id = id
         self.title = title
@@ -131,6 +134,7 @@ struct CollectibleItem: Identifiable, Hashable, Codable {
         self.readingStatus = readingStatus
         self.createdAt = createdAt
         self.updatedAt = updatedAt
+        self.isFavorite = isFavorite
     }
 
     init(from decoder: Decoder) throws {
@@ -166,5 +170,6 @@ struct CollectibleItem: Identifiable, Hashable, Codable {
         readingStatus = try container.decodeIfPresent(ReadingStatus.self, forKey: .readingStatus)
         createdAt = try container.decode(Date.self, forKey: .createdAt)
         updatedAt = try container.decodeIfPresent(Date.self, forKey: .updatedAt)
+        isFavorite = try container.decodeIfPresent(Bool.self, forKey: .isFavorite)
     }
 }

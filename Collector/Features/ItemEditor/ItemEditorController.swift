@@ -107,7 +107,8 @@ final class ItemEditorController: ObservableObject {
             ownershipStatus: ownershipStatus,
             readingStatus: template.supportsReadingStatus ? readingStatus : nil,
             createdAt: existingItem?.createdAt ?? .now,
-            updatedAt: existingItem?.updatedAt
+            updatedAt: existingItem?.updatedAt,
+            isFavorite: existingItem?.isFavorite
         )
     }
 
