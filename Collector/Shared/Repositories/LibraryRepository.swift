@@ -15,7 +15,12 @@ final class LocalLibraryRepository: LibraryRepository {
     }
 
     func loadCategories() -> [CollectionCategory] {
-        persistence.loadCategories() ?? []
+        if let categories = persistence.loadCategories() { return categories }
+        guard !persistence.hasSavedLibrary else { return [] }
+
+        let categories = DefaultLibraryCategories.make()
+        persistence.saveCategories(categories)
+        return categories
     }
 
     func loadCategories(from fileURL: URL) throws -> [CollectionCategory] {

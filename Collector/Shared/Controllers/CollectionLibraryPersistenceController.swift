@@ -20,6 +20,11 @@ final class CollectionLibraryPersistenceController {
         self.decoder = decoder
     }
 
+    var hasSavedLibrary: Bool {
+        guard let url = try? libraryURL() else { return true }
+        return fileManager.fileExists(atPath: url.path)
+    }
+
     func loadCategories() -> [CollectionCategory]? {
         do {
             let url = try libraryURL()
