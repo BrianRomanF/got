@@ -11,10 +11,6 @@ extension WidgetDashboardSnapshot {
         )
     }
 
-    var metrics: [WidgetMetricSnapshot] {
-        [books, comics, games, vinyl]
-    }
-
     private static func booksSnapshot(from categories: [CollectionCategory]) -> WidgetMetricSnapshot {
         let items = categories
             .filter { $0.template == .books }

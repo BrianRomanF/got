@@ -186,8 +186,6 @@
 "dashboard.reading" = "Reading";
 "dashboard.categoryProgress" = "%d/%d in collection";
 "dashboard.categoryTags" = "%d tags";
-"dashboard.utilityTitle" = "Utility dashboard";
-"dashboard.utilitySubtitle" = "Books, comics, games, and vinyl at a glance.";
 
 "wishlist.title" = "Wishlist";
 "wishlist.subtitle" = "Everything marked as missing, together in one place.";

@@ -200,8 +200,6 @@ enum L10n {
         static var reading: String { tr("dashboard.reading") }
         static var categoryProgress: String { tr("dashboard.categoryProgress") }
         static var categoryTags: String { tr("dashboard.categoryTags") }
-        static var utilityTitle: String { tr("dashboard.utilityTitle") }
-        static var utilitySubtitle: String { tr("dashboard.utilitySubtitle") }
     }
 
     enum Wishlist {

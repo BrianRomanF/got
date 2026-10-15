@@ -9,7 +9,6 @@ struct HomeView: View {
     @State private var paywallMessage = L10n.Pro.subtitle
     @State private var categoryToEdit: CollectionCategory?
     @State private var categoryToDelete: CollectionCategory?
-    @State private var isUtilityDashboardExpanded = false
 
     var body: some View {
         NavigationStack {
@@ -39,10 +38,6 @@ struct HomeView: View {
                                 onDelete: { category in
                                     categoryToDelete = category
                                 }
-                            )
-                            HomeUtilityDashboardView(
-                                snapshot: WidgetDashboardSnapshot.make(from: libraryController.categories),
-                                isExpanded: $isUtilityDashboardExpanded
                             )
                             HomeRecentActivityButton(count: libraryController.recentActivity(limit: 60).count)
                             HomeWishlistButton(missingCount: libraryController.libraryStats().missingItems)
