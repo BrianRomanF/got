@@ -7,16 +7,9 @@ struct BookReadingLocation {
 }
 
 extension CollectionLibraryController {
-    static let simultaneousReadingLimit = 4
-
     var readingBooks: [BookReadingLocation] {
         bookLocations.filter { $0.item.ownershipStatus == .owned && $0.item.readingStatus == .reading }
             .sorted { ($0.item.updatedAt ?? $0.item.createdAt) > ($1.item.updatedAt ?? $1.item.createdAt) }
-    }
-
-    func canTrackReading(_ item: CollectibleItem) -> Bool {
-        item.readingStatus != .reading || item.ownershipStatus != .owned
-            || readingBooks.filter { $0.item.id != item.id }.count < Self.simultaneousReadingLimit
     }
 
     func bookLocation(id: UUID?) -> BookReadingLocation? {

@@ -7,20 +7,19 @@ struct BookReadingWidgetView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Label(String(localized: "reading.title"), systemImage: "books.vertical.fill")
+            Label(String(localized: "reading.title"), systemImage: "bookmark.fill")
                 .font(.caption.weight(.black))
                 .foregroundStyle(WidgetComicStyle.red)
 
             if let book = entry.readingBooks.first {
                 HStack(alignment: .center, spacing: 10) {
-                    if family == .systemSmall { cover(book, width: 38, height: 55) }
+                    bookIcon
                     VStack(alignment: .leading, spacing: 5) {
                         Text(book.title).font(.subheadline.weight(.black)).lineLimit(2)
                         Text(pageDescription(book))
                             .font(.caption2.weight(.bold)).lineLimit(1).minimumScaleFactor(0.75)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    if family == .systemMedium { shelf }
                 }
                 HStack(spacing: 8) {
                     ProgressView(value: book.progress).tint(WidgetComicStyle.green)
@@ -44,38 +43,14 @@ struct BookReadingWidgetView: View {
         .containerBackground(for: .widget) { WidgetComicBackground() }
     }
 
-    private var shelf: some View {
-        VStack(spacing: 0) {
-            HStack(alignment: .bottom, spacing: 4) {
-                ForEach(Array(entry.readingBooks.prefix(4))) { book in
-                    if let url = book.url {
-                        Link(destination: url) { cover(book, width: 29, height: 48) }
-                            .accessibilityLabel(book.title)
-                    }
-                }
-            }
-            .padding(.horizontal, 4)
-            .padding(.bottom, 3)
-            Rectangle().fill(WidgetComicStyle.ink).frame(height: 4)
-        }
-        .fixedSize()
-    }
-
-    private func cover(_ book: ReadingBookWidgetItem, width: CGFloat, height: CGFloat) -> some View {
-        ZStack(alignment: .leading) {
-            RoundedRectangle(cornerRadius: 3).fill(WidgetComicStyle.panel)
-            if let data = book.coverData, let image = UIImage(data: data) {
-                Image(uiImage: image).resizable().scaledToFill()
-            } else {
-                Text(book.title).font(.system(size: 9, weight: .black, design: .serif))
-                    .lineLimit(4).padding(.leading, 6).padding(.trailing, 3)
-            }
-            Rectangle().fill(WidgetComicStyle.red).frame(width: 4)
-        }
-        .frame(width: width, height: height)
-        .clipShape(RoundedRectangle(cornerRadius: 3))
-        .overlay(RoundedRectangle(cornerRadius: 3).stroke(WidgetComicStyle.ink, lineWidth: 1.5))
-        .accessibilityLabel(book.title)
+    private var bookIcon: some View {
+        Image(systemName: "book.closed.fill")
+            .font(.system(size: family == .systemSmall ? 28 : 34, weight: .black))
+            .foregroundStyle(WidgetComicStyle.red)
+            .frame(width: family == .systemSmall ? 40 : 52, height: 56)
+            .background(WidgetComicStyle.panel, in: RoundedRectangle(cornerRadius: 5))
+            .overlay(RoundedRectangle(cornerRadius: 5).stroke(WidgetComicStyle.ink, lineWidth: 2))
+            .accessibilityHidden(true)
     }
 
     private func pageDescription(_ book: ReadingBookWidgetItem) -> String {

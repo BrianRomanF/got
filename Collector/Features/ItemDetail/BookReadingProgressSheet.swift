@@ -21,14 +21,24 @@ struct BookReadingProgressSheet: View {
                 HalftoneBackground()
                 ScrollView {
                     VStack(alignment: .leading, spacing: 18) {
-                        Text(title).font(.title2.weight(.black))
-                        Text(L10n.BookReading.hint).font(.subheadline)
-                        Picker(L10n.ReadingStatus.title, selection: $controller.status) {
-                            ForEach(ReadingStatus.allCases) { status in
-                                Text(status.title).tag(status)
-                            }
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(title).font(.title2.weight(.black))
+                            Text(L10n.BookReading.hint).font(.subheadline.weight(.semibold))
                         }
-                        .pickerStyle(.segmented)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(16)
+                        .comicPanel(fill: ComicTheme.panel)
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text(L10n.ReadingStatus.title.uppercased())
+                                .font(.caption.weight(.black))
+                            ComicSegmentedControl(
+                                options: ReadingStatus.allCases,
+                                selection: $controller.status,
+                                title: { $0.title }
+                            )
+                        }
+                        .padding(16)
+                        .comicPanel(fill: .white)
                         VStack(alignment: .leading, spacing: 8) {
                             Text(L10n.BookProgress.currentPagePlaceholder).font(.caption.weight(.bold))
                             TextField(L10n.BookProgress.currentPagePlaceholder, text: $controller.currentPage)
@@ -39,8 +49,6 @@ struct BookReadingProgressSheet: View {
                         }
                         if controller.updatedItem == nil {
                             Text(L10n.BookReading.invalidPages).font(.caption.weight(.bold))
-                        } else if let item = controller.updatedItem, !library.canTrackReading(item) {
-                            Text(L10n.BookReading.limit).font(.caption.weight(.bold))
                         }
                     }
                     .foregroundStyle(ComicTheme.ink)
@@ -49,17 +57,21 @@ struct BookReadingProgressSheet: View {
             }
             .navigationTitle(L10n.BookReading.update)
             .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(ComicTheme.paper, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarColorScheme(.light, for: .navigationBar)
+            .tint(ComicTheme.ink)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(L10n.Common.cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(L10n.Common.save) {
-                        guard let item = controller.updatedItem, library.canTrackReading(item) else { return }
+                        guard let item = controller.updatedItem else { return }
                         library.updateItem(item, inCategory: categoryID, groupID: groupID)
                         dismiss()
                     }
-                    .disabled(controller.updatedItem.map { !library.canTrackReading($0) } ?? true)
+                    .disabled(controller.updatedItem == nil)
                 }
             }
         }

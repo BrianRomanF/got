@@ -537,6 +537,5 @@
 "templateDetails.locationPlaceholder" = "Display case, box, shelf...";
 "bookReading.start" = "Read this book";
 "bookReading.update" = "Update reading progress";
-"bookReading.hint" = "Keep up to 4 books on your reading shelf. Save your current page here; reaching the final page marks the book as read.";
-"bookReading.limit" = "You are already reading 4 books. Finish one or change its reading status to add another.";
+"bookReading.hint" = "Keep one book marked as reading. Choosing another keeps your previous book's progress. Save your page here; reaching the final page marks the book as read.";
 "bookReading.invalidPages" = "Enter a page of 0 or more, no higher than the total. The total is optional and must be greater than 0.";

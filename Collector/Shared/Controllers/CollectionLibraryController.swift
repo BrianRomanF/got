@@ -3,6 +3,13 @@ import Foundation
 final class CollectionLibraryController: ObservableObject {
     @Published private(set) var categories: [CollectionCategory] {
         didSet {
+            guard !isNormalizingReading else { return }
+            let normalized = BookReadingSelection.normalize(categories, previous: oldValue)
+            if normalized != categories {
+                isNormalizingReading = true
+                categories = normalized
+                isNormalizingReading = false
+            }
             repository.saveCategories(categories)
             WidgetDashboardPublisher.publish(categories: categories)
 
@@ -15,6 +22,7 @@ final class CollectionLibraryController: ObservableObject {
     private let backupController: LibraryLocalBackupController
     let syncStateController: LibrarySyncStateController
     private var isApplyingSync = false
+    private var isNormalizingReading = false
 
     init(
         categories: [CollectionCategory]? = nil,
@@ -25,8 +33,9 @@ final class CollectionLibraryController: ObservableObject {
         self.repository = repository
         self.backupController = backupController
         self.syncStateController = syncStateController
-        self.categories = categories
-            ?? repository.loadCategories()
+        let loadedCategories = categories ?? repository.loadCategories()
+        self.categories = BookReadingSelection.normalize(loadedCategories)
+        if self.categories != loadedCategories { repository.saveCategories(self.categories) }
         WidgetDashboardPublisher.publish(categories: self.categories)
     }
 

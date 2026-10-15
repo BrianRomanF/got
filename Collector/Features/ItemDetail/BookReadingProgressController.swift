@@ -26,7 +26,7 @@ final class BookReadingProgressController: ObservableObject {
         var item = original
         item.bookCurrentPage = status == .read ? (total ?? page) : page
         item.bookTotalPages = total
-        item.readingStatus = total != nil && page == total ? .read : status
+        item.readingStatus = status == .reading && total != nil && page == total ? .read : status
         if item.readingStatus != .unread, item.bookStartedAt == nil { item.bookStartedAt = .now }
         item.bookFinishedAt = item.readingStatus == .read ? (original.bookFinishedAt ?? .now) : nil
         return item

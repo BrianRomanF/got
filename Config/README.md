@@ -15,8 +15,11 @@ write a purchased entitlement to device storage. Release uses real purchases.
 Release keeps the original iCloud, push and App Group entitlements and requires
 a development team and provisioning profiles that support those capabilities.
 
-The Books widget shows up to four currently reading books from the shared
-snapshot, with the most recently updated book featured. Tapping a book uses
+The Books widget shows the single currently reading book from the shared
+snapshot, with its book icon and progress. Selecting another current book
+removes the previous book's reading status while preserving its pages and dates.
+Existing libraries with multiple current books keep the most recently updated
+one selected. Comics retain their independent reading statuses. Tapping a book uses
 `gotit://reading/<item UUID>` to open its progress editor, including books on
 nested shelves. `gotit://reading` opens the most recently updated current book.
 Open the app after installing to publish the library to the shared App Group.

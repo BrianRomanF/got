@@ -461,7 +461,6 @@ enum L10n {
         static var start: String { tr("bookReading.start") }
         static var update: String { tr("bookReading.update") }
         static var hint: String { tr("bookReading.hint") }
-        static var limit: String { tr("bookReading.limit") }
         static var invalidPages: String { tr("bookReading.invalidPages") }
     }
 

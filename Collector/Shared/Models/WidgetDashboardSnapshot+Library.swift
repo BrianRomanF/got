@@ -1,5 +1,4 @@
 import Foundation
-import UIKit
 
 extension WidgetDashboardSnapshot {
     static func make(from categories: [CollectionCategory]) -> WidgetDashboardSnapshot {
@@ -17,22 +16,11 @@ extension WidgetDashboardSnapshot {
         categories.filter { $0.template == .books }.flatMap(\.allItems)
             .filter { $0.ownershipStatus == .owned && $0.readingStatus == .reading }
             .sorted { ($0.updatedAt ?? $0.createdAt) > ($1.updatedAt ?? $1.createdAt) }
-            .prefix(4)
+            .prefix(1)
             .map { item in
-                let data = item.coverImageData ?? item.coverLocalImagePath.flatMap { try? Data(contentsOf: URL(fileURLWithPath: $0)) }
-                let image = data.flatMap(UIImage.init(data:))
-                let thumbnail = image.flatMap { image -> Data? in
-                    guard image.size.width > 0, image.size.height > 0 else { return nil }
-                    let size = CGSize(width: 100, height: 140)
-                    let format = UIGraphicsImageRendererFormat()
-                    format.scale = 1
-                    return UIGraphicsImageRenderer(size: size, format: format).image { _ in
-                        image.draw(in: CGRect(origin: .zero, size: size))
-                    }.jpegData(compressionQuality: 0.7)
-                }
                 return ReadingBookWidgetItem(id: item.id, title: item.title,
                     currentPage: item.bookCurrentPage ?? 0, totalPages: item.bookTotalPages,
-                    progress: item.bookProgressRatio, coverData: thumbnail)
+                    progress: item.bookProgressRatio, coverData: nil)
             }
     }
 
