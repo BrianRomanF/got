@@ -57,72 +57,80 @@ struct CollectorWidgetView: View {
     let entry: CollectorWidgetEntry
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 6) {
             HStack(alignment: .firstTextBaseline) {
                 Text(entry.metric.title.uppercased())
                     .font(.caption.weight(.black))
-                    .foregroundStyle(.red)
+                    .foregroundStyle(WidgetComicStyle.red)
                     .lineLimit(1)
 
                 Spacer(minLength: 0)
 
                 Text("\(Int(entry.metric.progress * 100))%")
-                    .font(.title3.weight(.black))
-                    .foregroundStyle(.primary)
+                    .font(.headline.weight(.black))
+                    .foregroundStyle(WidgetComicStyle.ink)
                     .minimumScaleFactor(0.7)
             }
 
             progressBar
 
-            HStack(spacing: 8) {
+            HStack(spacing: 10) {
                 stat(value: entry.metric.primaryValue, label: entry.metric.primaryLabel)
                 stat(value: entry.metric.secondaryValue, label: entry.metric.secondaryLabel)
             }
 
             VStack(alignment: .leading, spacing: 3) {
                 Text(entry.metric.highlightTitle)
-                    .font(.headline.weight(.black))
-                    .foregroundStyle(.primary)
+                    .font(family == .systemSmall ? .subheadline.weight(.black) : .headline.weight(.black))
+                    .foregroundStyle(WidgetComicStyle.ink)
                     .lineLimit(family == .systemSmall ? 2 : 1)
                     .minimumScaleFactor(0.75)
 
                 Text(entry.metric.highlightSubtitle)
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(WidgetComicStyle.ink.opacity(0.8))
                     .lineLimit(1)
             }
 
             Spacer(minLength: 0)
         }
-        .containerBackground(Color(red: 1.0, green: 0.94, blue: 0.72), for: .widget)
+        .environment(\.colorScheme, .light)
+        .containerBackground(for: .widget) {
+            WidgetComicBackground()
+        }
     }
 
     private var progressBar: some View {
         GeometryReader { proxy in
             ZStack(alignment: .leading) {
                 Capsule()
-                    .fill(Color.white.opacity(0.8))
+                    .fill(WidgetComicStyle.panel)
                 Capsule()
-                    .fill(Color.green)
-                    .frame(width: entry.metric.progress > 0 ? max(8, proxy.size.width * entry.metric.progress) : 0)
+                    .fill(WidgetComicStyle.green)
+                    .frame(width: entry.metric.progress > 0 ? min(proxy.size.width, max(8, proxy.size.width * entry.metric.progress)) : 0)
             }
         }
         .frame(height: 8)
+        .overlay(Capsule().stroke(WidgetComicStyle.ink, lineWidth: 1.5))
     }
 
     private func stat(value: Int, label: String) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text("\(value)")
-                .font(.title3.weight(.black))
-                .foregroundStyle(.primary)
+                .font(.headline.weight(.black))
+                .foregroundStyle(WidgetComicStyle.ink)
 
             Text(label.uppercased())
                 .font(.caption2.weight(.black))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(WidgetComicStyle.ink.opacity(0.8))
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .background(WidgetComicStyle.panel, in: RoundedRectangle(cornerRadius: 5))
+        .overlay(RoundedRectangle(cornerRadius: 5).stroke(WidgetComicStyle.ink, lineWidth: 1.5))
     }
 }
 
