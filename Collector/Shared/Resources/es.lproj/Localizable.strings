@@ -43,8 +43,8 @@
 "settings.languageSystem" = "Sistema";
 "settings.languageEnglish" = "Ingles";
 "settings.languageSpanish" = "Espanol";
-"settings.generalTitle" = "General";
-"settings.generalHint" = "Define como se muestran tus piezas por defecto para mantener los estantes limpios.";
+"settings.generalTitle" = "Orden y visualización";
+"settings.generalHint" = "Elige el orden, los filtros y la vista predeterminados para tus piezas.";
 "settings.defaultOwnershipFilter" = "Posesion";
 "settings.defaultQuickFilter" = "Filtro rapido";
 "settings.defaultSort" = "Orden";

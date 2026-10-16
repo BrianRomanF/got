@@ -64,13 +64,11 @@ struct SettingsView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 18) {
                         SettingsHeaderView()
-                        Picker(L10n.Settings.title, selection: $selectedTab) {
-                            ForEach(SettingsTab.allCases) { tab in
-                                Text(tab.title).tag(tab)
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                        .labelsHidden()
+                        ComicSegmentedControl(
+                            options: SettingsTab.allCases,
+                            selection: $selectedTab,
+                            title: { $0.title }
+                        )
 
                         tabContent
                     }

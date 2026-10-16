@@ -43,8 +43,8 @@
 "settings.languageSystem" = "System";
 "settings.languageEnglish" = "English";
 "settings.languageSpanish" = "Spanish";
-"settings.generalTitle" = "General";
-"settings.generalHint" = "Choose how pieces appear by default so shelves stay clean.";
+"settings.generalTitle" = "Sorting & display";
+"settings.generalHint" = "Choose the default sorting, filters, and layout for your pieces.";
 "settings.defaultOwnershipFilter" = "Ownership";
 "settings.defaultQuickFilter" = "Quick filter";
 "settings.defaultSort" = "Sort";
