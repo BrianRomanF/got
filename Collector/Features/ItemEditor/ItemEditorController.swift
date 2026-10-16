@@ -34,6 +34,7 @@ final class ItemEditorController: ObservableObject {
     private var comicVineID: Int?
     private var comicVineSiteURL: URL?
     private var theGamesDBID: Int?
+    private var discogsReleaseID: Int?
 
     init(item: CollectibleItem? = nil, coverStorage: CoverImageStorageController = .shared) {
         self.existingItem = item
@@ -70,6 +71,7 @@ final class ItemEditorController: ObservableObject {
         comicVineID = item.comicVineID
         comicVineSiteURL = item.comicVineSiteURL
         theGamesDBID = item.theGamesDBID
+        discogsReleaseID = item.discogsReleaseID
     }
 
     func canSaveItem() -> Bool {
@@ -108,7 +110,8 @@ final class ItemEditorController: ObservableObject {
             readingStatus: template.supportsReadingStatus ? readingStatus : nil,
             createdAt: existingItem?.createdAt ?? .now,
             updatedAt: existingItem?.updatedAt,
-            isFavorite: existingItem?.isFavorite
+            isFavorite: existingItem?.isFavorite,
+            discogsReleaseID: template == .vinyl ? discogsReleaseID : nil
         )
     }
 
@@ -246,6 +249,7 @@ final class ItemEditorController: ObservableObject {
     }
 
     func applyDiscogsResult(_ result: DiscogsSearchResult) {
+        discogsReleaseID = result.id
         title = result.title
         subtitle = result.displaySubtitle
         notes = result.format.title
@@ -264,11 +268,13 @@ final class ItemEditorController: ObservableObject {
         theGamesDBID = nil
 
         Task {
-            coverLocalImagePath = await coverStorage.saveCover(
+            let path = await coverStorage.saveCover(
                 from: result.coverURL,
                 preferredName: "\(result.title)-\(result.id)",
                 template: .vinyl
             )
+            guard discogsReleaseID == result.id else { return }
+            coverLocalImagePath = path
         }
     }
 

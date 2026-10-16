@@ -72,6 +72,17 @@ final class DiscogsAPIClient {
         }
     }
 
+    func releaseDetails(id: Int) async throws -> DiscogsReleaseDetails {
+        guard id > 0, let url = URL(string: "https://api.discogs.com/releases/\(id)") else {
+            throw DiscogsAPIError.invalidURL
+        }
+        var request = URLRequest(url: url, timeoutInterval: 15)
+        request.setValue("GotItCollector/1.0", forHTTPHeaderField: "User-Agent")
+        let (data, response) = try await session.data(for: request)
+        guard (response as? HTTPURLResponse)?.statusCode == 200 else { throw DiscogsAPIError.requestFailed }
+        return try JSONDecoder().decode(DiscogsReleaseDetails.self, from: data)
+    }
+
     private func credentials() throws -> (key: String, secret: String) {
         let savedConsumerKey = AppSettings.discogsConsumerKey.trimmingCharacters(in: .whitespacesAndNewlines)
         let savedConsumerSecret = AppSettings.discogsConsumerSecret.trimmingCharacters(in: .whitespacesAndNewlines)

@@ -16,3 +16,5 @@
 "album.open" = "Toca para abrir el álbum →";
 "album.empty" = "Tu álbum destacado";
 "album.choose" = "Abre un álbum en Got it y toca Destacar en el widget para mostrarlo aquí.";
+"album.randomTrack" = "TEMA ALEATORIO";
+"album.noTracks" = "No hay canciones disponibles para esta edición.";

@@ -34,7 +34,15 @@ cover, ordered by issue number. Tapping opens the series via
 
 Open an album and select Feature in widget to make it the single favorite album
 across vinyl collections. The Vinyl widget shows its square cover, title and
-subtitle, alongside the existing collection counts. Without an explicit favorite,
+subtitle, and a random track from that Discogs release. Without an explicit favorite,
 the previous tagged/recently added owned-album selection remains the fallback.
 The favorite flag is saved with the item and preserved by the editor. Tapping
 uses `gotit://vinyl/<item UUID>` and resolves albums on nested shelves as well.
+
+Discogs release IDs are retained by new imports. Older albums are resolved only
+when the album title and artist or catalog number match a search result. Release
+tracklists exclude headings and expand subtracks. The app caches the artwork and
+tracklist before sharing them with the widget; API credentials stay in the app.
+Remote artwork and rebased local cover paths are supported. Widget timelines
+schedule shuffled tracks at 30-minute intervals using cached data, without
+depending on network access in the extension.

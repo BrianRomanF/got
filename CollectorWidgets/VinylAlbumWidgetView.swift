@@ -26,12 +26,17 @@ struct VinylAlbumWidgetView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                HStack(spacing: 6) {
-                    count(entry.metric.primaryValue, title: entry.metric.primaryLabel)
-                    count(entry.metric.secondaryValue, title: entry.metric.secondaryLabel)
+                if let track = entry.suggestedTrack {
+                    VStack(alignment: .leading, spacing: 3) {
+                        Label(String(localized: "album.randomTrack"), systemImage: "shuffle")
+                            .font(.caption2.weight(.black))
+                            .foregroundStyle(WidgetComicStyle.red)
+                        Text(track.title).font(.caption.weight(.bold)).lineLimit(2)
+                    }
+                } else {
+                    Text(String(localized: "album.noTracks"))
+                        .font(.caption2.weight(.semibold)).lineLimit(2)
                 }
-                ProgressView(value: entry.metric.progress).tint(WidgetComicStyle.green)
-                Text(String(localized: "album.open")).font(.caption2.weight(.bold))
             } else {
                 Text(String(localized: "album.empty")).font(.subheadline.weight(.black))
                 Text(String(localized: "album.choose")).font(.caption2.weight(.semibold)).lineLimit(3)
@@ -48,15 +53,4 @@ struct VinylAlbumWidgetView: View {
         entry.featuredAlbum?.isFavorite == true ? String(localized: "album.favorite") : String(localized: "album.listen")
     }
 
-    private func count(_ value: Int, title: String) -> some View {
-        HStack(spacing: 3) {
-            Text("\(value)").font(.caption.weight(.black))
-            Text(title).font(.caption2.weight(.bold))
-        }
-        .lineLimit(1).minimumScaleFactor(0.7)
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 4)
-        .background(WidgetComicStyle.panel, in: RoundedRectangle(cornerRadius: 4))
-        .overlay(RoundedRectangle(cornerRadius: 4).stroke(WidgetComicStyle.ink, lineWidth: 1.5))
-    }
 }

@@ -16,3 +16,5 @@
 "album.open" = "Tap to open the album →";
 "album.empty" = "Your featured album";
 "album.choose" = "Open an album in Got it and tap Feature in widget to show it here.";
+"album.randomTrack" = "RANDOM TRACK";
+"album.noTracks" = "No tracks available for this edition.";

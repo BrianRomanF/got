@@ -17,8 +17,10 @@ extension WidgetDashboardSnapshot {
     private static func featuredAlbum(from categories: [CollectionCategory]) -> VinylAlbumWidgetItem? {
         guard let selection = VinylFavoriteSelection.featuredAlbum(in: categories) else { return nil }
         let item = selection.item
+        let cached = VinylWidgetAssetController.cached(for: item)
         return VinylAlbumWidgetItem(id: item.id, title: item.title, subtitle: item.subtitle,
-            coverData: WidgetCoverThumbnail.make(from: item), isFavorite: item.isFavorite == true)
+            coverData: WidgetCoverThumbnail.make(from: item) ?? cached?.coverData, isFavorite: item.isFavorite == true,
+            tracks: cached?.tracks)
     }
 
     private static func readingBooks(from categories: [CollectionCategory]) -> [ReadingBookWidgetItem] {

@@ -53,8 +53,15 @@ struct VinylAlbumWidgetItem: Codable, Hashable {
     let id: UUID
     let title: String
     let subtitle: String
-    let coverData: Data?
+    var coverData: Data?
     let isFavorite: Bool
+    var tracks: [VinylTrackWidgetItem]? = nil
 
     var url: URL? { URL(string: "gotit://vinyl/\(id.uuidString)") }
+}
+
+struct VinylTrackWidgetItem: Codable, Hashable {
+    let title: String
+    let position: String
+    let duration: String
 }

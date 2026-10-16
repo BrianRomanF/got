@@ -5,11 +5,12 @@ private let appGroupIdentifier = "group.com.brianroman.Collectorappmen"
 private let snapshotKey = "collector.widgetDashboardSnapshot"
 
 struct CollectorWidgetEntry: TimelineEntry {
-    let date: Date
+    var date: Date
     let metric: WidgetMetricSnapshot
     var readingBooks: [ReadingBookWidgetItem] = []
     var followedComic: FollowedComicWidgetItem? = nil
     var featuredAlbum: VinylAlbumWidgetItem? = nil
+    var suggestedTrack: VinylTrackWidgetItem? = nil
 }
 
 struct CollectorWidgetProvider: TimelineProvider {
@@ -20,11 +21,24 @@ struct CollectorWidgetProvider: TimelineProvider {
     }
 
     func getSnapshot(in context: Context, completion: @escaping (CollectorWidgetEntry) -> Void) {
-        completion(CollectorWidgetEntry(date: .now, metric: metric(), readingBooks: readingBooks(), followedComic: followedComic(), featuredAlbum: featuredAlbum()))
+        var entry = CollectorWidgetEntry(date: .now, metric: metric(), readingBooks: readingBooks(), followedComic: followedComic(), featuredAlbum: featuredAlbum())
+        entry.suggestedTrack = entry.featuredAlbum?.tracks?.randomElement()
+        completion(entry)
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<CollectorWidgetEntry>) -> Void) {
         let entry = CollectorWidgetEntry(date: .now, metric: metric(), readingBooks: readingBooks(), followedComic: followedComic(), featuredAlbum: featuredAlbum())
+        if kind == .vinyl, let tracks = entry.featuredAlbum?.tracks, !tracks.isEmpty {
+            let shuffled = tracks.shuffled()
+            let entries = (0..<3).map { index in
+                var suggestion = entry
+                suggestion.date = entry.date.addingTimeInterval(Double(index) * 1_800)
+                suggestion.suggestedTrack = shuffled[index % shuffled.count]
+                return suggestion
+            }
+            completion(Timeline(entries: entries, policy: .after(entry.date.addingTimeInterval(5_400))))
+            return
+        }
         let nextRefresh = Calendar.current.date(byAdding: .minute, value: 30, to: .now) ?? .now.addingTimeInterval(1800)
         completion(Timeline(entries: [entry], policy: .after(nextRefresh)))
     }
