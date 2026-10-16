@@ -10,6 +10,21 @@ enum L10n {
         static var notes: String { tr("common.notes") }
     }
 
+    enum HomeDiscovery {
+        static var title: String { tr("homeDiscovery.title") }
+        static var another: String { tr("homeDiscovery.another") }
+        static var open: String { tr("homeDiscovery.open") }
+        static var listen: String { tr("homeDiscovery.listen") }
+        static var continueBook: String { tr("homeDiscovery.continueBook") }
+        static var rereadBook: String { tr("homeDiscovery.rereadBook") }
+        static var nextBook: String { tr("homeDiscovery.nextBook") }
+        static var continueComic: String { tr("homeDiscovery.continueComic") }
+        static var rereadComic: String { tr("homeDiscovery.rereadComic") }
+        static var nextComic: String { tr("homeDiscovery.nextComic") }
+        static var play: String { tr("homeDiscovery.play") }
+        static var rediscover: String { tr("homeDiscovery.rediscover") }
+    }
+
     enum Home {
         static var title: String { tr("home.title") }
         static var eyebrow: String { tr("home.eyebrow") }

@@ -551,3 +551,15 @@
 "vinylFavorite.select" = "Feature in widget";
 "vinylFavorite.selected" = "Favorite album";
 "vinylFavorite.hint" = "Choose a favorite album to show its cover and name in the widget. Choosing another changes the featured album.";
+"homeDiscovery.title" = "Discover your collection";
+"homeDiscovery.another" = "Discover another piece";
+"homeDiscovery.open" = "Open this piece's details.";
+"homeDiscovery.listen" = "How about listening to this today?";
+"homeDiscovery.continueBook" = "Your reading is waiting for you";
+"homeDiscovery.rereadBook" = "Revisit this book?";
+"homeDiscovery.nextBook" = "Your next read";
+"homeDiscovery.continueComic" = "Continue this story";
+"homeDiscovery.rereadComic" = "A story to read again";
+"homeDiscovery.nextComic" = "This comic is waiting for you";
+"homeDiscovery.play" = "How about a game?";
+"homeDiscovery.rediscover" = "A piece worth another look";

@@ -551,3 +551,15 @@
 "vinylFavorite.select" = "Destacar en el widget";
 "vinylFavorite.selected" = "Álbum favorito";
 "vinylFavorite.hint" = "Elige un álbum favorito para mostrar su portada y nombre en el widget. Al elegir otro, cambia el álbum destacado.";
+"homeDiscovery.title" = "Descubre tu colección";
+"homeDiscovery.another" = "Descubrir otra pieza";
+"homeDiscovery.open" = "Abre la ficha de esta pieza.";
+"homeDiscovery.listen" = "¿Qué tal escuchar este hoy?";
+"homeDiscovery.continueBook" = "Tu lectura te está esperando";
+"homeDiscovery.rereadBook" = "¿Volvemos a este libro?";
+"homeDiscovery.nextBook" = "Tu próxima lectura";
+"homeDiscovery.continueComic" = "Continúa esta historia";
+"homeDiscovery.rereadComic" = "Una historia para releer";
+"homeDiscovery.nextComic" = "Este cómic todavía te espera";
+"homeDiscovery.play" = "¿Qué tal una partida?";
+"homeDiscovery.rediscover" = "Una pieza para volver a mirar";

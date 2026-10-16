@@ -26,6 +26,9 @@ struct HomeView: View {
                                 startAddingCategory()
                             }
                         } else {
+                            if libraryController.libraryStats().ownedItems > 0 {
+                                HomeDiscoverySectionView()
+                            }
                             HomeCategoryGrid(
                                 categories: libraryController.categories,
                                 stats: { libraryController.stats(for: $0) },
