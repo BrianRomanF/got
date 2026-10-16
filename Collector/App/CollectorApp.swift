@@ -15,22 +15,27 @@ struct CollectorApp: App {
 
     var body: some Scene {
         WindowGroup {
-            if hasCompletedOnboarding && !isShowingOnboarding {
-                HomeView()
-                    .environmentObject(libraryController)
+            ZStack {
+                if hasCompletedOnboarding && !isShowingOnboarding {
+                    HomeView()
+                        .environmentObject(libraryController)
+                        .environmentObject(proAccessController)
+                        .environmentObject(libraryController.syncStateController)
+                        .environmentObject(cloudKitCoordinator)
+                        .environment(\.locale, Locale(identifier: currentLocaleIdentifier))
+                } else {
+                    OnboardingView {
+                        hasCompletedOnboarding = true
+                        isShowingOnboarding = false
+                    }
                     .environmentObject(proAccessController)
                     .environmentObject(libraryController.syncStateController)
                     .environmentObject(cloudKitCoordinator)
                     .environment(\.locale, Locale(identifier: currentLocaleIdentifier))
-            } else {
-                OnboardingView {
-                    hasCompletedOnboarding = true
-                    isShowingOnboarding = false
                 }
-                .environmentObject(proAccessController)
-                .environmentObject(libraryController.syncStateController)
-                .environmentObject(cloudKitCoordinator)
-                .environment(\.locale, Locale(identifier: currentLocaleIdentifier))
+            }
+            .task {
+                isShowingOnboarding = !hideOnboarding
             }
         }
         .onChange(of: scenePhase) { _, newPhase in
@@ -44,9 +49,6 @@ struct CollectorApp: App {
                     localCategories: libraryController.categories
                 )
             }
-        }
-        .task {
-            isShowingOnboarding = !hideOnboarding
         }
     }
 
