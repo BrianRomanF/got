@@ -42,6 +42,10 @@ enum L10n {
 
     enum Settings {
         static var title: String { tr("settings.title") }
+        static var generalTab: String { tr("settings.generalTab") }
+        static var integrationsTab: String { tr("settings.integrationsTab") }
+        static var dataTab: String { tr("settings.dataTab") }
+        static var aboutTab: String { tr("settings.aboutTab") }
         static var eyebrow: String { tr("settings.eyebrow") }
         static var languageTitle: String { tr("settings.languageTitle") }
         static var languageSystem: String { tr("settings.languageSystem") }
@@ -135,6 +139,7 @@ enum L10n {
         static var syncStatusOffline: String { tr("settings.syncStatusOffline") }
         static var syncStatusConflict: String { tr("settings.syncStatusConflict") }
         static var syncStatusFailed: String { tr("settings.syncStatusFailed") }
+        static var syncCheckConnection: String { tr("settings.syncCheckConnection") }
         static var syncNow: String { tr("settings.syncNow") }
         static var syncBackupNow: String { tr("settings.syncBackupNow") }
         static var syncBackupConfirmTitle: String { tr("settings.syncBackupConfirmTitle") }

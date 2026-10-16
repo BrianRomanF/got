@@ -10,10 +10,12 @@ struct CollectorApp: App {
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage(AppSettings.selectedLanguageKey) private var selectedLanguage = AppLanguage.system.rawValue
     @AppStorage(AppSettings.hideOnboardingKey) private var hideOnboarding = false
+    @AppStorage(AppSettings.hasCompletedOnboardingKey) private var hasCompletedOnboarding = false
+    @State private var isShowingOnboarding = false
 
     var body: some Scene {
         WindowGroup {
-            if hideOnboarding {
+            if hasCompletedOnboarding && !isShowingOnboarding {
                 HomeView()
                     .environmentObject(libraryController)
                     .environmentObject(proAccessController)
@@ -22,7 +24,8 @@ struct CollectorApp: App {
                     .environment(\.locale, Locale(identifier: currentLocaleIdentifier))
             } else {
                 OnboardingView {
-                    hideOnboarding = true
+                    hasCompletedOnboarding = true
+                    isShowingOnboarding = false
                 }
                 .environmentObject(proAccessController)
                 .environmentObject(libraryController.syncStateController)
@@ -41,6 +44,9 @@ struct CollectorApp: App {
                     localCategories: libraryController.categories
                 )
             }
+        }
+        .task {
+            isShowingOnboarding = !hideOnboarding
         }
     }
 

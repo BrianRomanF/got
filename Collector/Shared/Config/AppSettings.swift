@@ -4,6 +4,7 @@ enum AppSettings {
     static let selectedLanguageKey = "collector.selectedLanguage"
     static let hasSeenOnboardingKey = "collector.hasSeenOnboarding"
     static let hideOnboardingKey = "collector.hideOnboarding"
+    static let hasCompletedOnboardingKey = "collector.hasCompletedOnboarding"
     static let comicVineAPIKeyKey = "collector.comicVineAPIKey"
     static let theGamesDBAPIKeyKey = "collector.theGamesDBAPIKey"
     static let googleBooksAPIKeyKey = "collector.googleBooksAPIKey"

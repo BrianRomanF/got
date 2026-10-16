@@ -31,7 +31,7 @@ struct CategoryGroupSection: View {
                     ForEach(Array(category.groups.enumerated()), id: \.element.id) { index, group in
                         ZStack(alignment: .topTrailing) {
                             NavigationLink(value: CollectorRoute.group(categoryID: category.id, groupID: group.id)) {
-                                CategoryGroupCell(group: group)
+                                CategoryGroupCell(group: group, template: category.template)
                             }
                             .buttonStyle(.plain)
                             .simultaneousGesture(

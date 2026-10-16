@@ -34,6 +34,10 @@
 "home.firstRunPrimaryAction" = "Crear colección";
 
 "settings.title" = "Configuracion";
+"settings.generalTab" = "General";
+"settings.integrationsTab" = "APIs";
+"settings.dataTab" = "Datos";
+"settings.aboutTab" = "Acerca";
 "settings.eyebrow" = "Preferencias";
 "settings.languageTitle" = "Idioma";
 "settings.languageSystem" = "Sistema";
@@ -127,6 +131,7 @@
 "settings.syncStatusOffline" = "Sin conexion. Los cambios siguen locales.";
 "settings.syncStatusConflict" = "Hay un conflicto que revisar.";
 "settings.syncStatusFailed" = "La ultima sincronizacion fallo.";
+"settings.syncCheckConnection" = "Revisar conexion con iCloud";
 "settings.syncNow" = "Sincronizar ahora";
 "settings.syncBackupNow" = "Crear respaldo protegido";
 "settings.syncBackupConfirmTitle" = "Crear respaldo?";

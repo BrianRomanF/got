@@ -33,6 +33,21 @@ struct SettingsSyncSectionView: View {
                     description: statusDescription
                 )
 
+                if cloudKitCoordinator.accountStatus != .available,
+                   !cloudKitCoordinator.isCheckingAccount {
+                    Button {
+                        Task {
+                            await cloudKitCoordinator.refreshAccountStatus()
+                        }
+                    } label: {
+                        SettingsActionLabel(
+                            title: L10n.Settings.syncCheckConnection,
+                            systemName: "arrow.clockwise.icloud"
+                        )
+                    }
+                    .buttonStyle(.plain)
+                }
+
                 Button {
                     isShowingBackupConfirmation = true
                 } label: {

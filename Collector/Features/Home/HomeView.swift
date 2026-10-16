@@ -20,10 +20,6 @@ struct HomeView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 22) {
                         HomeHeaderView()
-                        HomeDashboardSummaryView(
-                            stats: libraryController.libraryStats(),
-                            categoryCount: libraryController.categories.count
-                        )
 
                         if libraryController.categories.isEmpty {
                             HomeFirstRunCard {
@@ -40,6 +36,10 @@ struct HomeView: View {
                                 onDelete: { category in
                                     categoryToDelete = category
                                 }
+                            )
+                            HomeDashboardSummaryView(
+                                stats: libraryController.libraryStats(),
+                                categoryCount: libraryController.categories.count
                             )
                             HomeRecentActivityButton(count: libraryController.recentActivity(limit: 60).count)
                             HomeWishlistButton(missingCount: libraryController.libraryStats().missingItems)

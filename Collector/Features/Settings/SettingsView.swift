@@ -2,6 +2,24 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct SettingsView: View {
+    private enum SettingsTab: String, CaseIterable, Identifiable {
+        case general
+        case integrations
+        case data
+        case about
+
+        var id: String { rawValue }
+
+        var title: String {
+            switch self {
+            case .general: L10n.Settings.generalTab
+            case .integrations: L10n.Settings.integrationsTab
+            case .data: L10n.Settings.dataTab
+            case .about: L10n.Settings.aboutTab
+            }
+        }
+    }
+
     private let privacyPolicyURL = URL(string: "https://gotit.app/privacy")!
     private let supportURL = URL(string: "mailto:broman.89@gmail.com?subject=Support%20Request")!
 
@@ -36,6 +54,7 @@ struct SettingsView: View {
     @State private var csvImportFailed = false
     @State private var isShowingPaywall = false
     @State private var paywallMessage = L10n.Pro.subtitle
+    @State private var selectedTab: SettingsTab = .general
 
     var body: some View {
         NavigationStack {
@@ -45,16 +64,15 @@ struct SettingsView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 18) {
                         SettingsHeaderView()
-                        languageSection
-                        generalSection
-                        onboardingSection
-                        proSection
-                        apiSection
-                        backupSection
-                        SettingsSyncSectionView()
-                        usageGuideSection
-                        privacySection
-                        aboutSection
+                        Picker(L10n.Settings.title, selection: $selectedTab) {
+                            ForEach(SettingsTab.allCases) { tab in
+                                Text(tab.title).tag(tab)
+                            }
+                        }
+                        .pickerStyle(.segmented)
+                        .labelsHidden()
+
+                        tabContent
                     }
                     .padding(20)
                 }
@@ -120,6 +138,26 @@ struct SettingsView: View {
             } message: {
                 Text(L10n.Settings.importCSVFailedMessage)
             }
+        }
+    }
+
+    @ViewBuilder
+    private var tabContent: some View {
+        switch selectedTab {
+        case .general:
+            languageSection
+            generalSection
+            onboardingSection
+            proSection
+        case .integrations:
+            apiSection
+            usageGuideSection
+        case .data:
+            backupSection
+            SettingsSyncSectionView()
+            privacySection
+        case .about:
+            aboutSection
         }
     }
 
