@@ -11,6 +11,7 @@ enum L10n {
     }
 
     enum HomeDiscovery {
+        static var missing: String { tr("homeDiscovery.missing") }
         static var title: String { tr("homeDiscovery.title") }
         static var another: String { tr("homeDiscovery.another") }
         static var open: String { tr("homeDiscovery.open") }
@@ -210,6 +211,8 @@ enum L10n {
     }
 
     enum Dashboard {
+        static var expandDetails: String { tr("dashboard.expandDetails") }
+        static var collapseDetails: String { tr("dashboard.collapseDetails") }
         static var title: String { tr("dashboard.title") }
         static var subtitle: String { tr("dashboard.subtitle") }
         static var collections: String { tr("dashboard.collections") }

@@ -4,6 +4,7 @@ struct HomeDiscoverySectionView: View {
     @EnvironmentObject private var library: CollectionLibraryController
     @Environment(\.scenePhase) private var scenePhase
     @StateObject private var controller = HomeDiscoveryController()
+    @State private var needsNewSuggestion = true
 
     var body: some View {
         VStack(spacing: 0) {
@@ -16,18 +17,18 @@ struct HomeDiscoverySectionView: View {
         .onChange(of: library.categories) { _, categories in
             controller.refresh(categories: categories)
         }
-        .onChange(of: scenePhase) { _, phase in
-            if phase == .active { controller.refresh(categories: library.categories) }
+        .onChange(of: scenePhase, initial: true) { _, phase in
+            if phase == .background {
+                needsNewSuggestion = true
+            } else if phase == .active, needsNewSuggestion {
+                controller.refresh(categories: library.categories, chooseAnother: true)
+                needsNewSuggestion = false
+            }
         }
-        .task {
-            controller.refresh(categories: library.categories)
-            while !Task.isCancelled {
-                let calendar = Calendar.current
-                guard let nextDay = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: .now)) else { return }
-                do {
-                    try await Task.sleep(for: .seconds(max(1, nextDay.timeIntervalSinceNow)))
-                } catch { return }
+        .onAppear {
+            if controller.suggestion == nil {
                 controller.refresh(categories: library.categories)
+                if scenePhase == .active { needsNewSuggestion = false }
             }
         }
     }

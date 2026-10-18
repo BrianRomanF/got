@@ -21,7 +21,7 @@ struct HomeDiscoveryCoverView: View {
                 placeholder
             }
         }
-        .frame(width: 62, height: suggestion.template == .vinyl ? 62 : 82)
+        .frame(width: 92, height: suggestion.template == .vinyl ? 92 : 122)
         .clipShape(RoundedRectangle(cornerRadius: 5))
         .overlay(RoundedRectangle(cornerRadius: 5).stroke(ComicTheme.ink, lineWidth: 2))
         .accessibilityHidden(true)
@@ -32,7 +32,7 @@ struct HomeDiscoveryCoverView: View {
 
     private var placeholder: some View {
         Image(systemName: suggestion.template.defaultSymbolName)
-            .font(.title2.weight(.black))
+            .font(.largeTitle.weight(.black))
             .foregroundStyle(ComicTheme.red)
     }
 }

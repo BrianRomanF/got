@@ -26,7 +26,7 @@ struct HomeView: View {
                                 startAddingCategory()
                             }
                         } else {
-                            if libraryController.libraryStats().ownedItems > 0 {
+                            if libraryController.categories.contains(where: { !$0.allItems.isEmpty }) {
                                 HomeDiscoverySectionView()
                             }
                             HomeCategoryGrid(
@@ -52,27 +52,10 @@ struct HomeView: View {
                 }
             }
             .toolbar {
-                ToolbarItemGroup(placement: .topBarLeading) {
-                    NavigationLink(value: CollectorRoute.globalSearch) {
-                        Image(systemName: "magnifyingglass")
-                            .font(.headline.weight(.black))
-                    }
-                    .accessibilityLabel(L10n.GlobalSearch.title)
-
-                    Button {
-                        isShowingSettings = true
-                    } label: {
-                        Image(systemName: "gearshape.fill")
-                            .font(.headline.weight(.black))
-                    }
-                    .accessibilityLabel(L10n.Settings.title)
-                }
-
-                ToolbarItem(placement: .topBarTrailing) {
-                    HomeAddCategoryButton {
-                        startAddingCategory()
-                    }
-                }
+                HomeToolbar(
+                    onSettings: { isShowingSettings = true },
+                    onAddCategory: { startAddingCategory() }
+                )
             }
             .sheet(isPresented: $controller.isAddingCategory, onDismiss: {
                 controller.resetForm()

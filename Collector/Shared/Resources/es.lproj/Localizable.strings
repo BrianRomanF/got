@@ -563,3 +563,6 @@
 "homeDiscovery.nextComic" = "Este cómic todavía te espera";
 "homeDiscovery.play" = "¿Qué tal una partida?";
 "homeDiscovery.rediscover" = "Una pieza para volver a mirar";
+"homeDiscovery.missing" = "Este aún te falta";
+"dashboard.expandDetails" = "Mostrar los datos del resumen";
+"dashboard.collapseDetails" = "Ocultar los datos del resumen";

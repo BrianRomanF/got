@@ -5,10 +5,9 @@ struct HomeAddCategoryButton: View {
 
     var body: some View {
         Button(action: action) {
-            Image(systemName: "plus")
-                .font(.headline.weight(.black))
-                .foregroundStyle(ComicTheme.ink)
+            HomeToolbarIconLabel(symbolName: "plus", fill: ComicTheme.yellow)
         }
+        .buttonStyle(.plain)
         .accessibilityLabel(L10n.Home.addCategory)
     }
 }

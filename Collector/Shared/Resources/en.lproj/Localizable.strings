@@ -563,3 +563,6 @@
 "homeDiscovery.nextComic" = "This comic is waiting for you";
 "homeDiscovery.play" = "How about a game?";
 "homeDiscovery.rediscover" = "A piece worth another look";
+"homeDiscovery.missing" = "You’re still missing this one";
+"dashboard.expandDetails" = "Show summary details";
+"dashboard.collapseDetails" = "Hide summary details";

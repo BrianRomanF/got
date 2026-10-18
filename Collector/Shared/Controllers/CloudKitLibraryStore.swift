@@ -21,11 +21,10 @@ enum CloudKitLibraryError: LocalizedError {
 actor CloudKitLibraryStore {
     static let shared = CloudKitLibraryStore()
 
-    static let containerIdentifier = "iCloud.com.brianroman.Collectorappmen"
+    static let containerIdentifier = "iCloud.com.brianroman.gotit"
     private static let recordType = "LibrarySnapshot"
     private static let recordName = "current-library"
     private static let snapshotField = "snapshot"
-    private static let subscriptionID = "collector-library-changes"
 
     private let container: CKContainer?
     private let database: CKDatabase?
@@ -33,13 +32,9 @@ actor CloudKitLibraryStore {
     private let decoder: JSONDecoder
 
     init(container: CKContainer? = nil) {
-        #if LOCAL_DEVICE_BUILD
-        let resolvedContainer = container
-        #else
-        let resolvedContainer: CKContainer? = container ?? CKContainer(identifier: Self.containerIdentifier)
-        #endif
+        let resolvedContainer = container ?? CKContainer(identifier: Self.containerIdentifier)
         self.container = resolvedContainer
-        self.database = resolvedContainer?.privateCloudDatabase
+        self.database = resolvedContainer.privateCloudDatabase
 
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]
@@ -54,27 +49,6 @@ actor CloudKitLibraryStore {
     func accountStatus() async throws -> CKAccountStatus {
         guard let container else { return .noAccount }
         return try await container.accountStatus()
-    }
-
-    func ensureLibrarySubscription() async throws {
-        guard let database else { throw CloudKitLibraryError.accountUnavailable }
-        let subscriptionID = Self.subscriptionID
-
-        do {
-            _ = try await database.subscription(for: subscriptionID)
-            return
-        } catch let error as CKError where error.code == .unknownItem {
-            let predicate = NSPredicate(format: "recordID == %@", recordID)
-            let subscription = CKQuerySubscription(
-                recordType: Self.recordType,
-                predicate: predicate,
-                subscriptionID: subscriptionID,
-                options: [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion]
-            )
-            subscription.notificationInfo = CKSubscription.NotificationInfo()
-            subscription.notificationInfo?.shouldSendContentAvailable = true
-            _ = try await database.save(subscription)
-        }
     }
 
     func loadCategories() async throws -> [CollectionCategory] {

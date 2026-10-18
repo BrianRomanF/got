@@ -3,17 +3,42 @@
 Open `Collector.xcodeproj`, select the `Collector` scheme and your iPhone,
 then run with the Debug configuration.
 
-Debug uses `LocalDevice.entitlements` and `LOCAL_DEVICE_BUILD` so the app and
-widget can be signed for local device testing. Collections stay on the device;
-iCloud sync and push notifications are disabled. App Group sharing is enabled
-for `group.com.brianroman.Collectorappmen` in both targets so widgets show real data.
+Debug uses `Collector/Collector.entitlements`; Release uses
+`Config/AppStore.entitlements` with production CloudKit entitlements.
+The widget uses `CollectorWidgets/CollectorWidgets.entitlements`, with manual signing
+for team `3H2J727ZZN`.
 
-Debug with `LOCAL_DEVICE_BUILD` also unlocks Pro for local testing without
+The app bundle ID is `com.brianroman.Collectorappmen`. The embedded widget bundle
+ID must start with the app bundle ID followed by a dot, so the project uses
+`com.brianroman.Collectorappmen.widget`. Register that widget ID with
+the account holder; `com.Collectorap.CollectorWidgets` cannot be embedded in this app.
+
+Release uses Apple Distribution for App Store Connect / TestFlight, with profiles
+`Gotit AppStore` for the app and `Gotit Widget AppStore` for the widget. The
+app profile authorizes `group.com.brianroman.gotit` and
+`iCloud.com.brianroman.gotit`. The regenerated widget profile also authorizes the
+shared group; Release selects its UUID `c211d388-293e-4ec2-82de-1d686862a1da` to
+avoid selecting the older profile with the same name. Push Notifications are not required by this build:
+CloudKit is checked when the app becomes active or through Settings, without
+registering subscriptions or handling remote notifications.
+App Store Connect profiles do not require registered iPhones.
+
+Debug uses Apple Development and requires separate development profiles with
+the test device included. The installed development certificate is
+`Apple Development: Cristian Bahamondes (6SLM6BYX8Y)`; this suffix is not the team ID.
+
+The app uses CloudKit container `iCloud.com.brianroman.gotit` and both
+targets share `group.com.brianroman.gotit`. These identifiers must be
+registered with the selected team and associated with the appropriate App IDs
+before generating profiles.
+
+Debug with `LOCAL_DEVICE_BUILD` still unlocks Pro for local testing without
 StoreKit or App Store Connect. This override is kept in memory and does not
 write a purchased entitlement to device storage. Release uses real purchases.
+`LOCAL_DEVICE_BUILD` no longer disables CloudKit.
 
-Release keeps the original iCloud, push and App Group entitlements and requires
-a development team and provisioning profiles that support those capabilities.
+`LocalDevice.entitlements` is retained as a legacy local-only entitlement file;
+it is not selected by the app or widget build configurations.
 
 The Books widget shows the single currently reading book from the shared
 snapshot, with its cover thumbnail (or a book icon when unavailable) and progress. Selecting another current book
@@ -46,3 +71,25 @@ tracklist before sharing them with the widget; API credentials stay in the app.
 Remote artwork and rebased local cover paths are supported. Widget timelines
 schedule shuffled tracks at 30-minute intervals using cached data, without
 depending on network access in the extension.
+
+## Manual App Store Connect export
+
+The Organizer's automatic distribution flow may try to fetch profiles from the
+account holder's team, which is unavailable to an App Store Connect-only member.
+Select Custom distribution and manually manage signing, importing the local
+profiles for both targets if necessary. `Config/ExportOptions-AppStore.plist`
+records the verified manual export configuration, including exact profile UUIDs.
+Update those UUIDs if the account holder regenerates the profiles.
+
+To export an existing signed archive locally without uploading it:
+
+```sh
+DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild \
+  -exportArchive \
+  -archivePath /private/tmp/Gotit-AppStore-20261018.xcarchive \
+  -exportOptionsPlist Config/ExportOptions-AppStore.plist \
+  -exportPath /private/tmp/Gotit-AppStore-export
+```
+
+The exported IPA can be uploaded with Transporter using an Apple account that
+has permission to upload builds to the app in App Store Connect.

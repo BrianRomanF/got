@@ -2,7 +2,7 @@ import Foundation
 import WidgetKit
 
 enum WidgetDashboardPublisher {
-    static let appGroupIdentifier = "group.com.brianroman.Collectorappmen"
+    static let appGroupIdentifier = "group.com.brianroman.gotit"
     static let snapshotKey = "collector.widgetDashboardSnapshot"
 
     static func publish(categories: [CollectionCategory]) {

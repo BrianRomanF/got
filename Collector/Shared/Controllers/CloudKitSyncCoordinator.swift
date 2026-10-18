@@ -25,7 +25,6 @@ final class CloudKitSyncCoordinator: ObservableObject {
         do {
             accountStatus = try await store.accountStatus()
             if accountStatus == .available {
-                try await store.ensureLibrarySubscription()
                 syncStateController.markPendingChanges(count: syncStateController.state.pendingChangesCount)
             } else {
                 syncStateController.markOffline()

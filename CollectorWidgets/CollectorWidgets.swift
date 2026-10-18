@@ -1,7 +1,7 @@
 import SwiftUI
 import WidgetKit
 
-private let appGroupIdentifier = "group.com.brianroman.Collectorappmen"
+private let appGroupIdentifier = "group.com.brianroman.gotit"
 private let snapshotKey = "collector.widgetDashboardSnapshot"
 
 struct CollectorWidgetEntry: TimelineEntry {
